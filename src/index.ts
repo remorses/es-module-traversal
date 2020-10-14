@@ -1,4 +1,5 @@
 import { promises as fsp } from 'fs'
+import fs from 'fs'
 import path from 'path'
 import resolve from 'enhanced-resolve'
 import { init, parse } from 'es-module-lexer'
@@ -9,11 +10,15 @@ const defaultResolver = resolve.create.sync({
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.mjs'],
 })
 
-export async function* walkEsModules(
+function isRelative(x: string) {
+    return x.startsWith('.') || x.startsWith('/')
+}
+
+export function* walkEsModulesSync(
     entryPoint,
     resolver = defaultResolver,
-): AsyncGenerator {
-    const content = await (await fsp.readFile(entryPoint)).toString()
+): Generator {
+    const content = fs.readFileSync(entryPoint).toString()
     const [imports, exports] = parse(content)
     for (const { s, e } of imports) {
         let importPath = content.slice(s, e).trim()
@@ -25,6 +30,6 @@ export async function* walkEsModules(
         }
         const resolved = resolver(path.dirname(entryPoint), importPath)
         yield { importPath, resolved, importer: entryPoint }
-        yield* await walkEsModules(resolved, resolver)
+        yield* walkEsModulesSync(resolved, resolver)
     }
 }
