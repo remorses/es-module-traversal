@@ -50,7 +50,7 @@ export async function walkEsModules({
                     return {
                         importPath,
                         importer: filePath,
-                        resolved: resolvedImportPath,
+                        resolvedImportPath,
                     }
                 }),
             )
