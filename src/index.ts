@@ -36,6 +36,10 @@ export function* walkEsModulesGenerator(
                 continue
             }
         }
+        const isImportMeta = d === -2
+        if (isImportMeta) {
+            continue
+        }
         debug(importPath)
         if (isBuiltin(importPath)) {
             continue
