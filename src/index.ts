@@ -20,11 +20,48 @@ export type ResultType = {
     importer: string
 }
 
-export function* walkEsModulesGenerator(
+export async function walkEsModules({
     entryPoint,
     resolver = defaultResolver,
-): Generator<ResultType> {
-    const content = fs.readFileSync(entryPoint).toString()
+}): Promise<ResultType[]> {
+    let results: Set<ResultType> = new Set()
+    let toProcess = [entryPoint]
+
+    while (toProcess.length) {
+        const files = await Promise.all(
+            toProcess.map(async (filePath) => {
+                return {
+                    content: await (await fsp.readFile(filePath)).toString(),
+                    filePath,
+                }
+            }),
+        )
+        let newResults: ResultType[] = []
+        for (let { filePath, content } of files) {
+            const importPaths = getImportPaths(content)
+            newResults.push(
+                ...importPaths.map((importPath) => {
+                    const resolved =
+                        resolver(path.dirname(filePath), importPath) ||
+                        undefined
+                    return {
+                        importPath,
+                        importer: filePath,
+                        resolved,
+                    }
+                }),
+            )
+        }
+        newResults.forEach((x) => results.add(x))
+        toProcess = newResults
+            .filter((x) => isRelative(x.importPath))
+            .map((x) => x.resolved)
+    }
+    return [...results]
+}
+
+function getImportPaths(content) {
+    const result: string[] = []
     const [imports, exports] = parse(content)
     for (const { s, e, d } of imports) {
         let importPath = content.slice(s, e).trim()
@@ -44,15 +81,8 @@ export function* walkEsModulesGenerator(
         if (isBuiltin(importPath)) {
             continue
         }
-        const resolved =
-            resolver(path.dirname(entryPoint), importPath) || undefined
-        yield { importPath, resolved, importer: entryPoint }
-        if (isRelative(importPath)) {
-            yield* walkEsModulesGenerator(resolved, resolver)
-        }
-    }
-}
 
-export function walkEsModulesSync({ entryPoint, resolver = defaultResolver }) {
-    return [...walkEsModulesGenerator(entryPoint, resolver)]
+        result.push(importPath)
+    }
+    return result
 }

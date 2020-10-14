@@ -1,11 +1,11 @@
 import { init } from 'es-module-lexer'
 import path from 'path'
-import { walkEsModulesSync } from '../src'
+import { walkEsModules } from '../src'
 
 it('works', async () => {
     await init
     const currentFile = path.resolve(__dirname, __filename)
-    const res = walkEsModulesSync({
+    const res = await walkEsModules({
         entryPoint: currentFile,
     })
 })
@@ -13,8 +13,8 @@ it('works', async () => {
 it('example', async () => {
     await init
     const currentFile = path.resolve('tests/example/entry.js')
-    const res = walkEsModulesSync({
+    const res = await walkEsModules({
         entryPoint: currentFile,
     })
-    expect(res.map(x => x.importPath)).toMatchSnapshot()
+    expect(res.map((x) => x.importPath)).toMatchSnapshot()
 })
