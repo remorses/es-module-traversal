@@ -38,6 +38,7 @@ export async function walkEsModules({
             }),
         )
         let newResults: ResultType[] = []
+        // for every files get its imports and add them to results
         for (let { filePath, content } of files) {
             const importPaths = getImportPaths(content)
             newResults.push(
