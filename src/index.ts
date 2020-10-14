@@ -70,7 +70,7 @@ export async function walkEsModules({
 
 function getImportPaths(content) {
     const result: string[] = []
-    const [imports, exports] = parse(content)
+    const [imports] = parse(content)
     for (const { s, e, d } of imports) {
         let importPath = content.slice(s, e).trim()
         const isDynamicImport = d > -1
