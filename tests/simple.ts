@@ -9,3 +9,11 @@ it('works', async () => {
         entryPoint: currentFile,
     }).forEach((x) => console.log(x.importPath))
 })
+
+it('example', async () => {
+    await init
+    const currentFile = path.resolve('tests/example/entry.js')
+    walkEsModulesSync({
+        entryPoint: currentFile,
+    }).forEach((x) => console.log(x.importPath))
+})

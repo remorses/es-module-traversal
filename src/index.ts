@@ -26,11 +26,17 @@ export function* walkEsModulesGenerator(
 ): Generator<ResultType> {
     const content = fs.readFileSync(entryPoint).toString()
     const [imports, exports] = parse(content)
-    for (const { s, e } of imports) {
+    for (const { s, e, d } of imports) {
         let importPath = content.slice(s, e).trim()
+        const isDynamicImport = d > -1
+        if (isDynamicImport) {
+            try {
+                importPath = eval(importPath)
+            } catch {
+                continue
+            }
+        }
         debug(importPath)
-
-        // TODO first resolve it
         if (isBuiltin(importPath)) {
             continue
         }
