@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES2015",
+        "target": "es2015",
         "downlevelIteration": true,
         "module": "commonjs",
         "importHelpers": true,
@@ -9,7 +9,6 @@
             "es2017",
             "es7",
             "es6"
-            // "dom"
         ],
         "declaration": true,
         "outDir": "dist",

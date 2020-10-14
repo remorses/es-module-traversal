@@ -5,15 +5,16 @@ import { walkEsModulesSync } from '../src'
 it('works', async () => {
     await init
     const currentFile = path.resolve(__dirname, __filename)
-    walkEsModulesSync({
+    const res = walkEsModulesSync({
         entryPoint: currentFile,
-    }).forEach((x) => console.log(x.importPath))
+    })
 })
 
 it('example', async () => {
     await init
     const currentFile = path.resolve('tests/example/entry.js')
-    walkEsModulesSync({
+    const res = walkEsModulesSync({
         entryPoint: currentFile,
-    }).forEach((x) => console.log(x.importPath))
+    })
+    expect(res.map(x => x.importPath)).toMatchSnapshot()
 })
