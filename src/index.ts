@@ -43,6 +43,7 @@ export async function walkEsModules({
             const importPaths = getImportPaths(content)
             newResults.push(
                 ...importPaths.map((importPath) => {
+                    // TODO maybe throw when import is not resolved?
                     const resolved =
                         resolver(path.dirname(filePath), importPath) ||
                         undefined
@@ -60,6 +61,7 @@ export async function walkEsModules({
         toProcess = newResults
             .filter((x) => isRelative(x.importPath))
             .map((x) => x.resolved)
+            .filter(Boolean)
     }
     return [...results]
 }
