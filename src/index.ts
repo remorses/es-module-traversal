@@ -42,17 +42,19 @@ export async function walkEsModules({
         for (let { filePath, content } of files) {
             const importPaths = getImportPaths(content)
             newResults.push(
-                ...importPaths.map((importPath) => {
-                    // TODO maybe throw when import is not resolved?
-                    const resolvedImportPath =
-                        resolver(path.dirname(filePath), importPath) ||
-                        undefined
-                    return {
-                        importPath,
-                        importer: filePath,
-                        resolvedImportPath,
-                    }
-                }),
+                ...importPaths.map(
+                    (importPath): ResultType => {
+                        // TODO maybe throw when import is not resolved?
+                        const resolvedImportPath =
+                            resolver(path.dirname(filePath), importPath) ||
+                            undefined
+                        return {
+                            importPath,
+                            importer: filePath,
+                            resolvedImportPath,
+                        }
+                    },
+                ),
             )
         }
         // add new found imports to the results
