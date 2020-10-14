@@ -28,6 +28,7 @@ export async function walkEsModules({
     let toProcess = [entryPoint]
 
     while (toProcess.length) {
+        // read files to process concurrently
         const files = await Promise.all(
             toProcess.map(async (filePath) => {
                 return {
@@ -52,7 +53,9 @@ export async function walkEsModules({
                 }),
             )
         }
+        // add new found imports to the results
         newResults.forEach((x) => results.add(x))
+        // process the relative imports found in current path
         toProcess = newResults
             .filter((x) => isRelative(x.importPath))
             .map((x) => x.resolved)
