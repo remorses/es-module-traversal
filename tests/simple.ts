@@ -7,7 +7,7 @@ import assert from 'assert'
 it('works', async () => {
     await init
     const currentFile = path.resolve(__dirname, __filename)
-    await from(
-        walkEsModulesSync(path.resolve(__dirname, __filename)),
-    ).forEach((x) => console.log(x.importPath))
+    walkEsModulesSync({
+        entryPoint: path.resolve(__dirname, __filename),
+    }).forEach((x) => console.log(x.importPath))
 })

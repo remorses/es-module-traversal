@@ -20,7 +20,7 @@ export type ResultType = {
     importer: string
 }
 
-export function* walkEsModulesSync(
+export function* walkEsModulesGenerator(
     entryPoint,
     resolver = defaultResolver,
 ): Generator<ResultType> {
@@ -34,10 +34,15 @@ export function* walkEsModulesSync(
         if (isBuiltin(importPath)) {
             continue
         }
-        const resolved = resolver(path.dirname(entryPoint), importPath) || undefined
+        const resolved =
+            resolver(path.dirname(entryPoint), importPath) || undefined
         yield { importPath, resolved, importer: entryPoint }
         if (isRelative(importPath)) {
-            yield* walkEsModulesSync(resolved, resolver)
+            yield* walkEsModulesGenerator(resolved, resolver)
         }
     }
+}
+
+export function walkEsModulesSync({ entryPoint, resolver = defaultResolver }) {
+    return [...walkEsModulesGenerator(entryPoint, resolver)]
 }
