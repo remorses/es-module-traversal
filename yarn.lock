@@ -848,6 +848,11 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
+batched-promise-all@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/batched-promise-all/-/batched-promise-all-0.9.2.tgz#1253fd9511a82e07daa248ed5d282b2a1cc65a72"
+  integrity sha512-Kx5UHdBSXFCcFfX7St/2EVyDer/jWZtjW4gnRha3Wv4lXyzVCmRR6AHmBPGguxI4XhL8Ut2nH0JXY4OEmGzR6A==
+
 bcrypt-pbkdf@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.2.tgz#a4301d389b6a43f9b67ff3ca11a3f6637e360e9e"

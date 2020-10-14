@@ -1,10 +1,11 @@
-import { promises as fsp } from 'fs'
-import fs from 'fs'
-import path from 'path'
 import resolve from 'enhanced-resolve'
-import { init, parse } from 'es-module-lexer'
-import { debug } from './constants'
+import { parse } from 'es-module-lexer'
+import { promises as fsp } from 'fs'
 import isBuiltin from 'is-builtin-module'
+import path from 'path'
+import os from 'os'
+import { debug } from './constants'
+import { batchedPromiseAll } from 'batched-promise-all'
 
 const defaultResolver = resolve.create.sync({
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.mjs'],
@@ -20,6 +21,8 @@ export type ResultType = {
     importer: string
 }
 
+const MAX_IO_OPS: number = os.cpus().length * 4
+
 export async function walkEsModules({
     entryPoint,
     resolver = defaultResolver,
@@ -29,13 +32,15 @@ export async function walkEsModules({
 
     while (toProcess.length) {
         // read files to process concurrently
-        const files = await Promise.all(
-            toProcess.map(async (filePath) => {
+        const files = await batchedPromiseAll(
+            toProcess,
+            async (filePath) => {
                 return {
                     content: await (await fsp.readFile(filePath)).toString(),
                     filePath,
                 }
-            }),
+            },
+            MAX_IO_OPS,
         )
         let newResults: ResultType[] = []
         // for every files get its imports and add them to results
