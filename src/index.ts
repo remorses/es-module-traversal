@@ -16,7 +16,7 @@ function isRelative(x: string) {
 
 export type ResultType = {
     importPath: string
-    resolved?: string
+    resolvedImportPath?: string
     importer: string
 }
 
@@ -44,13 +44,13 @@ export async function walkEsModules({
             newResults.push(
                 ...importPaths.map((importPath) => {
                     // TODO maybe throw when import is not resolved?
-                    const resolved =
+                    const resolvedImportPath =
                         resolver(path.dirname(filePath), importPath) ||
                         undefined
                     return {
                         importPath,
                         importer: filePath,
-                        resolved,
+                        resolved: resolvedImportPath,
                     }
                 }),
             )
@@ -60,7 +60,7 @@ export async function walkEsModules({
         // process the relative imports found in current path
         toProcess = newResults
             .filter((x) => isRelative(x.importPath))
-            .map((x) => x.resolved)
+            .map((x) => x.resolvedImportPath)
             .filter(Boolean)
     }
     return [...results]
