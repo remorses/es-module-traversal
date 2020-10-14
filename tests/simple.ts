@@ -9,5 +9,5 @@ it('works', async () => {
     const currentFile = path.resolve(__dirname, __filename)
     await from(
         walkEsModulesSync(path.resolve(__dirname, __filename)),
-    ).forEach((x) => console.log(x))
+    ).forEach((x) => console.log(x.importPath))
 })

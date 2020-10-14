@@ -14,10 +14,16 @@ function isRelative(x: string) {
     return x.startsWith('.') || x.startsWith('/')
 }
 
+export type ResultType = {
+    importPath: string
+    resolved?: string
+    importer: string
+}
+
 export function* walkEsModulesSync(
     entryPoint,
     resolver = defaultResolver,
-): Generator {
+): Generator<ResultType> {
     const content = fs.readFileSync(entryPoint).toString()
     const [imports, exports] = parse(content)
     for (const { s, e } of imports) {
@@ -28,8 +34,10 @@ export function* walkEsModulesSync(
         if (isBuiltin(importPath)) {
             continue
         }
-        const resolved = resolver(path.dirname(entryPoint), importPath)
+        const resolved = resolver(path.dirname(entryPoint), importPath) || undefined
         yield { importPath, resolved, importer: entryPoint }
-        yield* walkEsModulesSync(resolved, resolver)
+        if (isRelative(importPath)) {
+            yield* walkEsModulesSync(resolved, resolver)
+        }
     }
 }
