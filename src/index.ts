@@ -89,6 +89,7 @@ function getImportPaths(content) {
         const isDynamicImport = d > -1
         if (isDynamicImport) {
             try {
+                // dynamic import paths are expressions, if they are dimple strings i can get the importPath
                 importPath = eval(importPath)
             } catch {
                 continue
