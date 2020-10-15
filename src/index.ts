@@ -29,7 +29,7 @@ export type ResultType = {
 
 const MAX_IO_OPS: number = os.cpus().length * 4
 
-// TODO does not support jsx and ts
+
 // change the resolver and readFile function to be injectable, this way
 // - in vite i can read the file from the server, this way the server will transpile the file before sending it
 // - resolver returns the url of the server for relative paths, with t=1 to skip rewrite caching
@@ -37,12 +37,17 @@ const MAX_IO_OPS: number = os.cpus().length * 4
 // maybe before sending the file the server want to process other files?
 // cache can use previous rewrites (before the _analyze.json has been generated)
 
-
 // another use case for this plugin is asset export, get all the imports from the entrypoiny in html, save them on disk with right content type
 
+export async function defaultReadFile(filePath: string): Promise<string> {
+    return await (await fsp.readFile(filePath)).toString()
+}
+
+// TODO return an import graph? with nodes and edges arrays
 export async function walkEsModules({
     entryPoint,
     resolver = defaultResolver,
+    readFile = defaultReadFile,
 }): Promise<ResultType[]> {
     let results: Set<ResultType> = new Set()
     let toProcess = [entryPoint]
@@ -54,7 +59,7 @@ export async function walkEsModules({
             toProcess,
             async (filePath) => {
                 return {
-                    content: await (await fsp.readFile(filePath)).toString(),
+                    content: await readFile(filePath), // you can transpile modules from jsx and tsx here
                     filePath,
                 }
             },
@@ -68,6 +73,7 @@ export async function walkEsModules({
                 ...importPaths.map(
                     (importPath): ResultType => {
                         // TODO maybe throw when import is not resolved?
+                        // you can resolve to a local running server (vite) here if you want
                         const resolvedImportPath =
                             resolver(path.dirname(filePath), importPath) ||
                             undefined
