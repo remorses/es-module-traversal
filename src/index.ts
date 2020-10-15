@@ -48,10 +48,9 @@ export async function defaultReadFile(filePath: string): Promise<string> {
 
 export type Args = {
     entryPoint: string
-    resolver?:
-        | ((cwd: string, id: string) => string)
-        | ((cwd: string, id: string) => Promise<string>)
-    readFile?: ((path: string) => Promise<string>) | ((path: string) => string)
+    resolver?: (cwd: string, id: string) => string
+    // | ((cwd: string, id: string) => Promise<string>)
+    readFile?: ((path: string) => string) | ((path: string) => Promise<string>)
 }
 
 // TODO return an import graph? with nodes and edges arrays
@@ -80,12 +79,12 @@ export async function walkEsModules({
         // for every files get its imports and add them to results
         for (let { filePath, content } of files) {
             const importPaths = getImportPaths(content)
-            const objects = await batchedPromiseAll(
+            const objects = map(
                 importPaths,
-                async (importPath): Promise<ResultType> => {
+                (importPath): ResultType => {
                     // TODO maybe throw when import is not resolved?
                     // you can resolve to a local running server (vite) here if you want
-                    const resolvedImportPath = await resolver(
+                    const resolvedImportPath = resolver(
                         path.dirname(filePath),
                         importPath,
                     )
@@ -138,4 +137,8 @@ function getImportPaths(content) {
         result.push(importPath)
     }
     return result
+}
+
+const map = <T, Z>(x: T[], func: (x: T) => Z, _n): Z[] => {
+    return x.map(func)
 }
