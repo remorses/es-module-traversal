@@ -51,7 +51,7 @@ export type Args = {
     resolver?:
         | ((cwd: string, id: string) => string)
         | ((cwd: string, id: string) => Promise<string>)
-    readFile?: (path: string) => Promise<string>
+    readFile?: ((path: string) => Promise<string>) | ((path: string) => string)
 }
 
 // TODO return an import graph? with nodes and edges arrays
