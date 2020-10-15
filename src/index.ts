@@ -7,12 +7,18 @@ import os from 'os'
 import { debug } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
 
+const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
+
 const defaultResolver = resolve.create.sync({
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.mjs'],
+    extensions: [...JS_EXTENSIONS],
 })
 
 function isRelative(x: string) {
     return x.startsWith('.') || x.startsWith('/')
+}
+
+function isJsModule(x: string) {
+    return JS_EXTENSIONS.has(path.extname(x))
 }
 
 export type ResultType = {
@@ -68,6 +74,7 @@ export async function walkEsModules({
         toProcess = newResults
             .filter((x) => isRelative(x.importPath))
             .map((x) => x.resolvedImportPath)
+            .filter((x) => isJsModule(x))
             .filter(Boolean)
     }
     return [...results]
