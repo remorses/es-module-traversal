@@ -29,7 +29,6 @@ export type ResultType = {
 
 const MAX_IO_OPS: number = os.cpus().length * 4
 
-
 // change the resolver and readFile function to be injectable, this way
 // - in vite i can read the file from the server, this way the server will transpile the file before sending it
 // - resolver returns the url of the server for relative paths, with t=1 to skip rewrite caching
@@ -69,22 +68,25 @@ export async function walkEsModules({
         // for every files get its imports and add them to results
         for (let { filePath, content } of files) {
             const importPaths = getImportPaths(content)
-            newResults.push(
-                ...importPaths.map(
-                    (importPath): ResultType => {
-                        // TODO maybe throw when import is not resolved?
-                        // you can resolve to a local running server (vite) here if you want
-                        const resolvedImportPath =
-                            resolver(path.dirname(filePath), importPath) ||
-                            undefined
-                        return {
-                            importPath,
-                            importer: filePath,
-                            resolvedImportPath,
-                        }
-                    },
-                ),
+            const objects = await batchedPromiseAll(
+                importPaths,
+                async (importPath): Promise<ResultType> => {
+                    // TODO maybe throw when import is not resolved?
+                    // you can resolve to a local running server (vite) here if you want
+                    const resolvedImportPath = await resolver(
+                        path.dirname(filePath),
+                        importPath,
+                    )
+
+                    return {
+                        importPath,
+                        importer: filePath,
+                        resolvedImportPath: resolvedImportPath || undefined,
+                    }
+                },
+                MAX_IO_OPS,
             )
+            newResults.push(...objects)
         }
         // add new found imports to the results
         newResults.forEach((x) => results.add(x))
