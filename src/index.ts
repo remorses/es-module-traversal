@@ -9,9 +9,13 @@ import { batchedPromiseAll } from 'batched-promise-all'
 
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
 
-const defaultResolver = resolve.create.sync({
+const _defaultResolver = resolve.create.sync({
     extensions: [...JS_EXTENSIONS],
 })
+
+function defaultResolver(cwd: string, id: string) {
+    return _defaultResolver(cwd, id) || ''
+}
 
 function isRelative(x: string) {
     return x.startsWith('.') || x.startsWith('/')
@@ -42,12 +46,20 @@ export async function defaultReadFile(filePath: string): Promise<string> {
     return await (await fsp.readFile(filePath)).toString()
 }
 
+export type Args = {
+    entryPoint: string
+    resolver?:
+        | ((cwd: string, id: string) => string)
+        | ((cwd: string, id: string) => Promise<string>)
+    readFile?: (path: string) => Promise<string>
+}
+
 // TODO return an import graph? with nodes and edges arrays
 export async function walkEsModules({
     entryPoint,
     resolver = defaultResolver,
     readFile = defaultReadFile,
-}): Promise<ResultType[]> {
+}: Args): Promise<ResultType[]> {
     let results: Set<ResultType> = new Set()
     let toProcess = [entryPoint]
     await init
