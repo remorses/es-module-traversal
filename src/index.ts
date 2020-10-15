@@ -74,8 +74,8 @@ export async function walkEsModules({
         toProcess = newResults
             .filter((x) => isRelative(x.importPath))
             .map((x) => x.resolvedImportPath)
-            .filter((x) => isJsModule(x))
             .filter(Boolean)
+            .filter(isJsModule)
     }
     return [...results]
 }
