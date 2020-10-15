@@ -1,5 +1,5 @@
 import resolve from 'enhanced-resolve'
-import { parse } from 'es-module-lexer'
+import { init, parse } from 'es-module-lexer'
 import { promises as fsp } from 'fs'
 import isBuiltin from 'is-builtin-module'
 import path from 'path'
@@ -35,6 +35,7 @@ export async function walkEsModules({
 }): Promise<ResultType[]> {
     let results: Set<ResultType> = new Set()
     let toProcess = [entryPoint]
+    await init
 
     while (toProcess.length) {
         // read files to process concurrently
