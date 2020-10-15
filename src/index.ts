@@ -139,6 +139,6 @@ function getImportPaths(content) {
     return result
 }
 
-const map = <T, Z>(x: T[], func: (x: T) => Z, _n): Z[] => {
+const map = <T, Z>(x: T[], func: (x: T) => Z, _n?: number): Z[] => {
     return x.map(func)
 }
