@@ -12,6 +12,9 @@ import { traverseEsModules } from 'es-module-traversal'
 
 const res = await traverseEsModules({
     entryPoint: currentFile,
+    onFile: (path) => {
+        console.log('traversed ' + path)
+    },
 })
 
 console.log(res)

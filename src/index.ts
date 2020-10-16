@@ -14,15 +14,6 @@ export type ResultType = {
     importer: string
 }
 
-// change the resolver and readFile function to be injectable, this way
-// - in vite i can read the file from the server, this way the server will transpile the file before sending it
-// - resolver returns the url of the server for relative paths, with t=1 to skip rewrite caching
-// problems are
-// maybe before sending the file the server want to process other files?
-// cache can use previous rewrites (before the _analyze.json has been generated)
-
-// another use case for this plugin is asset export, get all the imports from the entrypoiny in html, save them on disk with right content type
-
 export async function defaultReadFile(filePath: string): Promise<string> {
     return await (await fsp.readFile(filePath)).toString()
 }
