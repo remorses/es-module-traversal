@@ -3,35 +3,16 @@ import { init, parse } from 'es-module-lexer'
 import { promises as fsp } from 'fs'
 import isBuiltin from 'is-builtin-module'
 import path from 'path'
-import os from 'os'
 import { debug } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
 
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
-
-const _defaultResolver = resolve.create.sync({
-    extensions: [...JS_EXTENSIONS],
-})
-
-function defaultResolver(cwd: string, id: string) {
-    return _defaultResolver(cwd, id) || ''
-}
-
-function isRelative(x: string) {
-    return x.startsWith('.') || x.startsWith('/')
-}
-
-function isJsModule(x: string) {
-    return JS_EXTENSIONS.has(path.extname(x))
-}
 
 export type ResultType = {
     importPath: string
     resolvedImportPath?: string
     importer: string
 }
-
-const MAX_IO_OPS: number = os.cpus().length * 4
 
 // change the resolver and readFile function to be injectable, this way
 // - in vite i can read the file from the server, this way the server will transpile the file before sending it
@@ -141,4 +122,20 @@ function getImportPaths(content) {
 
 const map = <T, Z>(x: T[], func: (x: T) => Z, _n?: number): Z[] => {
     return x.map(func)
+}
+
+const _defaultResolver = resolve.create.sync({
+    extensions: [...JS_EXTENSIONS],
+})
+
+function defaultResolver(cwd: string, id: string) {
+    return _defaultResolver(cwd, id) || ''
+}
+
+function isRelative(x: string) {
+    return x.startsWith('.') || x.startsWith('/')
+}
+
+function isJsModule(x: string) {
+    return JS_EXTENSIONS.has(path.extname(x))
 }
