@@ -1,3 +1,3 @@
-import x from './deeper/secondLevel'
+import x from './deeper/secondLevel.js'
 
 export { x }

@@ -128,14 +128,15 @@ const _defaultResolver = resolve.create.sync({
     extensions: [...JS_EXTENSIONS],
 })
 
-function defaultResolver(cwd: string, id: string) {
+export function defaultResolver(cwd: string, id: string) {
     return _defaultResolver(cwd, id) || ''
 }
 
-function isRelative(x: string) {
+export function isRelative(x: string) {
     return x.startsWith('.') || x.startsWith('/')
 }
 
 function isJsModule(x: string) {
-    return JS_EXTENSIONS.has(path.extname(x))
+    const ext = path.extname(x)
+    return !ext || JS_EXTENSIONS.has(ext)
 }

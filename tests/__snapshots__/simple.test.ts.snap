@@ -2,9 +2,18 @@
 
 exports[`example 1`] = `
 Array [
-  "./firstLevelDynamic",
-  "./firstLevel",
-  "./deeper/secondLevel",
+  "./firstLevelDynamic.js",
+  "./firstLevel.js",
+  "./deeper/secondLevel.js",
+  "es-module-lexer",
+]
+`;
+
+exports[`with server 1`] = `
+Array [
+  "./firstLevelDynamic.js",
+  "./firstLevel.js",
+  "./deeper/secondLevel.js",
   "es-module-lexer",
 ]
 `;
