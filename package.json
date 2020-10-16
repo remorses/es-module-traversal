@@ -1,7 +1,7 @@
 {
     "name": "es-module-traversal",
     "_": "[bump]",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "",
     "main": "dist/index.js",
     "module": "esm/index.js",
