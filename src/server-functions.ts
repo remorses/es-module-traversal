@@ -37,7 +37,7 @@ export function makeServerFunctions({
                 )
             }
             importerDirectory = path.relative(root, importerDirectory)
-            console.log({ importerDirectory, importPath, root })
+            // console.log({ importerDirectory, importPath, root })
             if (importPath.startsWith('/')) {
                 // import from / means import from the root of the website
                 importPath = importPath.slice(1)

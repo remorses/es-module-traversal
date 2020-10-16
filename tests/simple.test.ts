@@ -26,7 +26,7 @@ it('with server', async () => {
     const res = await traverseEsModules({
         entryPoint: currentFile,
         ...makeServerFunctions({
-            downloadFilesToDir: './tests/mirror/2',
+            downloadFilesToDir: './tests/mirror/example',
             port: PORT,
             root,
         }),
