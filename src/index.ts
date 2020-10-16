@@ -3,7 +3,7 @@ import { init, parse } from 'es-module-lexer'
 import { promises as fsp } from 'fs'
 import isBuiltin from 'is-builtin-module'
 import path from 'path'
-import { debug } from './constants'
+import { debug, MAX_IO_OPS } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
 
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
