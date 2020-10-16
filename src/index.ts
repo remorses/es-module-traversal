@@ -32,17 +32,24 @@ export type Args = {
     resolver?: (cwd: string, id: string) => string
     // | ((cwd: string, id: string) => Promise<string>)
     readFile?: ((path: string) => string) | ((path: string) => Promise<string>)
+    onFile?: ((path: string) => any) | ((path: string) => Promise<any>)
 }
 
 // TODO return an import graph? with nodes and edges arrays
 export async function traverseEsModules({
     entryPoint,
     resolver = defaultResolver,
+    onFile,
     readFile = defaultReadFile,
 }: Args): Promise<ResultType[]> {
     let results: Set<ResultType> = new Set()
     let toProcess = [entryPoint]
     await init
+
+    // first onFile
+    if (onFile) {
+        await onFile(entryPoint)
+    }
 
     while (toProcess.length) {
         // read files to process concurrently
@@ -82,6 +89,13 @@ export async function traverseEsModules({
         }
         // add new found imports to the results
         newResults.forEach((x) => results.add(x))
+        if (onFile) {
+            await batchedPromiseAll(
+                newResults.map((x) => x.resolvedImportPath).filter(Boolean),
+                onFile,
+                MAX_IO_OPS,
+            )
+        }
         // process the relative imports found in current path
         toProcess = newResults
             .filter((x) => isRelative(x.importPath))

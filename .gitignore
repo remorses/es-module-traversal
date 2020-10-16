@@ -8,6 +8,7 @@ yarn-error.log*
 play*
 dist/*
 esm
+/tests/mirror
 
 # Runtime data
 pids

@@ -1,5 +1,5 @@
 import { init } from 'es-module-lexer'
-import { promises as fsp } from 'fs'
+import { promises as fsp, read } from 'fs'
 import fetch from 'node-fetch'
 import path from 'path'
 import fs from 'fs-extra'
@@ -32,6 +32,16 @@ it('with server', async () => {
     const PORT = '7000'
     const stop = await serve(PORT)
     const currentFile = path.resolve('tests/example/entry.js')
+    const readFile = async (url) => {
+        let content = ''
+        if (!url.startsWith('http')) {
+            content = await defaultReadFile(url)
+        } else {
+            const res = await fetch(url, { headers: {} })
+            content = await res.text()
+        }
+        return content
+    }
     const res = await traverseEsModules({
         entryPoint: currentFile,
         resolver: (ctx, importPath) => {
@@ -49,15 +59,11 @@ it('with server', async () => {
             // console.log({ importPath, pathname: importerDirectory })
             return `http://localhost:${PORT}/${importPath}`
         },
-        readFile: async (url) => {
-            if (!url.startsWith('http')) {
-                return defaultReadFile(url)
-            }
-            // read from the server
-            const res = await fetch(url, { headers: {} })
-            const content = await res.text()
-            // await writeUrlFileToDisk({ content, url, dest: './mirror' })
-            return content
+        readFile,
+        onFile: async (url) => {
+            // recreate server files structure on disk
+            const content = await readFile(url)
+            await writeUrlFileToDisk({ content, url, dest: './tests/mirror' })
         },
     })
     expect(res.map((x) => x.importPath)).toMatchSnapshot()
@@ -66,9 +72,13 @@ it('with server', async () => {
 
 // add this to readFile to recreate the server files
 async function writeUrlFileToDisk({ url, content, dest }) {
-    // console.log(url)
-    let filePath = relativePathFromUrl(url)
+    // console.log({ url })
+    let filePath = url.startsWith('http')
+        ? relativePathFromUrl(url)
+        : path.relative(process.cwd(), url)
+
     filePath = path.join(dest, filePath)
+
     await fs.createFile(filePath)
     await fs.writeFile(filePath, content)
     return
