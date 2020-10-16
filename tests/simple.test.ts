@@ -42,11 +42,12 @@ it('with server', async () => {
         }
         return content
     }
+    const root = process.cwd()
     const res = await traverseEsModules({
         entryPoint: currentFile,
         resolver: (ctx, importPath) => {
             let importerDirectory = ctx.startsWith('http')
-                ? relativePathFromUrl(ctx)
+                ? urlToRelativePath(ctx)
                 : ctx
             if (!isRelative(importPath)) {
                 return defaultResolver(
@@ -54,8 +55,14 @@ it('with server', async () => {
                     importPath,
                 )
             }
-            importerDirectory = path.relative(process.cwd(), importerDirectory)
-            importPath = path.join(importerDirectory, importPath)
+            importerDirectory = path.relative(root, importerDirectory)
+            if (importPath.startsWith('/')) {
+                // import from / means import from the root of the website
+                importPath = path.join(root, importPath.slice(1))
+            } else {
+                // resolve relative to the importer file
+                importPath = path.join(importerDirectory, importPath)
+            }
             // console.log({ importPath, pathname: importerDirectory })
             return `http://localhost:${PORT}/${importPath}`
         },
@@ -63,7 +70,12 @@ it('with server', async () => {
         onFile: async (url) => {
             // recreate server files structure on disk
             const content = await readFile(url)
-            await writeUrlFileToDisk({ content, url, dest: './tests/mirror' })
+            await writeUrlFileToDisk({
+                content,
+                url,
+                dest: './tests/mirror',
+                root,
+            })
         },
     })
     expect(res.map((x) => x.importPath)).toMatchSnapshot()
@@ -71,11 +83,11 @@ it('with server', async () => {
 })
 
 // add this to readFile to recreate the server files
-async function writeUrlFileToDisk({ url, content, dest }) {
+async function writeUrlFileToDisk({ url, content, dest, root }) {
     // console.log({ url })
     let filePath = url.startsWith('http')
-        ? relativePathFromUrl(url)
-        : path.relative(process.cwd(), url)
+        ? urlToRelativePath(url)
+        : path.relative(root, url)
 
     filePath = path.join(dest, filePath)
 
@@ -84,7 +96,7 @@ async function writeUrlFileToDisk({ url, content, dest }) {
     return
 }
 
-function relativePathFromUrl(ctx) {
+function urlToRelativePath(ctx) {
     let pathname = new URL(ctx).pathname
     pathname = pathname.startsWith('/') ? pathname.slice(1) : pathname
     return pathname
