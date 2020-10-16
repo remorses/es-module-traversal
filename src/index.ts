@@ -125,6 +125,7 @@ function getImportPaths(content) {
     return result
 }
 
+// this map has same signature as batchedPromiseAll in case i want to refactor and make resolver asynchronous
 const map = <T, Z>(x: T[], func: (x: T) => Z, _n?: number): Z[] => {
     return x.map(func)
 }
