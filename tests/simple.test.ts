@@ -37,7 +37,7 @@ it('with server', async () => {
 it('with server and root paths', async () => {
     const PORT = '7000'
     const stop = await serve(PORT)
-    const currentFile = path.resolve('tests/example-with-root/entry.js')
+    const currentFile = `http://localhost:${PORT}/tests/example-with-root/entry.js`
     const root = process.cwd()
     const res = await traverseEsModules({
         entryPoint: currentFile,

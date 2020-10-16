@@ -35,7 +35,7 @@ export async function traverseEsModules({
 }: Args): Promise<ResultType[]> {
     let results: Set<ResultType> = new Set()
     const alreadyProcessed = new Set([])
-    let toProcess = [entryPoint]
+    let toProcess = [entryPoint] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
     // first onFile

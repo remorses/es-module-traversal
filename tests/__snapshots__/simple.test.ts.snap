@@ -22,18 +22,13 @@ exports[`with server and root paths 1`] = `
 Array [
   Object {
     "importPath": "/tests/example-with-root/firstLevel.js",
-    "importer": "/Users/morse/Documents/GitHub/walk-es-modules/tests/example-with-root/entry.js",
+    "importer": "http://localhost:7000/tests/example-with-root/entry.js",
     "resolvedImportPath": "http://localhost:7000/tests/example-with-root/firstLevel.js",
   },
   Object {
     "importPath": "/tests/example-with-root/entry.js",
     "importer": "http://localhost:7000/tests/example-with-root/firstLevel.js",
     "resolvedImportPath": "http://localhost:7000/tests/example-with-root/entry.js",
-  },
-  Object {
-    "importPath": "/tests/example-with-root/firstLevel.js",
-    "importer": "http://localhost:7000/tests/example-with-root/entry.js",
-    "resolvedImportPath": "http://localhost:7000/tests/example-with-root/firstLevel.js",
   },
 ]
 `;
