@@ -1,17 +1,15 @@
 import { init } from 'es-module-lexer'
+import fetch from 'node-fetch'
 import path from 'path'
 import { URL } from 'url'
-import fetch from 'node-fetch'
-var serveStatic = require('serve-static')
-
-import os from 'os'
 import {
     defaultReadFile,
     defaultResolver,
     isRelative,
-    traverseEsModules,
+    traverseEsModules
 } from '../src'
 import { serve } from './support'
+
 
 it('works', async () => {
     await init
@@ -50,7 +48,6 @@ it('with server', async () => {
             return `http://localhost:${PORT}/${importPath}`
         },
         readFile: async (url) => {
-            console.log({ url })
             if (!url.startsWith('http')) {
                 return defaultReadFile(url)
             }
