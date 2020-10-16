@@ -54,7 +54,7 @@ export type Args = {
 }
 
 // TODO return an import graph? with nodes and edges arrays
-export async function walkEsModules({
+export async function traverseEsModules({
     entryPoint,
     resolver = defaultResolver,
     readFile = defaultReadFile,
