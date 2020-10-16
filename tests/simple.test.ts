@@ -1,15 +1,16 @@
 import { init } from 'es-module-lexer'
+import { promises as fsp } from 'fs'
 import fetch from 'node-fetch'
 import path from 'path'
+import fs from 'fs-extra'
 import { URL } from 'url'
 import {
     defaultReadFile,
     defaultResolver,
     isRelative,
-    traverseEsModules
+    traverseEsModules,
 } from '../src'
 import { serve } from './support'
-
 
 it('works', async () => {
     await init
@@ -26,6 +27,7 @@ it('example', async () => {
     })
     expect(res.map((x) => x.importPath)).toMatchSnapshot()
 })
+
 it('with server', async () => {
     const PORT = '7000'
     const stop = await serve(PORT)
@@ -54,12 +56,23 @@ it('with server', async () => {
             // read from the server
             const res = await fetch(url, { headers: {} })
             const content = await res.text()
+            // await writeUrlFileToDisk({ content, url, dest: './mirror' })
             return content
         },
     })
     expect(res.map((x) => x.importPath)).toMatchSnapshot()
     await stop()
 })
+
+// add this to readFile to recreate the server files
+async function writeUrlFileToDisk({ url, content, dest }) {
+    // console.log(url)
+    let filePath = relativePathFromUrl(url)
+    filePath = path.join(dest, filePath)
+    await fs.createFile(filePath)
+    await fs.writeFile(filePath, content)
+    return
+}
 
 function relativePathFromUrl(ctx) {
     let pathname = new URL(ctx).pathname
