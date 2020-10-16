@@ -1,5 +1,5 @@
 import os from 'os'
-export const PACKAGE_NAME = 'es-modules-walker'
+export const PACKAGE_NAME = 'es-module-traversal'
 
 export const debug = require('debug')(PACKAGE_NAME)
 
