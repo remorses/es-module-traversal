@@ -1,4 +1,6 @@
 import path from 'path'
+import { URL } from 'url'
+import fetch from 'node-fetch'
 import fs from 'fs-extra'
 import { makeServerFunctions, traverseEsModules } from '../src'
 
@@ -17,23 +19,20 @@ async function main() {
             root: path.resolve('/Users/morse/Documents/GitHub/test-vite/src'),
         }),
     })
-    await fs.writeFile(path.join(dest, 'index.html'), getHtmlCode(entryPoint))
+    await fs.writeFile(path.join(dest, 'index.html'), await getHtmlCode(base))
     console.log(JSON.stringify(res, null, 4))
 }
 
-function getHtmlCode(entryPoint) {
-    return `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <title>Vite App</title>
-    </head>
-    <body>
-      <div id="root"></div>
-      <script type="module" src="${entryPoint}"></script>
-    </body>
-    </html>
-    `
+async function getHtmlCode(base) {
+    const url = new URL('index.html', base).toString()
+    // console.log({ url })
+    const res = await fetch(url, { headers: {} })
+    if (!res.ok) {
+        throw new Error(`Cannot fetch '${url}': ${res.statusText}`)
+    }
+    const content = await res.text()
+    // console.log({ content })
+    return content
 }
 
-main()
+main().catch(console.error)
