@@ -5,6 +5,7 @@ import isBuiltin from 'is-builtin-module'
 import path from 'path'
 import { debug, MAX_IO_OPS } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
+import { cleanUrl } from './support'
 
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
 
@@ -20,6 +21,7 @@ export async function defaultReadFile(filePath: string): Promise<string> {
 
 export type Args = {
     entryPoint: string
+    ignore?: string[]
     resolver?: (cwd: string, id: string) => string
     // | ((cwd: string, id: string) => Promise<string>)
     readFile?: ((path: string) => string) | ((path: string) => Promise<string>)
@@ -31,10 +33,13 @@ export async function traverseEsModules({
     entryPoint,
     resolver = defaultResolver,
     onFile,
+    ignore = [],
     readFile = defaultReadFile,
 }: Args): Promise<ResultType[]> {
     let results: Set<ResultType> = new Set()
+    const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
+    // entryPoint = cleanUrl(entryPoint)
     let toProcess = [entryPoint] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
@@ -59,6 +64,7 @@ export async function traverseEsModules({
         let newResults: ResultType[] = []
         // for every files get its imports and add them to results
         for (let { filePath, content } of files) {
+            debug(`traversing ${filePath}`)
             const importPaths = getImportPaths(content)
             const objects = map(
                 importPaths,
@@ -94,8 +100,15 @@ export async function traverseEsModules({
             .filter((x) => isRelative(x.importPath))
             .map((x) => x.resolvedImportPath)
             .filter(Boolean)
+            // .map(cleanUrl)
             .filter(isJsModule)
+            .filter((x) => {
+                x = cleanUrl(x)
+                return !ignoreFiles.has(x)
+            })
             .filter((x) => !alreadyProcessed.has(x))
+
+        debug(`traversing inside [${toProcess.join(', ')}]`)
     }
     return [...results]
 }
@@ -116,20 +129,23 @@ function getImportPaths(source: string) {
                 // dynamic import paths are expressions, if they are dimple strings i can get the importPath
                 importPath = eval(importPath)
             } catch {
+                debug(`could not evaluate dynamic import ${importPath}`)
                 continue
             }
         }
         const isImportMeta = d === -2
         if (isImportMeta) {
+            debug(`skipping import meta ${importPath}`)
             continue
         }
-        debug(importPath)
+        // debug(importPath)
         if (isBuiltin(importPath)) {
             continue
         }
 
         result.push(importPath)
     }
+    debug(`parsed imports [${result.join(', ')}]`)
     return result
 }
 
@@ -151,6 +167,6 @@ export function isRelative(x: string) {
 }
 
 function isJsModule(x: string) {
-    const ext = path.extname(x)
+    const ext = path.extname(cleanUrl(x))
     return !ext || JS_EXTENSIONS.has(ext)
 }

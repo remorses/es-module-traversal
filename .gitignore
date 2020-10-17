@@ -9,6 +9,7 @@ play*
 dist/*
 esm
 /tests/mirror
+/mirror
 
 # Runtime data
 pids
