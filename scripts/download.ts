@@ -11,8 +11,7 @@ async function main() {
     await fs.remove(dest)
     const entryPoint = `/main.tsx.js?addedExtension`
     const res = await traverseEsModules({
-        entryPoint: base + entryPoint,
-        ignore: [`${base}/vite/client`],
+        entryPoints: [base + entryPoint],
         ...makeServerFunctions({
             downloadFilesToDir: dest,
             port,

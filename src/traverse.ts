@@ -20,7 +20,7 @@ export async function defaultReadFile(filePath: string): Promise<string> {
 }
 
 export type Args = {
-    entryPoint: string
+    entryPoints: string[]
     ignore?: string[]
     resolver?: (cwd: string, id: string) => string
     // | ((cwd: string, id: string) => Promise<string>)
@@ -30,7 +30,7 @@ export type Args = {
 
 // TODO return an import graph? with nodes and edges arrays
 export async function traverseEsModules({
-    entryPoint,
+    entryPoints,
     resolver = defaultResolver,
     onFile,
     ignore = [],
@@ -40,12 +40,12 @@ export async function traverseEsModules({
     const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
     // entryPoint = cleanUrl(entryPoint)
-    let toProcess = [entryPoint] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
+    let toProcess = [...entryPoints] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
     // first onFile
     if (onFile) {
-        await onFile(entryPoint)
+        await Promise.all(entryPoints.map((x) => onFile(x)))
     }
 
     while (toProcess.length) {
