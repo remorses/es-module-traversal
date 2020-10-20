@@ -3,13 +3,15 @@ import fs from 'fs-extra'
 import fetch from 'node-fetch'
 import { URL } from 'url'
 import path from 'path'
+import { debug } from 'console'
 
 export function makeServerFunctions({
     root = process.cwd(),
     port,
     host = 'localhost',
     protocol = 'http',
-    downloadFilesToDir,
+    downloadFilesToDir = '',
+    stopTraversing = undefined as Function,
     headers = {},
 }): Partial<Args> {
     const readFile = async (url) => {
@@ -27,14 +29,19 @@ export function makeServerFunctions({
     }
     return {
         resolver: (ctx, importPath) => {
+            if (stopTraversing && stopTraversing(importPath)) {
+                return
+            }
             let importerDirectory = ctx.startsWith('http')
-                ? urlToRelativePath(ctx)
+                ? path.resolve(root, urlToRelativePath(ctx))
                 : ctx
             if (!isRelative(importPath)) {
-                return defaultResolver(
-                    path.resolve(importerDirectory),
+                console.log(
+                    'defaultResolver from',
+                    importerDirectory,
                     importPath,
                 )
+                return defaultResolver(importerDirectory, importPath)
             }
             importerDirectory = path.relative(root, importerDirectory)
             // console.log({ importerDirectory, importPath, root })

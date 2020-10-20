@@ -1,4 +1,4 @@
-import resolve from 'enhanced-resolve'
+import resolve from 'resolve'
 import { init, parse } from 'es-module-lexer'
 import { promises as fsp } from 'fs'
 import isBuiltin from 'is-builtin-module'
@@ -65,7 +65,7 @@ export async function traverseEsModules({
         // for every files get its imports and add them to results
         for (let { filePath, content } of files) {
             debug(`traversing ${filePath}`)
-            const importPaths = getImportPaths(content)
+            const importPaths = getImportPaths(content, filePath)
             const objects = map(
                 importPaths,
                 (importPath): ResultType => {
@@ -113,14 +113,14 @@ export async function traverseEsModules({
     return [...results]
 }
 
-function getImportPaths(source: string) {
+function getImportPaths(source: string, filePath?: string) {
     // strip UTF-8 BOM
     if (source.charCodeAt(0) === 0xfeff) {
         source = source.slice(1)
     }
     // console.log(source)
     const result: string[] = []
-    const [imports] = parse(source)
+    const imports = tryParse(source, filePath)
     for (const { s, e, d } of imports) {
         let importPath = source.slice(s, e).trim()
         const isDynamicImport = d > -1
@@ -149,14 +149,32 @@ function getImportPaths(source: string) {
     return result
 }
 
+function tryParse(source, message = '') {
+    try {
+        const [imports] = parse(source)
+        return imports
+    } catch {
+        throw new Error('cannot parse ES modules, ' + message)
+    }
+}
+
 // this map has same signature as batchedPromiseAll in case i want to refactor and make resolver asynchronous
 const map = <T, Z>(x: T[], func: (x: T) => Z, _n?: number): Z[] => {
     return x.map(func)
 }
 
-const _defaultResolver = resolve.create.sync({
-    extensions: [...JS_EXTENSIONS],
-})
+export const _defaultResolver = (root: string, id: string) => {
+    try {
+        return resolve.sync(id, {
+            basedir: root,
+            extensions: [...JS_EXTENSIONS],
+            // necessary to work with pnpm
+            preserveSymlinks: true || false, // TODO make it work with pnpm
+        })
+    } catch (e) {
+        console.error(`WARN: cannot find ${id} from ${root}`)
+    }
+}
 
 export function defaultResolver(cwd: string, id: string) {
     return _defaultResolver(cwd, id) || ''
