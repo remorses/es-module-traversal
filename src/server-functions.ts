@@ -11,7 +11,6 @@ export function makeServerFunctions({
     host = 'localhost',
     protocol = 'http',
     downloadFilesToDir = '',
-    stopTraversing = undefined as Function,
     headers = {},
 }): Partial<Args> {
     const readFile = async (url) => {
@@ -29,9 +28,6 @@ export function makeServerFunctions({
     }
     return {
         resolver: (ctx, importPath) => {
-            if (stopTraversing && stopTraversing(importPath)) {
-                return
-            }
             let importerDirectory = ctx.startsWith('http')
                 ? path.resolve(root, urlToRelativePath(ctx))
                 : ctx

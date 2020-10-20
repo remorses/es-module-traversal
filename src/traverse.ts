@@ -22,6 +22,7 @@ export async function defaultReadFile(filePath: string): Promise<string> {
 export type Args = {
     entryPoints: string[]
     ignore?: string[]
+    stopTraversing?: (importPath: string) => boolean
     resolver?: (cwd: string, id: string) => string
     // | ((cwd: string, id: string) => Promise<string>)
     readFile?: ((path: string) => string) | ((path: string) => Promise<string>)
@@ -33,6 +34,7 @@ export async function traverseEsModules({
     entryPoints,
     resolver = defaultResolver,
     onFile,
+    stopTraversing,
     ignore = [],
     readFile = defaultReadFile,
 }: Args): Promise<ResultType[]> {
@@ -98,10 +100,17 @@ export async function traverseEsModules({
         // process the relative imports found in current path
         toProcess = newResults
             .filter((x) => isRelative(x.importPath))
+            .filter((x) => {
+                if (stopTraversing) { // stopTraversing is necessary because some relative imports could take to node_modules directories in vite
+                    return !stopTraversing(x.importPath)
+                }
+                return true
+            })
             .map((x) => x.resolvedImportPath)
             .filter(Boolean)
             // .map(cleanUrl)
             .filter(isJsModule)
+            // .filter((x) => !stopTraversing(x))
             .filter((x) => {
                 x = cleanUrl(x)
                 return !ignoreFiles.has(x)
@@ -172,7 +181,7 @@ export const _defaultResolver = (root: string, id: string) => {
             preserveSymlinks: true || false, // TODO make it work with pnpm
         })
     } catch (e) {
-        console.error(`WARN: cannot find ${id} from ${root}`)
+        console.error(`WARN: cannot resolve '${id}' from '${root}'`)
     }
 }
 
@@ -181,6 +190,7 @@ export function defaultResolver(cwd: string, id: string) {
 }
 
 export function isRelative(x: string) {
+    x = cleanUrl(x)
     return x.startsWith('.') || x.startsWith('/')
 }
 

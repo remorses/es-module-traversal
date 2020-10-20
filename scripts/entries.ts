@@ -17,16 +17,17 @@ async function main() {
     const entryPoint = `/src/index.tsx`
     const res = await traverseEsModules({
         entryPoints: [base + entryPoint],
+        stopTraversing: (importPath) => {
+            return moduleRE.test(importPath)
+        },
         ...makeServerFunctions({
             // downloadFilesToDir: dest,
-            stopTraversing: (importPath) => {
-                return moduleRE.test(importPath)
-            },
             port,
             root: path.resolve(PATH),
         }),
     })
     // await fs.writeFile(path.join(dest, 'index.html'), await getHtmlCode(base))
+    // TODO vite serves node_modules deep paths adding a .js extension instead of searching for the real file
     const paths = [
         ...new Set(
             res
