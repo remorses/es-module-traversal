@@ -1,7 +1,4 @@
 import path from 'path'
-import { URL } from 'url'
-import fetch from 'node-fetch'
-import fs from 'fs-extra'
 import { makeServerFunctions, traverseEsModules } from '../src'
 
 const PATH = '/Users/morse/Documents/GitHub/sterblue0/packages/apps/cloud/'
@@ -27,7 +24,6 @@ async function main() {
         }),
     })
     // await fs.writeFile(path.join(dest, 'index.html'), await getHtmlCode(base))
-    // TODO vite serves node_modules deep paths adding a .js extension instead of searching for the real file
     const paths = [
         ...new Set(
             res
@@ -38,5 +34,12 @@ async function main() {
     ]
     console.log(JSON.stringify(paths, null, 4))
 }
+
+// Plugin
+// add the plugin at the end of middleware
+// when the first request comes in, start taking all the imports using the traverser
+// then use fileToRequestId to get the original importPath and create the entryPoints map
+// create the bundles and save them in root/web_modules
+// add the aliases to the resolver to point to the created web_modules files
 
 main()

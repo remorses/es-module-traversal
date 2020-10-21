@@ -5,7 +5,7 @@ import isBuiltin from 'is-builtin-module'
 import path from 'path'
 import { debug, MAX_IO_OPS } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
-import { cleanUrl } from './support'
+import { cleanUrl, isRunningWithYarnPnp } from './support'
 
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
 
@@ -29,7 +29,6 @@ export type Args = {
     onFile?: ((path: string) => any) | ((path: string) => Promise<any>)
 }
 
-// TODO return an import graph? with nodes and edges arrays
 export async function traverseEsModules({
     entryPoints,
     resolver = defaultResolver,
@@ -101,7 +100,8 @@ export async function traverseEsModules({
         toProcess = newResults
             .filter((x) => isRelative(x.importPath))
             .filter((x) => {
-                if (stopTraversing) { // stopTraversing is necessary because some relative imports could take to node_modules directories in vite
+                if (stopTraversing) {
+                    // stopTraversing is necessary because some relative imports could take to node_modules directories in vite
                     return !stopTraversing(x.importPath)
                 }
                 return true
@@ -178,7 +178,7 @@ export const _defaultResolver = (root: string, id: string) => {
             basedir: root,
             extensions: [...JS_EXTENSIONS],
             // necessary to work with pnpm
-            preserveSymlinks: true || false, // TODO make it work with pnpm
+            preserveSymlinks: isRunningWithYarnPnp || false,
         })
     } catch (e) {
         console.error(`WARN: cannot resolve '${id}' from '${root}'`)
