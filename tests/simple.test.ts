@@ -1,5 +1,6 @@
 import { init } from 'es-module-lexer'
 import glob from 'glob'
+import { URL } from 'url'
 import slash from 'slash'
 import path from 'path'
 import fs from 'fs-extra'
@@ -30,7 +31,6 @@ it('works', async () => {
 
 describe('snapshots', () => {
     const ENTRY_NAME = 'entry.js'
-    const PORT = '9000'
     const casesPath = 'tests/cases'
     const cases = fs
         .readdirSync(casesPath, {
@@ -39,7 +39,7 @@ describe('snapshots', () => {
         .filter((x) => x.isDirectory())
         .map((x) => x.name)
         .map((x) => path.join(casesPath, x))
-    const baseUrl = `http://localhost:${PORT}`
+
     for (let casePath of cases) {
         const snapshotFile = path.resolve(casePath, '__snapshots__')
         if (!casePath.includes('server')) {
@@ -47,17 +47,19 @@ describe('snapshots', () => {
                 const res = await traverseEsModules({
                     entryPoints: [path.join(casePath, ENTRY_NAME)],
                 })
-                expect(res).toMatchSpecificSnapshot(
+                expect(res.map(osAgnosticResult)).toMatchSpecificSnapshot(
                     snapshotFile,
                     'traverse result',
                 )
             })
         }
         it(`server case ${slash(casePath)}`, async () => {
+            const PORT = '9000'
+            const baseUrl = `http://localhost:${PORT}`
             const stop = await serve({ port: PORT, cwd: casePath })
             const downloadFilesToDir = path.join(casePath, 'mirror')
             const res = await traverseEsModules({
-                entryPoints: [path.join(casePath, ENTRY_NAME)],
+                entryPoints: [new URL(ENTRY_NAME, baseUrl).toString()],
                 resolver: urlResolver({ root: casePath, baseUrl }),
                 readFile: readFromUrlOrPath,
                 onFile: makeFilesDownloader({
@@ -65,7 +67,10 @@ describe('snapshots', () => {
                     downloadFilesToDir,
                 }),
             })
-            expect(res).toMatchSpecificSnapshot(snapshotFile, 'traverse result')
+            expect(res.map(osAgnosticResult)).toMatchSpecificSnapshot(
+                snapshotFile,
+                'traverse result',
+            )
             const allFiles = glob.sync(`**/*`, {
                 ignore: ['__snapshots__'],
                 cwd: downloadFilesToDir,

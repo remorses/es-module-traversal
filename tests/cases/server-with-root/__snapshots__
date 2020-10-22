@@ -11,18 +11,13 @@ exports[`snapshots server case tests/cases/server-with-root: traverse result 1`]
 Array [
   Object {
     "importPath": "/firstLevel.js",
-    "importer": "tests/cases/server-with-root/entry.js",
+    "importer": "http://localhost:9000/entry.js",
     "resolvedImportPath": "http://localhost:9000/firstLevel.js",
   },
   Object {
     "importPath": "/entry.js",
     "importer": "http://localhost:9000/firstLevel.js",
     "resolvedImportPath": "http://localhost:9000/entry.js",
-  },
-  Object {
-    "importPath": "/firstLevel.js",
-    "importer": "http://localhost:9000/entry.js",
-    "resolvedImportPath": "http://localhost:9000/firstLevel.js",
   },
 ]
 `;

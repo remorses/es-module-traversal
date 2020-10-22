@@ -5,22 +5,22 @@ Array [
   Object {
     "importPath": "./firstLevelDynamic.js",
     "importer": "tests/cases/example/entry.js",
-    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/firstLevelDynamic.js",
+    "resolvedImportPath": "tests/cases/example/firstLevelDynamic.js",
   },
   Object {
     "importPath": "./firstLevel.js",
     "importer": "tests/cases/example/entry.js",
-    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/firstLevel.js",
+    "resolvedImportPath": "tests/cases/example/firstLevel.js",
   },
   Object {
     "importPath": "./deeper/secondLevel.js",
     "importer": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/firstLevel.js",
-    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/deeper/secondLevel.js",
+    "resolvedImportPath": "tests/cases/example/deeper/secondLevel.js",
   },
   Object {
     "importPath": "es-module-lexer",
     "importer": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/deeper/secondLevel.js",
-    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/node_modules/es-module-lexer/dist/lexer.cjs",
+    "resolvedImportPath": "node_modules/es-module-lexer/dist/lexer.cjs",
   },
 ]
 `;
@@ -38,12 +38,12 @@ exports[`snapshots server case tests/cases/example: traverse result 1`] = `
 Array [
   Object {
     "importPath": "./firstLevelDynamic.js",
-    "importer": "tests/cases/example/entry.js",
+    "importer": "http://localhost:9000/entry.js",
     "resolvedImportPath": "http://localhost:9000/firstLevelDynamic.js",
   },
   Object {
     "importPath": "./firstLevel.js",
-    "importer": "tests/cases/example/entry.js",
+    "importer": "http://localhost:9000/entry.js",
     "resolvedImportPath": "http://localhost:9000/firstLevel.js",
   },
   Object {
@@ -54,7 +54,7 @@ Array [
   Object {
     "importPath": "es-module-lexer",
     "importer": "http://localhost:9000/deeper/secondLevel.js",
-    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/node_modules/es-module-lexer/dist/lexer.cjs",
+    "resolvedImportPath": "node_modules/es-module-lexer/dist/lexer.cjs",
   },
 ]
 `;
