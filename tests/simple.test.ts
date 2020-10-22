@@ -105,14 +105,21 @@ function urlToRelativePath(ctx) {
 
 function osAgnosticResult(x: ResultType): ResultType {
     let { importPath, importer, resolvedImportPath } = x
-    importer = slash(importer)
     if (!resolvedImportPath.startsWith('http')) {
-        resolvedImportPath = path.relative(process.cwd(), resolvedImportPath)
-        resolvedImportPath = slash(resolvedImportPath)
+        resolvedImportPath = normalizePath(resolvedImportPath)
+    }
+    if (!importer.startsWith('http')) {
+        importer = normalizePath(importer)
     }
     return {
         importPath,
         importer,
         resolvedImportPath,
     }
+}
+
+function normalizePath(filePath: string) {
+    filePath = path.relative(process.cwd(), filePath)
+    filePath = slash(filePath)
+    return filePath
 }

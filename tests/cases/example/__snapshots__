@@ -14,12 +14,12 @@ Array [
   },
   Object {
     "importPath": "./deeper/secondLevel.js",
-    "importer": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/firstLevel.js",
+    "importer": "tests/cases/example/firstLevel.js",
     "resolvedImportPath": "tests/cases/example/deeper/secondLevel.js",
   },
   Object {
     "importPath": "es-module-lexer",
-    "importer": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/deeper/secondLevel.js",
+    "importer": "tests/cases/example/deeper/secondLevel.js",
     "resolvedImportPath": "node_modules/es-module-lexer/dist/lexer.cjs",
   },
 ]

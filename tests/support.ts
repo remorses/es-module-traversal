@@ -2,10 +2,9 @@ var express = require('express')
 
 export async function serve({ port, cwd }): Promise<Function> {
     let server = express()
-    const baseUrl = `http://localhost:${port}`
     return new Promise((res, rej) => {
         server.use('/', express.static(cwd))
-        server = server.listen(port, (e) => {
+        server = server.listen(port, 'localhost', (e) => {
             // console.log('Running at ' + baseUrl)
             if (e) {
                 return rej()
