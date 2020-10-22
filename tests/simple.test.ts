@@ -108,8 +108,8 @@ function osAgnosticResult(x: ResultType): ResultType {
     importer = slash(importer)
     if (!resolvedImportPath.startsWith('http')) {
         resolvedImportPath = path.relative(process.cwd(), resolvedImportPath)
+        resolvedImportPath = slash(resolvedImportPath)
     }
-    resolvedImportPath = slash(resolvedImportPath)
     return {
         importPath,
         importer,
