@@ -33,7 +33,7 @@ export const urlResolver = ({
             ? path.posix.resolve(root, urlToRelativePath(ctx))
             : ctx
         if (!isRelative(importPath)) {
-            console.log('defaultResolver from', importerDirectory, importPath)
+            // console.log('defaultResolver from', importerDirectory, importPath)
             return defaultResolver(importerDirectory, importPath)
         }
         importerDirectory = path.posix.relative(root, importerDirectory)

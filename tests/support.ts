@@ -6,7 +6,7 @@ export async function serve({ port, cwd }): Promise<Function> {
     return new Promise((res, rej) => {
         server.use('/', express.static(cwd))
         server = server.listen(port, (e) => {
-            console.log('Running at ' + baseUrl)
+            // console.log('Running at ' + baseUrl)
             if (e) {
                 return rej()
             }

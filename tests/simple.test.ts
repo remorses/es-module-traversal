@@ -34,11 +34,21 @@ describe('snapshots', () => {
         .filter((x) => x.isDirectory())
         .map((x) => x.name)
         .map((x) => path.join(casesPath, x))
-    console.log({ cases })
     const baseUrl = `http://localhost:${PORT}`
     for (let casePath of cases) {
         const snapshotFile = path.resolve(casePath, '__snapshots__')
-        it(`traverseEsModules with server case ${slash(casePath)}`, async () => {
+        if (!casePath.includes('server')) {
+            it(`case ${slash(casePath)}`, async () => {
+                const res = await traverseEsModules({
+                    entryPoints: [path.join(casePath, ENTRY_NAME)],
+                })
+                expect(res.map((x) => x.importPath)).toMatchSpecificSnapshot(
+                    snapshotFile,
+                    'importPaths',
+                )
+            })
+        }
+        it(`server case ${slash(casePath)}`, async () => {
             const stop = await serve({ port: PORT, cwd: casePath })
             const downloadFilesToDir = path.join(casePath, 'mirror')
             const res = await traverseEsModules({
