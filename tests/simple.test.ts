@@ -3,7 +3,12 @@ import glob from 'glob'
 import slash from 'slash'
 import path from 'path'
 import fs from 'fs-extra'
-import { readFromUrlOrPath, traverseEsModules, urlResolver } from '../src'
+import {
+    readFromUrlOrPath,
+    ResultType,
+    traverseEsModules,
+    urlResolver,
+} from '../src'
 import { serve } from './support'
 
 require('jest-specific-snapshot')
@@ -42,9 +47,9 @@ describe('snapshots', () => {
                 const res = await traverseEsModules({
                     entryPoints: [path.join(casePath, ENTRY_NAME)],
                 })
-                expect(res.map((x) => x.importPath)).toMatchSpecificSnapshot(
+                expect(res).toMatchSpecificSnapshot(
                     snapshotFile,
-                    'importPaths',
+                    'traverse result',
                 )
             })
         }
@@ -60,10 +65,7 @@ describe('snapshots', () => {
                     downloadFilesToDir,
                 }),
             })
-            expect(res.map((x) => x.importPath)).toMatchSpecificSnapshot(
-                snapshotFile,
-                'importPaths',
-            )
+            expect(res).toMatchSpecificSnapshot(snapshotFile, 'traverse result')
             const allFiles = glob.sync(`**/*`, {
                 ignore: ['__snapshots__'],
                 cwd: downloadFilesToDir,
@@ -94,4 +96,18 @@ function urlToRelativePath(ctx) {
     let pathname = new URL(ctx).pathname
     pathname = pathname.startsWith('/') ? pathname.slice(1) : pathname
     return pathname
+}
+
+function osAgnosticResult(x: ResultType): ResultType {
+    let { importPath, importer, resolvedImportPath } = x
+    importer = slash(importer)
+    if (!resolvedImportPath.startsWith('http')) {
+        resolvedImportPath = path.relative(process.cwd(), resolvedImportPath)
+    }
+    resolvedImportPath = slash(resolvedImportPath)
+    return {
+        importPath,
+        importer,
+        resolvedImportPath,
+    }
 }

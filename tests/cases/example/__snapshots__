@@ -1,20 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`snapshots case tests/cases/example: importPaths 1`] = `
+exports[`snapshots case tests/cases/example: traverse result 1`] = `
 Array [
-  "./firstLevelDynamic.js",
-  "./firstLevel.js",
-  "./deeper/secondLevel.js",
-  "es-module-lexer",
-]
-`;
-
-exports[`snapshots server case tests/cases/example: importPaths 1`] = `
-Array [
-  "./firstLevelDynamic.js",
-  "./firstLevel.js",
-  "./deeper/secondLevel.js",
-  "es-module-lexer",
+  Object {
+    "importPath": "./firstLevelDynamic.js",
+    "importer": "tests/cases/example/entry.js",
+    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/firstLevelDynamic.js",
+  },
+  Object {
+    "importPath": "./firstLevel.js",
+    "importer": "tests/cases/example/entry.js",
+    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/firstLevel.js",
+  },
+  Object {
+    "importPath": "./deeper/secondLevel.js",
+    "importer": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/firstLevel.js",
+    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/deeper/secondLevel.js",
+  },
+  Object {
+    "importPath": "es-module-lexer",
+    "importer": "/Users/morse/Documents/GitHub/walk-es-modules/tests/cases/example/deeper/secondLevel.js",
+    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/node_modules/es-module-lexer/dist/lexer.cjs",
+  },
 ]
 `;
 
@@ -24,5 +31,30 @@ Array [
   "entry.js",
   "firstLevel.js",
   "firstLevelDynamic.js",
+]
+`;
+
+exports[`snapshots server case tests/cases/example: traverse result 1`] = `
+Array [
+  Object {
+    "importPath": "./firstLevelDynamic.js",
+    "importer": "tests/cases/example/entry.js",
+    "resolvedImportPath": "http://localhost:9000/firstLevelDynamic.js",
+  },
+  Object {
+    "importPath": "./firstLevel.js",
+    "importer": "tests/cases/example/entry.js",
+    "resolvedImportPath": "http://localhost:9000/firstLevel.js",
+  },
+  Object {
+    "importPath": "./deeper/secondLevel.js",
+    "importer": "http://localhost:9000/firstLevel.js",
+    "resolvedImportPath": "http://localhost:9000/deeper/secondLevel.js",
+  },
+  Object {
+    "importPath": "es-module-lexer",
+    "importer": "http://localhost:9000/deeper/secondLevel.js",
+    "resolvedImportPath": "/Users/morse/Documents/GitHub/walk-es-modules/node_modules/es-module-lexer/dist/lexer.cjs",
+  },
 ]
 `;
