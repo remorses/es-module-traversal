@@ -1,9 +1,7 @@
-import { Args, defaultReadFile, defaultResolver, isRelative } from '.'
-import fs from 'fs-extra'
-import url from 'url'
 import fetch from 'node-fetch'
-import { URL } from 'url'
 import path from 'path'
+import { URL } from 'url'
+import { defaultReadFile, defaultResolver, isRelative } from '.'
 
 export async function readFromUrlOrPath(url: string) {
     let content = ''

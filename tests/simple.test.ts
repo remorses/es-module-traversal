@@ -1,5 +1,6 @@
 import { init } from 'es-module-lexer'
 import glob from 'glob'
+import slash from 'slash'
 import path from 'path'
 import fs from 'fs-extra'
 import { readFromUrlOrPath, traverseEsModules, urlResolver } from '../src'
@@ -37,7 +38,7 @@ describe('snapshots', () => {
     const baseUrl = `http://localhost:${PORT}`
     for (let casePath of cases) {
         const snapshotFile = path.resolve(casePath, '__snapshots__')
-        it(`traverseEsModules with server case ${casePath}`, async () => {
+        it(`traverseEsModules with server case ${slash(casePath)}`, async () => {
             const stop = await serve({ port: PORT, cwd: casePath })
             const downloadFilesToDir = path.join(casePath, 'mirror')
             const res = await traverseEsModules({
