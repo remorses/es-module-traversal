@@ -7,7 +7,12 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os:
+                    - windows-latest
+                    - ubuntu-latest
         steps:
             - uses: actions/checkout@v1
             - uses: actions/setup-node@v1
@@ -17,13 +22,14 @@ jobs:
             - run: yarn
             - run: yarn test
             - run: tsc
-            - run: tsc -m es6 --outDir esm
             - name: Bump version
+              if: matrix.os == 'ubuntu-latest'
               uses: remorses/bump-version@js
               with:
                   version_file: VERSION
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - run: yarn publish
+              if: matrix.os == 'ubuntu-latest'
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.npm_token }}

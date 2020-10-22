@@ -2,9 +2,11 @@
     "name": "es-module-traversal",
     "_": "[bump]",
     "version": "0.0.15",
-    "description": "",
+    "description": "Traverse the ES module graph",
     "main": "dist/index.js",
-    "module": "esm/index.js",
+    "repository": {
+        "url": "https://github.com/remorses/es-module-traversal"
+    },
     "types": "dist/index.d.ts",
     "mocha": {
         "require": "tests/init.js",
@@ -33,6 +35,7 @@
         "@types/node-fetch": "^2.5.7",
         "@types/resolve": "^1.17.1",
         "assert": "^2.0.0",
+        "cross-env": "^7.0.2",
         "dotenv": "^8.2.0",
         "esbuild": "^0.7.15",
         "esbuild-jest": "^0.3.0-beta.0",
