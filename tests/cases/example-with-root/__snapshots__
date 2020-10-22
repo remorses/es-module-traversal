@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshots traverseEsModules with server case tests/cases/example-with-root: importPaths 1`] = `
+Array [
+  "/firstLevel.js",
+  "/entry.js",
+  "/firstLevel.js",
+]
+`;
+
+exports[`snapshots traverseEsModules with server case tests/cases/example-with-root: mirror 1`] = `
+Array [
+  "entry.js",
+  "firstLevel.js",
+]
+`;

@@ -136,7 +136,7 @@ function getImportPaths(source: string, filePath?: string) {
         if (isDynamicImport) {
             try {
                 // dynamic import paths are expressions, if they are dimple strings i can get the importPath
-                importPath = eval(importPath)
+                importPath = eval(importPath) // TODO replace eval with remove comments regex and remove quotes regex
             } catch {
                 debug(`could not evaluate dynamic import ${importPath}`)
                 continue

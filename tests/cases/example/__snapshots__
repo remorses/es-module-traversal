@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshots traverseEsModules with server case tests/cases/example: importPaths 1`] = `
+Array [
+  "./firstLevelDynamic.js",
+  "./firstLevel.js",
+  "./deeper/secondLevel.js",
+  "es-module-lexer",
+]
+`;
+
+exports[`snapshots traverseEsModules with server case tests/cases/example: mirror 1`] = `
+Array [
+  "deeper/secondLevel.js",
+  "entry.js",
+  "firstLevel.js",
+  "firstLevelDynamic.js",
+]
+`;
