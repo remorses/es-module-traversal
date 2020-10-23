@@ -29,6 +29,7 @@ export type Args = {
     onFile?: ((path: string) => any) | ((path: string) => Promise<any>)
 }
 
+// TODO use a cache and hash of file paths with contents as key that maps to the imports paths, this way i don't have to run the lexer or run transforms in vite server (does this make sense? is hash so much faster than es-module-lexer?)
 export async function traverseEsModules({
     entryPoints,
     resolver = defaultResolver,
