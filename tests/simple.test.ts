@@ -58,27 +58,31 @@ describe('snapshots', () => {
             const PORT = '9000'
             const baseUrl = `http://localhost:${PORT}`
             const stop = await serve({ port: PORT, cwd: casePath })
-            const downloadFilesToDir = path.posix.join(casePath, 'mirror')
-            const res = await traverseEsModules({
-                entryPoints: [new URL(ENTRY_NAME, baseUrl).toString()],
-                resolver: urlResolver({ root: casePath, baseUrl }),
-                readFile: readFromUrlOrPath,
-                onFile: makeFilesDownloader({
-                    root: casePath,
-                    downloadFilesToDir,
-                }),
-            })
-            expect(res.map(osAgnosticResult)).toMatchSpecificSnapshot(
-                snapshotFile,
-                'traverse result',
-            )
-            const allFiles = glob.sync(`**/*`, {
-                ignore: ['__snapshots__'],
-                cwd: downloadFilesToDir,
-                nodir: true,
-            })
-            expect(allFiles).toMatchSpecificSnapshot(snapshotFile, 'mirror')
-            await stop()
+            try {
+                const downloadFilesToDir = path.posix.join(casePath, 'mirror')
+                const res = await traverseEsModules({
+                    entryPoints: [new URL(ENTRY_NAME, baseUrl).toString()],
+                    resolver: urlResolver({ root: casePath, baseUrl }),
+                    readFile: readFromUrlOrPath,
+                    onFile: makeFilesDownloader({
+                        root: casePath,
+                        downloadFilesToDir,
+                    }),
+                })
+                expect(res.map(osAgnosticResult)).toMatchSpecificSnapshot(
+                    snapshotFile,
+                    'traverse result',
+                )
+                const allFiles = glob.sync(`**/*`, {
+                    ignore: ['__snapshots__'],
+                    cwd: downloadFilesToDir,
+                    nodir: true,
+                })
+                expect(allFiles).toMatchSpecificSnapshot(snapshotFile, 'mirror')
+            } catch (e) {
+                await stop()
+                throw e
+            }
         })
     }
 })
