@@ -9,7 +9,7 @@ This package exports 1 function
 ## Example
 
 ```ts
-import fetch from 'node-fetch'
+import path from 'path'
 import { traverseEsModules } from 'es-module-traversal'
 
 const res = await traverseEsModules({
@@ -41,8 +41,8 @@ import {
 const port = '3000'
 const res = await traverseEsModules({
     entryPoint: `http://localhost:${port}/main.tsx`,
+    // like require.resolve but support urls and paths
     resolver: urlResolver({
-        // like require.resolve but support urls and paths
         root: __dirname,
         baseUrl: `http://localhost:${port}/`,
     }),
