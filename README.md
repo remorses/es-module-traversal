@@ -22,8 +22,8 @@ const res = await traverseEsModules({
 console.log(res)
 // [{
 //     importPath: './someImport',
-//     resolvedImportPath: 'path/to/file',
-//     importer: 'path/to/importer'
+//     resolvedImportPath: '/path/to/file',
+//     importer: '/path/to/importer'
 // }, ...]
 ```
 
@@ -52,4 +52,13 @@ const res = await traverseEsModules({
     },
 })
 console.log(JSON.stringify(res, null, 4))
+
+// [
+//     {
+//         importPath: '/firstLevel.js',
+//         importer: 'http://localhost:9000/deep/file.js',
+//         resolvedImportPath: 'http://localhost:9000/firstLevel.js',
+//     },
+//     ...
+// ]
 ```
