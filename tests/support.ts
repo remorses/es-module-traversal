@@ -1,14 +1,12 @@
-var express = require('express')
+import staticServe from 'koa-static'
+import Koa from 'koa'
 
 export async function serve({ port, cwd }): Promise<Function> {
-    let server = express()
+    let app = new Koa()
     return new Promise((res, rej) => {
-        server.use('/', express.static(cwd))
-        server = server.listen(port, 'localhost', (e) => {
+        app.use(staticServe(cwd))
+        const server = app.listen(port, 'localhost', () => {
             // console.log('Running at ' + baseUrl)
-            if (e) {
-                return rej()
-            }
             const close = () =>
                 new Promise((res, rej) => {
                     server.close((e) => {
