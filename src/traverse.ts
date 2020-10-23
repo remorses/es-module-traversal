@@ -3,9 +3,10 @@ import { init, parse } from 'es-module-lexer'
 import { promises as fsp } from 'fs'
 import isBuiltin from 'is-builtin-module'
 import path from 'path'
+import slash from 'slash'
 import { debug, MAX_IO_OPS } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
-import { cleanUrl, isRunningWithYarnPnp } from './support'
+import { cleanUrl, isRunningWithYarnPnp, unixPath } from './support'
 
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
 
@@ -41,7 +42,7 @@ export async function traverseEsModules({
     const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
     // entryPoint = cleanUrl(entryPoint)
-    let toProcess = [...entryPoints] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
+    let toProcess = [...entryPoints.map(unixPath)] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
     // first onFile
@@ -73,7 +74,7 @@ export async function traverseEsModules({
                     // TODO maybe throw when import is not resolved?
                     // you can resolve to a local running server (vite) here if you want
                     const resolvedImportPath = resolver(
-                        path.dirname(filePath),
+                        path.posix.dirname(filePath),
                         importPath,
                     )
 
@@ -129,7 +130,7 @@ function getImportPaths(source: string, filePath?: string) {
     }
     // console.log(source)
     const result: string[] = []
-    const imports = tryParse(source, filePath)
+    const imports = tryParseImports(source, filePath)
     for (const { s, e, d } of imports) {
         let importPath = source.slice(s, e).trim()
         const isDynamicImport = d > -1
@@ -158,7 +159,7 @@ function getImportPaths(source: string, filePath?: string) {
     return result
 }
 
-function tryParse(source, message = '') {
+function tryParseImports(source, message = '') {
     try {
         const [imports] = parse(source)
         return imports
@@ -195,6 +196,6 @@ export function isRelative(x: string) {
 }
 
 function isJsModule(x: string) {
-    const ext = path.extname(cleanUrl(x))
+    const ext = path.posix.extname(cleanUrl(x))
     return !ext || JS_EXTENSIONS.has(ext)
 }

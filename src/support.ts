@@ -1,4 +1,5 @@
 import path from 'path'
+import slash from 'slash'
 
 export const queryRE = /\?.*$/
 export const hashRE = /#.*$/
@@ -9,5 +10,12 @@ export const cleanUrl = (url: string) => {
 
 export let isRunningWithYarnPnp: boolean
 try {
-    isRunningWithYarnPnp = Boolean(require('pnpapi')) 
+    isRunningWithYarnPnp = Boolean(require('pnpapi'))
 } catch {}
+
+export const unixPath = (x: string) => {
+    if (!x.startsWith('http')) {
+        return slash(x)
+    }
+    return x
+}

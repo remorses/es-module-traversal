@@ -38,14 +38,14 @@ describe('snapshots', () => {
         })
         .filter((x) => x.isDirectory())
         .map((x) => x.name)
-        .map((x) => path.join(casesPath, x))
+        .map((x) => path.posix.join(casesPath, x))
 
     for (let casePath of cases) {
-        const snapshotFile = path.resolve(casePath, '__snapshots__')
+        const snapshotFile = path.posix.resolve(casePath, '__snapshots__')
         if (!casePath.includes('server')) {
             it(`case ${slash(casePath)}`, async () => {
                 const res = await traverseEsModules({
-                    entryPoints: [path.join(casePath, ENTRY_NAME)],
+                    entryPoints: [path.posix.join(casePath, ENTRY_NAME)],
                 })
                 expect(res.map(osAgnosticResult)).toMatchSpecificSnapshot(
                     snapshotFile,
@@ -57,7 +57,7 @@ describe('snapshots', () => {
             const PORT = '9000'
             const baseUrl = `http://localhost:${PORT}`
             const stop = await serve({ port: PORT, cwd: casePath })
-            const downloadFilesToDir = path.join(casePath, 'mirror')
+            const downloadFilesToDir = path.posix.join(casePath, 'mirror')
             const res = await traverseEsModules({
                 entryPoints: [new URL(ENTRY_NAME, baseUrl).toString()],
                 resolver: urlResolver({ root: casePath, baseUrl }),
@@ -88,9 +88,9 @@ function makeFilesDownloader({ root, downloadFilesToDir }) {
         const content = await readFromUrlOrPath(url)
         let filePath = url.startsWith('http')
             ? urlToRelativePath(url)
-            : path.relative(root, url)
+            : path.posix.relative(root, url)
 
-        filePath = path.join(downloadFilesToDir, filePath)
+        filePath = path.posix.join(downloadFilesToDir, filePath)
 
         await fs.createFile(filePath)
         await fs.writeFile(filePath, content)
@@ -119,7 +119,7 @@ function osAgnosticResult(x: ResultType): ResultType {
 }
 
 function normalizePath(filePath: string) {
-    filePath = path.relative(process.cwd(), filePath)
+    filePath = path.posix.relative(process.cwd(), filePath)
     filePath = slash(filePath)
     return filePath
 }
