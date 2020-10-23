@@ -13,9 +13,9 @@ try {
     isRunningWithYarnPnp = Boolean(require('pnpapi'))
 } catch {}
 
-export const unixPath = (x: string) => {
+export const unixAbsolutePath = (x: string) => {
     if (!x.startsWith('http')) {
-        return slash(x)
+        return path.posix.resolve(slash(x))
     }
     return x
 }

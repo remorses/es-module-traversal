@@ -42,7 +42,7 @@ export async function traverseEsModules({
     const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
     // entryPoint = cleanUrl(entryPoint)
-    let toProcess = [...entryPoints.map(unixPath)] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
+    let toProcess = [...entryPoints.map(unixAbsolutePath)] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
     // first onFile
@@ -173,22 +173,21 @@ const map = <T, Z>(x: T[], func: (x: T) => Z, _n?: number): Z[] => {
     return x.map(func)
 }
 
-export const _defaultResolver = (root: string, id: string) => {
+export const defaultResolver = (root: string, id: string) => {
     try {
         return resolve.sync(id, {
             basedir: root,
             extensions: [...JS_EXTENSIONS],
             // necessary to work with pnpm
             preserveSymlinks: isRunningWithYarnPnp || false,
-        })
+        }) || ''
     } catch (e) {
         console.error(`WARN: cannot resolve '${id}' from '${root}'`)
+        return ''
     }
 }
 
-export function defaultResolver(cwd: string, id: string) {
-    return _defaultResolver(cwd, id) || ''
-}
+
 
 export function isRelative(x: string) {
     x = cleanUrl(x)
