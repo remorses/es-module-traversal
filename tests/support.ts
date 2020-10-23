@@ -5,6 +5,7 @@ export async function serve({ port, cwd }): Promise<Function> {
     let app = new Koa()
     return new Promise((res, rej) => {
         app.use(staticServe(cwd))
+
         const server = app.listen(port, 'localhost', () => {
             // console.log('Running at ' + baseUrl)
             const close = () =>
@@ -16,6 +17,7 @@ export async function serve({ port, cwd }): Promise<Function> {
                 })
             res(close)
         })
+        server.setTimeout(1000)
     })
 
     // await once(server, 'listening')
