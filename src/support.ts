@@ -15,3 +15,5 @@ export let isRunningWithYarnPnp: boolean
 try {
     isRunningWithYarnPnp = Boolean(require('pnpapi'))
 } catch {}
+
+export const sleep = (t) => new Promise((res) => setTimeout(res, t))

@@ -21,6 +21,7 @@
     "scripts": {
         "test": "jest",
         "test:debug": "cross-env DEBUG=es-module-traversal jest",
+        "test:bench": "cross-env BENCHMARK=1 jest",
         "compile": "sucrase -q ./src -d ./dist --transforms typescript,imports",
         "dev": "yarn compile && node dist"
     },
@@ -28,6 +29,8 @@
     "author": "Tommaso De Rossi, morse <beats.by.morse@gmail.com>",
     "license": "ISC",
     "devDependencies": {
+        "@pika/react": "^16.13.1",
+        "@pika/react-dom": "^16.13.1",
         "@types/es-module-lexer": "^0.3.0",
         "@types/fs-extra": "^9.0.2",
         "@types/jest": "^26.0.14",
@@ -48,8 +51,10 @@
         "koa": "^2.13.0",
         "koa-static": "^5.0.0",
         "node-fetch": "^2.6.1",
+        "react": "^17.0.1",
         "sucrase": "^3.15.0",
-        "typescript": "^3.9.5"
+        "typescript": "^3.9.5",
+        "vite": "npm:@knightly/vite@master"
     },
     "dependencies": {
         "batched-promise-all": "^0.9.2",

@@ -10,6 +10,14 @@ You can also customize the `resolver` and `readFile` functions to traverse the i
 npm install es-module-traversal
 ```
 
+## Benchmarks
+
+Run the benchmarks with the `yarn test:bench` command
+
+It traverses the graph of 780 modules in about 0.30 seconds, most of the time is spent by `es-module-lexer` (this means that the time will increase with the size of the javascript modules)
+
+It takes about 5 seconds to traverse the graph of a big typescript app with 3900 files of 30 lines each, the overhead here is given by the time vite takes to transform the typescript files
+
 ## Example
 
 ```ts
