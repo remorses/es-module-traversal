@@ -6,7 +6,7 @@ import path from 'path'
 import slash from 'slash'
 import { debug, MAX_IO_OPS } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
-import { cleanUrl, isRunningWithYarnPnp, unixPath } from './support'
+import { cleanUrl, isRunningWithYarnPnp, unixAbsolutePath } from './support'
 
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
 
