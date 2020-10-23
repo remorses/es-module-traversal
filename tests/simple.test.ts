@@ -90,6 +90,7 @@ describe('snapshots', () => {
 
 function makeFilesDownloader({ root, downloadFilesToDir }) {
     return async (url) => {
+        // console.log('traversed ' + url)
         // recreate server files structure on disk
         const content = await readFromUrlOrPath(url)
         let filePath = url.startsWith('http')
