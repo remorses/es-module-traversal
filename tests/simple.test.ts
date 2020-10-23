@@ -79,9 +79,8 @@ describe('snapshots', () => {
                     nodir: true,
                 })
                 expect(allFiles).toMatchSpecificSnapshot(snapshotFile, 'mirror')
-            } catch (e) {
+            } finally {
                 await stop()
-                throw e
             }
         })
     }
