@@ -18,7 +18,7 @@ try {
 
 export const unixAbsolutePath = (x: string) => {
     if (!x.startsWith('http')) {
-        return path.posix.resolve(slash(x))
+        return slash(path.resolve(x))
     }
     return x
 }
