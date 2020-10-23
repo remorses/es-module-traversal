@@ -23,6 +23,10 @@ export async function readFromUrlOrPath(url: string) {
     return content
 }
 
+/*
+ * Create a resolver function that support urls and paths
+ * It assumes a static server behind `baseUrl` with `root` folder mounted at /
+ */
 export const urlResolver = ({
     root,
     baseUrl,
