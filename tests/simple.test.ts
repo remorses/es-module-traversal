@@ -39,6 +39,7 @@ describe('snapshots', () => {
         .filter((x) => x.isDirectory())
         .map((x) => x.name)
         .map((x) => path.posix.join(casesPath, x))
+        .map(slash)
 
     for (let casePath of cases) {
         const snapshotFile = path.posix.resolve(casePath, '__snapshots__')
