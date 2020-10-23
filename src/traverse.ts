@@ -4,9 +4,9 @@ import { promises as fsp } from 'fs'
 import isBuiltin from 'is-builtin-module'
 import path from 'path'
 import slash from 'slash'
-import { debug, MAX_IO_OPS } from './constants'
+import { MAX_IO_OPS } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
-import { cleanUrl, isRunningWithYarnPnp, unixAbsolutePath } from './support'
+import { cleanUrl, debug, isRunningWithYarnPnp, unixAbsolutePath } from './support'
 
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
 
@@ -175,19 +175,19 @@ const map = <T, Z>(x: T[], func: (x: T) => Z, _n?: number): Z[] => {
 
 export const defaultResolver = (root: string, id: string) => {
     try {
-        return resolve.sync(id, {
-            basedir: root,
-            extensions: [...JS_EXTENSIONS],
-            // necessary to work with pnpm
-            preserveSymlinks: isRunningWithYarnPnp || false,
-        }) || ''
+        return (
+            resolve.sync(id, {
+                basedir: root,
+                extensions: [...JS_EXTENSIONS],
+                // necessary to work with pnpm
+                preserveSymlinks: isRunningWithYarnPnp || false,
+            }) || ''
+        )
     } catch (e) {
         console.error(`WARN: cannot resolve '${id}' from '${root}'`)
         return ''
     }
 }
-
-
 
 export function isRelative(x: string) {
     x = cleanUrl(x)
