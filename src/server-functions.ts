@@ -30,24 +30,24 @@ export const urlResolver = ({
     root: string
     baseUrl: string
 }) => {
-    root = slash(root)
+    // root = slash(root)
     return function resolveUrlOrPath(ctx: string, importPath: string) {
         debug(`resolveUrlOrPath from '${ctx}' to '${importPath}'`)
         let importerDirectory = ctx.startsWith('http')
-            ? path.posix.resolve(root, urlToRelativePath(ctx))
+            ? path.resolve(root, urlToRelativePath(ctx))
             : ctx
         if (!isRelative(importPath)) {
             // console.log('defaultResolver from', importerDirectory, importPath)
             return defaultResolver(importerDirectory, importPath)
         }
-        importerDirectory = path.posix.relative(root, importerDirectory)
+        importerDirectory = slash(path.relative(root, importerDirectory))
         // console.log({ importerDirectory, importPath, root })
         if (importPath.startsWith('/')) {
             // import from / means import from the root of the website
             importPath = importPath.slice(1)
         } else {
             // resolve relative to the importer file
-            importPath = path.posix.join(importerDirectory, importPath)
+            importPath = path.join(importerDirectory, importPath)
         }
         // console.log(importPath)
         // console.log({ importPath, pathname: importerDirectory })

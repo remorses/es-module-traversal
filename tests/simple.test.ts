@@ -28,6 +28,9 @@ it('works', async () => {
         entryPoints: [currentFile],
     })
 })
+it('path.dirname on urls', async () => {
+    expect(path.dirname('http://localhost/x/y')).toEqual('http://localhost/x')
+})
 
 describe('snapshots', () => {
     const ENTRY_NAME = 'entry.js'

@@ -3,10 +3,9 @@ import { init, parse } from 'es-module-lexer'
 import { promises as fsp } from 'fs'
 import isBuiltin from 'is-builtin-module'
 import path from 'path'
-import slash from 'slash'
 import { MAX_IO_OPS } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
-import { cleanUrl, debug, isRunningWithYarnPnp, unixAbsolutePath } from './support'
+import { cleanUrl, debug, isRunningWithYarnPnp } from './support'
 
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
 
@@ -42,7 +41,7 @@ export async function traverseEsModules({
     const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
     // entryPoint = cleanUrl(entryPoint)
-    let toProcess = [...entryPoints.map(unixAbsolutePath)] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
+    let toProcess = [...entryPoints] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
     // first onFile
@@ -74,7 +73,7 @@ export async function traverseEsModules({
                     // TODO maybe throw when import is not resolved?
                     // you can resolve to a local running server (vite) here if you want
                     const resolvedImportPath = resolver(
-                        path.posix.dirname(filePath),
+                        path.dirname(filePath), // TODO does dirname work on urls?
                         importPath,
                     )
 

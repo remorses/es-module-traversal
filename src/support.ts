@@ -15,10 +15,3 @@ export let isRunningWithYarnPnp: boolean
 try {
     isRunningWithYarnPnp = Boolean(require('pnpapi'))
 } catch {}
-
-export const unixAbsolutePath = (x: string) => {
-    if (!x.startsWith('http')) {
-        return slash(path.resolve(x))
-    }
-    return x
-}
