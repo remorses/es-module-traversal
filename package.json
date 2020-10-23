@@ -19,7 +19,8 @@
         "esm"
     ],
     "scripts": {
-        "test": "cross-env DEBUG=es-module-traversal jest",
+        "test": "jest",
+        "test:debug": "cross-env DEBUG=es-module-traversal jest",
         "compile": "sucrase -q ./src -d ./dist --transforms typescript,imports",
         "dev": "yarn compile && node dist"
     },

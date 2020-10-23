@@ -2,6 +2,7 @@
 
 exports[`snapshots server case tests/cases/server-with-root: mirror 1`] = `
 Array [
+  "deep/file.js",
   "entry.js",
   "firstLevel.js",
 ]
@@ -15,9 +16,19 @@ Array [
     "resolvedImportPath": "http://localhost:9000/firstLevel.js",
   },
   Object {
+    "importPath": "/deep/file.js",
+    "importer": "http://localhost:9000/entry.js",
+    "resolvedImportPath": "http://localhost:9000/deep/file.js",
+  },
+  Object {
     "importPath": "/entry.js",
     "importer": "http://localhost:9000/firstLevel.js",
     "resolvedImportPath": "http://localhost:9000/entry.js",
+  },
+  Object {
+    "importPath": "/firstLevel.js",
+    "importer": "http://localhost:9000/deep/file.js",
+    "resolvedImportPath": "http://localhost:9000/firstLevel.js",
   },
 ]
 `;
