@@ -3,6 +3,7 @@ import path from 'path'
 import slash from 'slash'
 import { URL } from 'url'
 import { defaultReadFile, defaultResolver, isRelative } from '.'
+import { debug } from './support'
 
 export async function readFromUrlOrPath(url: string) {
     let content = ''
@@ -31,6 +32,7 @@ export const urlResolver = ({
 }) => {
     root = slash(root)
     return function resolveUrlOrPath(ctx: string, importPath: string) {
+        debug(`resolveUrlOrPath from '${ctx}' to '${importPath}'`)
         let importerDirectory = ctx.startsWith('http')
             ? path.posix.resolve(root, urlToRelativePath(ctx))
             : ctx
