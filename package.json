@@ -22,7 +22,7 @@
         "test": "jest",
         "test:debug": "cross-env DEBUG=es-module-traversal jest",
         "test:bench": "cross-env BENCHMARK=1 jest",
-        "test:profile": "cross-env BENCHMARK=1 node --inspect-brk `npm bin`/jest -t 'benchmark'",
+        "test:profile": "cross-env BENCHMARK=1 node --inspect-brk `npm bin`/jest -t 'static'",
         "compile": "sucrase -q ./src -d ./dist --transforms typescript,imports",
         "dev": "yarn compile && node dist"
     },
@@ -53,6 +53,7 @@
         "koa-static": "^5.0.0",
         "node-fetch": "^2.6.1",
         "react": "^17.0.1",
+        "react-dom": "^17.0.1",
         "sucrase": "^3.15.0",
         "typescript": "^3.9.5",
         "vite": "npm:@knightly/vite@master"
