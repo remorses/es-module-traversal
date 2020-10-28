@@ -1910,10 +1910,10 @@ esbuild@^0.6.33:
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.6.34.tgz#76565a60e006f45d5f273b6e59e61ed0816551f5"
   integrity sha512-InRdL/Q96pUucPqovJzvuLhquZr6jOn81FDVwFjCKz1rYKIm9OdOC+7Fs4vr6x48vKBl5LzKgtjU39BUpO636A==
 
-esbuild@^0.7.15:
-  version "0.7.15"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.7.15.tgz#b50fe68fa12f41f42afab1c49a2b4524de5b6431"
-  integrity sha512-tgvd7miwyQVAzlDIcrs9vwoVEL33NmDRggTwKSkcdTj25BOfSWoIUuFXG4vvHRQTkJDk2uHJSi7bhBdPmMzodA==
+esbuild@^0.7.21:
+  version "0.7.21"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.7.21.tgz#e93f9d7e673cd5fcab2aab7774d489a0f680d657"
+  integrity sha512-qEnJdj+6Mdpt5kZwwCqO6PDNXSHNDDOPbnF4pduS3nub1v5GfgZfi8ysZ2DN4Q65WWgx6hz1a237ZETEHZpR0Q==
 
 escape-html@^1.0.3:
   version "1.0.3"
