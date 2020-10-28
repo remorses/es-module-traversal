@@ -1,5 +1,6 @@
 import { build, Metadata } from 'esbuild'
 import path from 'path'
+import slash from 'slash'
 import { promises as fsp } from 'fs'
 import { defaultResolver, defaultReadFile } from '.'
 import { TraverseArgs, TraversalResultType } from './types'
@@ -18,7 +19,9 @@ export async function traverseWithEsbuild({
     ignore = [],
     readFile = defaultReadFile,
 }: TraverseArgs): Promise<TraversalResultType[]> {
-    const destLoc = await fsp.mkdtemp('dest')
+    const destLoc = path.resolve(await fsp.mkdtemp('dest'))
+
+    entryPoints = entryPoints.map((x) => path.resolve(x))
 
     const metafile = path.join(destLoc, 'meta.json')
 
@@ -56,7 +59,7 @@ export async function traverseWithEsbuild({
 
     const res = flatten(
         entryPoints.map((entry) => {
-            return metaToTraversalResult({ meta, entry })
+            return metaToTraversalResult({ meta, entry, esbuildCwd: destLoc })
         }),
     )
     return res
@@ -67,15 +70,24 @@ export async function traverseWithEsbuild({
 export function metaToTraversalResult({
     meta,
     entry,
+    esbuildCwd = '.',
 }: {
     meta: Metadata
+    esbuildCwd: string
     entry: string
 }): TraversalResultType[] {
-    let imports = [entry] // TODO esbuild has relative imports to the cwd? i have to resolve them first
+    if (!path.isAbsolute(esbuildCwd)) {
+        throw new Error('esbuildCwd must be an absolute path')
+    }
+    if (!path.isAbsolute(entry)) {
+        throw new Error('entry must be an absolute path')
+    }
+    let imports = [slash(path.relative(esbuildCwd, entry))]
     let result: TraversalResultType[] = []
     while (imports.length) {
         const newImports = []
         imports.forEach((newEntry) => {
+            // newEntry = path.posix.normalize(newEntry) // TODO does esbuild always use posix?
             const input = meta.inputs[newEntry]
             if (!input) {
                 throw new Error(
@@ -89,8 +101,8 @@ export function metaToTraversalResult({
                     (x): TraversalResultType => {
                         return {
                             importPath: '',
-                            importer: newEntry,
-                            resolvedImportPath: x,
+                            importer: path.join(esbuildCwd, newEntry),
+                            resolvedImportPath: path.join(esbuildCwd, x),
                         }
                     },
                 ),

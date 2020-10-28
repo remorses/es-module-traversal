@@ -4,13 +4,13 @@ exports[`metaToTraversalResult: simple metaToTraversalResult 1`] = `
 Array [
   Object {
     "importPath": "",
-    "importer": "./entry",
-    "resolvedImportPath": "./some-file",
+    "importer": "/usr/someFolder/entry",
+    "resolvedImportPath": "/usr/someFolder/some-file",
   },
   Object {
     "importPath": "",
-    "importer": "./some-file",
-    "resolvedImportPath": "./other-file",
+    "importer": "/usr/someFolder/some-file",
+    "resolvedImportPath": "/usr/someFolder/other-file",
   },
 ]
 `;

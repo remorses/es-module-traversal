@@ -5,15 +5,15 @@ it('metaToTraversalResult', async () => {
     const meta: Metadata = {
         outputs: {},
         inputs: {
-            './entry': {
+            'entry': {
                 bytes: 0,
-                imports: [{ path: './some-file' }],
+                imports: [{ path: 'some-file' }],
             },
-            './some-file': {
+            'some-file': {
                 bytes: 0,
-                imports: [{ path: './other-file' }],
+                imports: [{ path: 'other-file' }],
             },
-            './other-file': {
+            'other-file': {
                 bytes: 0,
                 imports: [],
             },
@@ -21,7 +21,8 @@ it('metaToTraversalResult', async () => {
     }
     const res = metaToTraversalResult({
         meta: meta as any,
-        entry: './entry',
+        entry: '/usr/someFolder/entry',
+        esbuildCwd: '/usr/someFolder',
     })
     // console.log(res)
     expect(res).toMatchSnapshot('simple metaToTraversalResult')
