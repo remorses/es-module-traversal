@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`metaToTraversalResult: simple metaToTraversalResult 1`] = `
+Array [
+  Object {
+    "importPath": "",
+    "importer": "./entry",
+    "resolvedImportPath": "./some-file",
+  },
+  Object {
+    "importPath": "",
+    "importer": "./some-file",
+    "resolvedImportPath": "./other-file",
+  },
+]
+`;

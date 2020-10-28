@@ -54,3 +54,11 @@ export function isJsModule(x: string) {
     const ext = path.posix.extname(cleanUrl(x))
     return !ext || JS_EXTENSIONS.has(ext)
 }
+
+export function flatten<T>(arr: T[][]): T[] {
+    return arr.reduce(function (flat, toFlatten) {
+        return flat.concat(
+            Array.isArray(toFlatten) ? flatten(toFlatten as any) : toFlatten,
+        )
+    }, [])
+}
