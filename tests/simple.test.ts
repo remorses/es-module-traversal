@@ -10,7 +10,7 @@ import {
     traverseEsModules,
     urlResolver,
 } from '../src'
-import { serve } from './support'
+import { osAgnosticResult, serve } from './support'
 
 require('jest-specific-snapshot')
 
@@ -110,23 +110,3 @@ function urlToRelativePath(ctx) {
     return pathname
 }
 
-function osAgnosticResult(x: ResultType): ResultType {
-    let { importPath, importer, resolvedImportPath } = x
-    if (!resolvedImportPath.startsWith('http')) {
-        resolvedImportPath = normalizePath(resolvedImportPath)
-    }
-    if (!importer.startsWith('http')) {
-        importer = normalizePath(importer)
-    }
-    return {
-        importPath,
-        importer,
-        resolvedImportPath,
-    }
-}
-
-function normalizePath(filePath: string) {
-    filePath = path.relative(process.cwd(), filePath)
-    filePath = slash(filePath)
-    return filePath
-}

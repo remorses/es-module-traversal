@@ -1,11 +1,16 @@
 import { Metadata } from 'esbuild'
-import { metaToTraversalResult } from '../src/traverseEsbuild'
+import path from 'path'
+import {
+    metaToTraversalResult,
+    traverseWithEsbuild,
+} from '../src/traverseEsbuild'
+import { osAgnosticResult } from './support'
 
 it('metaToTraversalResult', async () => {
     const meta: Metadata = {
         outputs: {},
         inputs: {
-            'entry': {
+            entry: {
                 bytes: 0,
                 imports: [{ path: 'some-file' }],
             },
@@ -23,7 +28,19 @@ it('metaToTraversalResult', async () => {
         meta: meta as any,
         entry: '/usr/someFolder/entry',
         esbuildCwd: '/usr/someFolder',
-    })
+    }).map(osAgnosticResult)
     // console.log(res)
     expect(res).toMatchSnapshot('simple metaToTraversalResult')
+})
+it('traverseWithEsbuild', async () => {
+    const currentFile = path.resolve(__dirname, __filename)
+    let res = await traverseWithEsbuild({
+        entryPoints: [currentFile],
+        esbuildOptions: {
+            platform: 'node',
+        },
+    })
+    res = res.map(osAgnosticResult)
+    console.log(res)
+    expect(res).toMatchSnapshot('traverseWithEsbuild')
 })

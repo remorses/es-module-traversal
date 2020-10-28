@@ -1,68 +1,87 @@
-import { build, Metadata } from 'esbuild'
+import { build, BuildOptions, Metadata } from 'esbuild'
+import { promises as fsp } from 'fs'
+import fsx from 'fs-extra'
+import os from 'os'
 import path from 'path'
 import slash from 'slash'
-import { promises as fsp } from 'fs'
-import { defaultResolver, defaultReadFile } from '.'
-import { TraverseArgs, TraversalResultType } from './types'
 import { flatten } from './support'
+import { TraversalResultType } from './types'
 
 // TODO support tsconfig paths,
 // TODO make any non js module external
 // use the right resolver in esbuild
 // maybe can add support for vue and other stuff by loading a vue file to a js file? i will let people pas the loaders for esbuild directly, this way they can pass them if they want
 // mark as external modules that make stopTraversing true
+
+type Args = {
+    entryPoints: string[]
+    esbuildOptions: BuildOptions
+}
+
+// resolver = defaultResolver,
+// onFile,
+// stopTraversing,
+// ignore = [],
+// readFile = defaultReadFile,
 export async function traverseWithEsbuild({
     entryPoints,
-    resolver = defaultResolver,
-    onFile,
-    stopTraversing,
-    ignore = [],
-    readFile = defaultReadFile,
-}: TraverseArgs): Promise<TraversalResultType[]> {
-    const destLoc = path.resolve(await fsp.mkdtemp('dest'))
+    esbuildOptions = {},
+}: Args): Promise<TraversalResultType[]> {
+    const destLoc = path.resolve(
+        await fsp.mkdtemp(path.join(os.tmpdir(), 'dest')),
+    )
 
     entryPoints = entryPoints.map((x) => path.resolve(x))
 
-    const metafile = path.join(destLoc, 'meta.json')
+    try {
+        const metafile = path.join(destLoc, 'meta.json')
 
-    await build({
-        splitting: true, // needed to dedupe modules
-        // external: externalPackages,
-        minifyIdentifiers: false,
-        minifySyntax: false,
-        minifyWhitespace: false,
-        mainFields: ['module', 'browser', 'main'].filter(Boolean),
-        // sourcemap: 'inline', // TODO sourcemaps panics and gives a lot of CPU load
-        define: {
-            'process.env.NODE_ENV': JSON.stringify('dev'),
-            global: 'window',
-            // TODO defined to make any package work
-            // ...generateEnvReplacements(env),
-        },
-        // TODO inject polyfills for runtime globals like process, ...etc
-        // TODO allow importing from node builtins when using allowNodeImports
-        // TODO add plugin for pnp resolution
-        // tsconfig: ,
-        bundle: true,
-        format: 'esm',
-        write: true,
-        entryPoints,
-        outdir: destLoc,
-        minify: false,
-        logLevel: 'info',
-        metafile,
-    })
+        const esbuildCwd = process.cwd()
+        await build({
+            splitting: true, // needed to dedupe modules
+            // external: externalPackages,
 
-    const meta: Metadata = JSON.parse(
-        await (await fsp.readFile(metafile)).toString(),
-    )
+            minifyIdentifiers: false,
+            minifySyntax: false,
+            minifyWhitespace: false,
+            mainFields: ['module', 'browser', 'main'].filter(Boolean),
+            // sourcemap: 'inline', // TODO sourcemaps panics and gives a lot of CPU load
+            define: {
+                'process.env.NODE_ENV': JSON.stringify('dev'),
+                global: 'window',
+                // TODO defined to make any package work
+                // ...generateEnvReplacements(env),
+            },
+            // TODO inject polyfills for runtime globals like process, ...etc
+            // TODO allow importing from node builtins when using allowNodeImports
+            // TODO add plugin for pnp resolution
+            // tsconfig: ,
+            bundle: true,
+            format: 'esm',
+            write: true,
+            entryPoints,
+            outdir: destLoc,
+            minify: false,
+            logLevel: 'info',
+            metafile,
+            ...esbuildOptions, // TODO deep merge
+        })
 
-    const res = flatten(
-        entryPoints.map((entry) => {
-            return metaToTraversalResult({ meta, entry, esbuildCwd: destLoc })
-        }),
-    )
-    return res
+        const meta: Metadata = JSON.parse(
+            await (await fsp.readFile(metafile)).toString(),
+        )
+
+        const res = flatten(
+            entryPoints.map((entry) => {
+                return metaToTraversalResult({ meta, entry, esbuildCwd })
+            }),
+        )
+        return res
+    } catch (e) {
+        throw e
+    } finally {
+        await fsx.remove(destLoc)
+    }
 }
 
 // TODO i cannot get the import paths with esbuild, output will only be with resolvedPath and importer
