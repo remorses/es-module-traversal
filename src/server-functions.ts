@@ -10,7 +10,9 @@ export async function readFromUrlOrPath(url: string, importer?: string) {
     if (!url.startsWith('http')) {
         content = await defaultReadFile(url)
     } else {
-        const res = await fetch(url, { headers: { Referer: importer } })
+        const res = await fetch(url, {
+            headers: importer ? { Referer: importer } : {},
+        })
         if (!res.ok) {
             throw new Error(
                 `Cannot fetch '${url}': ${
