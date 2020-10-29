@@ -20,6 +20,7 @@
     ],
     "scripts": {
         "test": "jest",
+        "watch": "tsc -w",
         "test:debug": "cross-env DEBUG=es-module-traversal jest",
         "test:bench": "cross-env BENCHMARK=1 jest",
         "test:profile": "cross-env BENCHMARK=1 node --inspect-brk `npm bin`/jest -t 'benchmark'",

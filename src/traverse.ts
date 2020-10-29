@@ -88,7 +88,7 @@ export async function traverseEsModules({
             .filter((x) => {
                 if (stopTraversing) {
                     // stopTraversing is necessary because some relative imports could take to node_modules directories in vite
-                    return !stopTraversing(x.importPath)
+                    return !stopTraversing(x.importPath, x.importer)
                 }
                 return true
             })

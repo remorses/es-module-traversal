@@ -7,7 +7,7 @@ export type TraversalResultType = {
 export type TraverseArgs = {
     entryPoints: string[]
     ignore?: string[]
-    stopTraversing?: (importPath: string) => boolean
+    stopTraversing?: (importPath: string, context: string) => boolean
     resolver?: (cwd: string, id: string) => string
     // | ((cwd: string, id: string) => Promise<string>)
     readFile?: ((path: string) => string) | ((path: string) => Promise<string>)
