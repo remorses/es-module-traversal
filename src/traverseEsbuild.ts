@@ -56,6 +56,9 @@ export async function traverseWithEsbuild({
             // TODO allow importing from node builtins when using allowNodeImports
             // TODO add plugin for pnp resolution
             // tsconfig: ,
+            loader: {
+                '.js': 'jsx',
+            },
             bundle: true,
             format: 'esm',
             write: true,
