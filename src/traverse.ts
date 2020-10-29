@@ -29,7 +29,9 @@ export async function traverseEsModules({
     const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
     // entryPoint = cleanUrl(entryPoint)
-    let toProcess = [...entryPoints] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
+    let toProcess: [path: string, importer?: string][] = [
+        ...entryPoints.map((x): [string] => [x]),
+    ] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
     // first onFile
@@ -41,10 +43,10 @@ export async function traverseEsModules({
         // read files to process concurrently
         const files = await batchedPromiseAll(
             toProcess,
-            async (filePath) => {
+            async ([filePath, importer]) => {
                 alreadyProcessed.add(filePath)
                 return {
-                    content: await readFile(filePath), // you can transpile modules from jsx and tsx here
+                    content: await readFile(filePath, importer), // you can transpile modules from jsx and tsx here
                     filePath,
                 }
             },
@@ -92,16 +94,19 @@ export async function traverseEsModules({
                 }
                 return true
             })
-            .map((x) => x.resolvedImportPath)
-            .filter(Boolean)
-            // .map(cleanUrl)
-            .filter(isJsModule)
-            // .filter((x) => !stopTraversing(x))
             .filter((x) => {
-                x = cleanUrl(x)
-                return !ignoreFiles.has(x)
+                return (
+                    isJsModule(x.resolvedImportPath) &&
+                    !ignoreFiles.has(cleanUrl(x.resolvedImportPath)) &&
+                    !alreadyProcessed.has(x.resolvedImportPath)
+                )
             })
-            .filter((x) => !alreadyProcessed.has(x))
+            // .map((x) => x.resolvedImportPath)
+            // .map(cleanUrl)
+            .filter(Boolean)
+            .map((x) => [x.resolvedImportPath, x.importer])
+
+        // .filter((x) => !stopTraversing(x))
 
         debug(`traversing inside [${toProcess.join(', ')}]`)
     }

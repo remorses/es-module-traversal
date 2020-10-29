@@ -6,7 +6,7 @@ import path from 'path'
 import fs from 'fs-extra'
 import {
     readFromUrlOrPath,
-    ResultType,
+    TraversalResultType,
     traverseEsModules,
     urlResolver,
 } from '../src'

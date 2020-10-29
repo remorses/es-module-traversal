@@ -5,12 +5,12 @@ import { URL } from 'url'
 import { defaultReadFile, defaultResolver, isRelative } from '.'
 import { debug } from './support'
 
-export async function readFromUrlOrPath(url: string) {
+export async function readFromUrlOrPath(url: string, importer?: string) {
     let content = ''
     if (!url.startsWith('http')) {
         content = await defaultReadFile(url)
     } else {
-        const res = await fetch(url, {})
+        const res = await fetch(url, { headers: { Referer: importer } })
         if (!res.ok) {
             throw new Error(
                 `Cannot fetch '${url}': ${
