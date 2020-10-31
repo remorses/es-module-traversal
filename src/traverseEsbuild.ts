@@ -4,7 +4,7 @@ import fsx from 'fs-extra'
 import os from 'os'
 import path from 'path'
 import slash from 'slash'
-import { flatten } from './support'
+import { flatten, unique } from './support'
 import { TraversalResultType } from './types'
 
 // TODO support tsconfig paths,
@@ -102,35 +102,42 @@ export function metaToTraversalResult({
     if (!path.isAbsolute(entry)) {
         throw new Error('entry must be an absolute path')
     }
-    let imports = [slash(path.relative(esbuildCwd, entry))]
+    const alreadyProcessed = new Set<string>()
+    let toProcess = [slash(path.relative(esbuildCwd, entry))]
     let result: TraversalResultType[] = []
-    while (imports.length) {
-        const newImports = []
-        imports.forEach((newEntry) => {
-            // newEntry = path.posix.normalize(newEntry) // TODO does esbuild always use posix?
-            const input = meta.inputs[newEntry]
-            if (!input) {
-                throw new Error(
-                    `entry ${newEntry} is not present in esbuild metafile`,
+    while (toProcess.length) {
+        const newImports = flatten(
+            toProcess.map((newEntry) => {
+                if (alreadyProcessed.has(newEntry)) {
+                    return
+                }
+                alreadyProcessed.add(newEntry)
+                // newEntry = path.posix.normalize(newEntry) // TODO does esbuild always use posix?
+                const input = meta.inputs[newEntry]
+                if (!input) {
+                    throw new Error(
+                        `entry ${newEntry} is not present in esbuild metafile`,
+                    )
+                }
+                const currentImports = input.imports.map((x) => x.path)
+                // newImports.push(...currentImports)
+                result.push(
+                    ...currentImports.map(
+                        (x): TraversalResultType => {
+                            return {
+                                importPath: '',
+                                importer: path.join(esbuildCwd, newEntry),
+                                resolvedImportPath: path.join(esbuildCwd, x),
+                            }
+                        },
+                    ),
                 )
-            }
-            const currentImports = input.imports.map((x) => x.path)
-            newImports.push(...currentImports)
-            result.push(
-                ...currentImports.map(
-                    (x): TraversalResultType => {
-                        return {
-                            importPath: '',
-                            importer: path.join(esbuildCwd, newEntry),
-                            resolvedImportPath: path.join(esbuildCwd, x),
-                        }
-                    },
-                ),
-            )
-        })
-        imports = newImports
+                return currentImports
+            }),
+        ).filter(Boolean)
+        toProcess = newImports
     }
-    return result
+    return unique(result, (x) => x.importPath + x.resolvedImportPath)
     // find the right output getting the key of the right output.inputs == input
     // get the imports of the inputs.[entry].imports and attach them the importer
     // do the same with the imports just found

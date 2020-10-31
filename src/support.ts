@@ -20,7 +20,7 @@ try {
 
 export const sleep = (t) => new Promise((res) => setTimeout(res, t))
 
-export async function defaultReadFile(filePath: string, ): Promise<string> {
+export async function defaultReadFile(filePath: string): Promise<string> {
     return await (await fsp.readFile(filePath)).toString()
 }
 
@@ -62,4 +62,16 @@ export function flatten<T>(arr: T[][]): T[] {
             Array.isArray(toFlatten) ? flatten(toFlatten as any) : toFlatten,
         )
     }, [])
+}
+
+export function unique<T>(array: T[], key = (x: T): any => x): T[] {
+    const cache: Record<any, boolean> = {}
+    return array.filter(function (a) {
+        const keyed = key(a)
+        if (!cache[keyed]) {
+            cache[keyed] = true
+            return true
+        }
+        return false
+    }, {})
 }
