@@ -38,14 +38,14 @@ export async function traverseWithEsbuild({
 
         const esbuildCwd = process.cwd()
         await build({
-            splitting: true, // needed to dedupe modules
+            // splitting: true, // needed to dedupe modules
             // external: externalPackages,
 
             minifyIdentifiers: false,
             minifySyntax: false,
             minifyWhitespace: false,
-            mainFields: ['module', 'browser', 'main'].filter(Boolean),
-            // sourcemap: 'inline', // TODO sourcemaps panics and gives a lot of CPU load
+            mainFields: ['module', 'browser', 'main'],
+            sourcemap: false,
             define: {
                 'process.env.NODE_ENV': JSON.stringify('dev'),
                 global: 'window',

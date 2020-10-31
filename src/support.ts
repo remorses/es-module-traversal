@@ -24,6 +24,7 @@ export async function defaultReadFile(filePath: string, ): Promise<string> {
     return await (await fsp.readFile(filePath)).toString()
 }
 
+// use resolve.sync to resolve paths, returns '' when it cannot resolve
 export const defaultResolver = (root: string, id: string) => {
     try {
         return (
@@ -35,7 +36,7 @@ export const defaultResolver = (root: string, id: string) => {
             }) || ''
         )
     } catch (e) {
-        console.error(`WARN: cannot resolve '${id}' from '${root}'`)
+        // console.error(`WARN: cannot resolve '${id}' from '${root}'`)
         return ''
     }
 }
