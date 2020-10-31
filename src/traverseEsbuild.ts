@@ -15,7 +15,7 @@ import { TraversalResultType } from './types'
 
 type Args = {
     entryPoints: string[]
-    esbuildOptions: BuildOptions
+    esbuildOptions?: BuildOptions
 }
 
 // resolver = defaultResolver,
