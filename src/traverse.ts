@@ -1,33 +1,18 @@
-import resolve from 'resolve'
 import { init, parse } from 'es-module-lexer'
-import { promises as fsp } from 'fs'
 import isBuiltin from 'is-builtin-module'
 import path from 'path'
 import { MAX_IO_OPS } from './constants'
 import { batchedPromiseAll } from 'batched-promise-all'
-import { cleanUrl, debug, isRunningWithYarnPnp } from './support'
-
-const JS_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
-
-export type ResultType = {
-    importPath: string
-    resolvedImportPath?: string
-    importer: string
-}
-
-export async function defaultReadFile(filePath: string): Promise<string> {
-    return await (await fsp.readFile(filePath)).toString()
-}
-
-export type Args = {
-    entryPoints: string[]
-    ignore?: string[]
-    stopTraversing?: (importPath: string) => boolean
-    resolver?: (cwd: string, id: string) => string
-    // | ((cwd: string, id: string) => Promise<string>)
-    readFile?: ((path: string) => string) | ((path: string) => Promise<string>)
-    onFile?: ((path: string) => any) | ((path: string) => Promise<any>)
-}
+import {
+    cleanUrl,
+    debug,
+    defaultReadFile,
+    defaultResolver,
+    isJsModule,
+    isRelative,
+    isRunningWithYarnPnp,
+} from './support'
+import { TraverseArgs, TraversalResultType } from './types'
 
 // TODO use a cache and hash of file paths with contents as key that maps to the imports paths, this way i don't have to run the lexer or run transforms in vite server (does this make sense? serializing result will be slower)
 // TODO add a watcher argument, this mode lets you get the import graph over time, when the watcher emits a change to a file, i try to parse it and add the import to the graph if not already existing
@@ -38,8 +23,8 @@ export async function traverseEsModules({
     stopTraversing,
     ignore = [],
     readFile = defaultReadFile,
-}: Args): Promise<ResultType[]> {
-    let results: Set<ResultType> = new Set()
+}: TraverseArgs): Promise<TraversalResultType[]> {
+    let results: Set<TraversalResultType> = new Set()
     const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
     // entryPoint = cleanUrl(entryPoint)
@@ -64,13 +49,13 @@ export async function traverseEsModules({
             },
             MAX_IO_OPS,
         )
-        let newResults: ResultType[] = []
+        let newResults: TraversalResultType[] = []
         // for every files get its imports and add them to results
         for (let { filePath, importPaths } of files) {
             debug(`traversing ${filePath}`)
-            const objects = map(
-                importPaths,
-                (importPath: string): ResultType => {
+            // const importPaths = getImportPaths(content, filePath)
+            const objects = importPaths.map(
+                (importPath): TraversalResultType => {
                     // TODO maybe throw when import is not resolved?
                     // you can resolve to a local running server (vite) here if you want
                     const resolvedImportPath = resolver(
@@ -84,7 +69,6 @@ export async function traverseEsModules({
                         resolvedImportPath: resolvedImportPath || undefined,
                     }
                 },
-                MAX_IO_OPS,
             )
             newResults.push(...objects)
         }
@@ -103,7 +87,7 @@ export async function traverseEsModules({
             .filter((x) => {
                 if (stopTraversing) {
                     // stopTraversing is necessary because some relative imports could take to node_modules directories in vite
-                    return !stopTraversing(x.importPath)
+                    return !stopTraversing(x.importPath, x.importer)
                 }
                 return true
             })
@@ -166,35 +150,4 @@ function tryParseImports(source, message = '') {
     } catch {
         throw new Error('cannot parse ES modules, ' + message)
     }
-}
-
-// this map has same signature as batchedPromiseAll in case i want to refactor and make resolver asynchronous
-const map = <T, Z>(x: T[], func: (x: T) => Z, _n?: number): Z[] => {
-    return x.map(func)
-}
-
-export const defaultResolver = (root: string, id: string) => {
-    try {
-        return (
-            resolve.sync(id, {
-                basedir: root,
-                extensions: [...JS_EXTENSIONS],
-                // necessary to work with pnpm
-                preserveSymlinks: isRunningWithYarnPnp || false,
-            }) || ''
-        )
-    } catch (e) {
-        console.error(`WARN: cannot resolve '${id}' from '${root}'`)
-        return ''
-    }
-}
-
-export function isRelative(x: string) {
-    x = cleanUrl(x)
-    return x.startsWith('.') || x.startsWith('/')
-}
-
-function isJsModule(x: string) {
-    const ext = path.posix.extname(cleanUrl(x))
-    return !ext || JS_EXTENSIONS.has(ext)
 }

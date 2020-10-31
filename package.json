@@ -1,7 +1,7 @@
 {
     "name": "es-module-traversal",
     "_": "[bump]",
-    "version": "0.0.30",
+    "version": "0.0.33",
     "description": "Traverse the ES module graph",
     "main": "dist/index.js",
     "repository": {
@@ -20,6 +20,7 @@
     ],
     "scripts": {
         "test": "jest",
+        "watch": "tsc -w",
         "test:debug": "cross-env DEBUG=es-module-traversal jest",
         "test:bench": "cross-env BENCHMARK=1 jest",
         "test:profile": "cross-env BENCHMARK=1 node --inspect-brk `npm bin`/jest -t 'static'",
@@ -40,10 +41,11 @@
         "@types/node": "^14.0.11",
         "@types/node-fetch": "^2.5.7",
         "@types/resolve": "^1.17.1",
+        "@types/slash": "^3.0.0",
         "assert": "^2.0.0",
         "cross-env": "^7.0.2",
         "dotenv": "^8.2.0",
-        "esbuild": "^0.7.15",
+        "esbuild": "^0.7.21",
         "esbuild-jest": "^0.3.0-beta.0",
         "fs-extra": "^9.0.1",
         "glob": "^7.1.6",
@@ -64,6 +66,6 @@
         "es-module-lexer": "^0.3.25",
         "is-builtin-module": "^3.0.0",
         "resolve": "^1.18.1",
-        "tslib": "^2.0.0"
+        "tslib": "^2.0.3"
     }
 }
