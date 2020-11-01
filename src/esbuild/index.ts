@@ -1,1 +1,1 @@
-export { traverseWithEsbuild } from './traverseEsbuild'
+export { traverseWithEsbuild, metaToTraversalResult } from './traverseEsbuild'

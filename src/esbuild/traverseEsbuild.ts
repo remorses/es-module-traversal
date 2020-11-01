@@ -1,7 +1,7 @@
-import { build, BuildOptions, Metadata } from 'esbuild'
+import { build, BuildOptions, Metadata, Plugin } from 'esbuild'
 import { promises as fsp } from 'fs'
 import fsx from 'fs-extra'
-import deepmerge from 'deepmerge'
+import deepmerge, { Options } from 'deepmerge'
 import os from 'os'
 import path from 'path'
 import slash from 'slash'
@@ -16,7 +16,7 @@ import { TraversalResultType } from '../types'
 
 type Args = {
     entryPoints: string[]
-    esbuildOptions?: BuildOptions
+    esbuildOptions?: Partial<BuildOptions>
     stopTraversing?: (importPath: string, context: string) => boolean
 }
 
@@ -57,13 +57,30 @@ export async function traverseWithEsbuild({
                         // TODO defined to make any package work
                         // ...generateEnvReplacements(env),
                     },
-                    // TODO inject polyfills for runtime globals like process, ...etc
                     // TODO allow importing from node builtins when using allowNodeImports
                     // TODO add plugin for pnp resolution
                     // tsconfig: ,
                     loader: {
                         '.js': 'jsx',
                     },
+                    plugins: [
+                        stopTraversing &&
+                            ({
+                                name: 'stop-traversing',
+                                setup: function setup({ onLoad, onResolve }) {
+                                    onResolve({ filter: /./ }, (args) => {
+                                        console.log({ args })
+                                        const external = stopTraversing(
+                                            args.resolveDir,
+                                            args.importer,
+                                        )
+                                        return {
+                                            external,
+                                        }
+                                    })
+                                },
+                            } as Plugin),
+                    ].filter(Boolean),
                     bundle: true,
                     format: 'esm',
                     write: true,
@@ -72,7 +89,7 @@ export async function traverseWithEsbuild({
                     minify: false,
                     logLevel: 'info',
                     metafile,
-                },
+                } as BuildOptions,
                 esbuildOptions,
             ),
         )
