@@ -1,11 +1,12 @@
 import { build, BuildOptions, Metadata } from 'esbuild'
 import { promises as fsp } from 'fs'
 import fsx from 'fs-extra'
+import deepmerge from 'deepmerge'
 import os from 'os'
 import path from 'path'
 import slash from 'slash'
-import { flatten, unique } from './support'
-import { TraversalResultType } from './types'
+import { flatten, unique } from '../support'
+import { TraversalResultType } from '../types'
 
 // TODO support tsconfig paths,
 // TODO make any non js module external
@@ -16,6 +17,7 @@ import { TraversalResultType } from './types'
 type Args = {
     entryPoints: string[]
     esbuildOptions?: BuildOptions
+    stopTraversing?: (importPath: string, context: string) => boolean
 }
 
 // resolver = defaultResolver,
@@ -25,7 +27,8 @@ type Args = {
 // readFile = defaultReadFile,
 export async function traverseWithEsbuild({
     entryPoints,
-    esbuildOptions = {},
+    esbuildOptions = { plugins: [] },
+    stopTraversing,
 }: Args): Promise<TraversalResultType[]> {
     const destLoc = path.resolve(
         await fsp.mkdtemp(path.join(os.tmpdir(), 'dest')),
@@ -37,38 +40,42 @@ export async function traverseWithEsbuild({
         const metafile = path.join(destLoc, 'meta.json')
 
         const esbuildCwd = process.cwd()
-        await build({
-            // splitting: true, // needed to dedupe modules
-            // external: externalPackages,
+        await build(
+            deepmerge(
+                {
+                    // splitting: true, // needed to dedupe modules
+                    // external: externalPackages,
 
-            minifyIdentifiers: false,
-            minifySyntax: false,
-            minifyWhitespace: false,
-            mainFields: ['module', 'browser', 'main'],
-            sourcemap: false,
-            define: {
-                'process.env.NODE_ENV': JSON.stringify('dev'),
-                global: 'window',
-                // TODO defined to make any package work
-                // ...generateEnvReplacements(env),
-            },
-            // TODO inject polyfills for runtime globals like process, ...etc
-            // TODO allow importing from node builtins when using allowNodeImports
-            // TODO add plugin for pnp resolution
-            // tsconfig: ,
-            loader: {
-                '.js': 'jsx',
-            },
-            bundle: true,
-            format: 'esm',
-            write: true,
-            entryPoints,
-            outdir: destLoc,
-            minify: false,
-            logLevel: 'info',
-            metafile,
-            ...esbuildOptions, // TODO deep merge
-        })
+                    minifyIdentifiers: false,
+                    minifySyntax: false,
+                    minifyWhitespace: false,
+                    mainFields: ['module', 'browser', 'main'],
+                    sourcemap: false,
+                    define: {
+                        'process.env.NODE_ENV': JSON.stringify('dev'),
+                        global: 'window',
+                        // TODO defined to make any package work
+                        // ...generateEnvReplacements(env),
+                    },
+                    // TODO inject polyfills for runtime globals like process, ...etc
+                    // TODO allow importing from node builtins when using allowNodeImports
+                    // TODO add plugin for pnp resolution
+                    // tsconfig: ,
+                    loader: {
+                        '.js': 'jsx',
+                    },
+                    bundle: true,
+                    format: 'esm',
+                    write: true,
+                    entryPoints,
+                    outdir: destLoc,
+                    minify: false,
+                    logLevel: 'info',
+                    metafile,
+                },
+                esbuildOptions,
+            ),
+        )
 
         const meta: Metadata = JSON.parse(
             await (await fsp.readFile(metafile)).toString(),
