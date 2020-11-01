@@ -1,5 +1,6 @@
 import { exec, execSync } from 'child_process'
 import path from 'path'
+import { URL } from 'url'
 import { traverseEsModules, urlResolver, readFromUrlOrPath } from '../../src'
 import { sleep } from '../../src/support'
 import { timedRun } from '../support'
@@ -41,7 +42,6 @@ test('benchmark vite server', async () => {
         })
 
         console.log(`\n\ntook ${ms / 1000} seconds\n\n`)
-        
     } finally {
         p.kill()
     }

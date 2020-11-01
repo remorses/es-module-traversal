@@ -1,7 +1,7 @@
 module.exports = {
     testEnvironment: 'node',
-    
-    transform: {
-        '.*\.tsx?': 'esbuild-jest',
-    },
+    preset: 'ts-jest',
+    // transform: {
+    //     '.*\.tsx?': 'esbuild-jest',
+    // },
 }

@@ -5,8 +5,9 @@ import deepmerge, { Options } from 'deepmerge'
 import os from 'os'
 import path from 'path'
 import slash from 'slash'
-import { flatten, unique } from '../support'
+import { defaultResolver, flatten, unique } from '../support'
 import { TraversalResultType } from '../types'
+import { CustomResolverPlugin, StopTraversingPlugin } from './plugins'
 
 // TODO support tsconfig paths,
 // TODO make any non js module external
@@ -17,6 +18,7 @@ import { TraversalResultType } from '../types'
 type Args = {
     entryPoints: string[]
     esbuildOptions?: Partial<BuildOptions>
+    resolver?: (cwd: string, id: string) => string
     stopTraversing?: (importPath: string, context: string) => boolean
 }
 
@@ -27,6 +29,7 @@ type Args = {
 // readFile = defaultReadFile,
 export async function traverseWithEsbuild({
     entryPoints,
+    resolver = defaultResolver,
     esbuildOptions = { plugins: [] },
     stopTraversing,
 }: Args): Promise<TraversalResultType[]> {
@@ -64,22 +67,9 @@ export async function traverseWithEsbuild({
                         '.js': 'jsx',
                     },
                     plugins: [
+                        // CustomResolverPlugin({ resolver }),
                         stopTraversing &&
-                            ({
-                                name: 'stop-traversing',
-                                setup: function setup({ onLoad, onResolve }) {
-                                    onResolve({ filter: /./ }, (args) => {
-                                        console.log({ args })
-                                        const external = stopTraversing(
-                                            args.resolveDir,
-                                            args.importer,
-                                        )
-                                        return {
-                                            external,
-                                        }
-                                    })
-                                },
-                            } as Plugin),
+                            StopTraversingPlugin({ stopTraversing }),
                     ].filter(Boolean),
                     bundle: true,
                     format: 'esm',

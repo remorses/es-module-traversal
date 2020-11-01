@@ -1,7 +1,5 @@
-import { exec, execSync } from 'child_process'
-import path from 'path'
-import { traverseEsModules, urlResolver, readFromUrlOrPath } from '../../src'
-import { sleep } from '../../src/support'
+import { URL } from 'url'
+import { readFromUrlOrPath, traverseEsModules, urlResolver } from '../../src'
 import { serve, timedRun } from '../support'
 
 jest.setTimeout(100 * 1000)

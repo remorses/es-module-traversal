@@ -19,6 +19,11 @@ exports[`traverseWithEsbuild stop traversing: traverseWithEsbuild 1`] = `
 Array [
   Object {
     "importPath": "",
+    "importer": "src/esbuild/plugins.ts",
+    "resolvedImportPath": "node_modules/builtin-modules/index.js",
+  },
+  Object {
+    "importPath": "",
     "importer": "src/support.ts",
     "resolvedImportPath": "node_modules/debug/src/browser.js",
   },
@@ -69,6 +74,11 @@ Array [
   },
   Object {
     "importPath": "",
+    "importer": "src/esbuild/traverseEsbuild.ts",
+    "resolvedImportPath": "src/esbuild/plugins.ts",
+  },
+  Object {
+    "importPath": "",
     "importer": "src/esbuild/index.ts",
     "resolvedImportPath": "src/esbuild/traverseEsbuild.ts",
   },
@@ -111,6 +121,11 @@ Array [
     "importPath": "",
     "importer": "node_modules/fs-extra/lib/mkdirs/make-dir.js",
     "resolvedImportPath": "node_modules/at-least-node/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/esbuild/plugins.ts",
+    "resolvedImportPath": "node_modules/builtin-modules/index.js",
   },
   Object {
     "importPath": "",
@@ -726,6 +741,11 @@ Array [
     "importPath": "",
     "importer": "tests/esbuild.test.ts",
     "resolvedImportPath": "src/esbuild/index.ts",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/esbuild/traverseEsbuild.ts",
+    "resolvedImportPath": "src/esbuild/plugins.ts",
   },
   Object {
     "importPath": "",
