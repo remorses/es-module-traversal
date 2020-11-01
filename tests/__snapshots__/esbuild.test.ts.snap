@@ -15,86 +15,6 @@ Array [
 ]
 `;
 
-exports[`traverseWithEsbuild stop traversing: traverseWithEsbuild 1`] = `
-Array [
-  Object {
-    "importPath": "",
-    "importer": "src/esbuild/plugins.ts",
-    "resolvedImportPath": "node_modules/builtin-modules/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/support.ts",
-    "resolvedImportPath": "node_modules/debug/src/browser.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/esbuild/traverseEsbuild.ts",
-    "resolvedImportPath": "node_modules/deepmerge/dist/cjs.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/esbuild/traverseEsbuild.ts",
-    "resolvedImportPath": "node_modules/esbuild/lib/main.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/esbuild/traverseEsbuild.ts",
-    "resolvedImportPath": "node_modules/fs-extra/lib/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "tests/support.ts",
-    "resolvedImportPath": "node_modules/koa-static/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "tests/support.ts",
-    "resolvedImportPath": "node_modules/koa/lib/application.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/support.ts",
-    "resolvedImportPath": "node_modules/resolve/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "tests/support.ts",
-    "resolvedImportPath": "node_modules/slash/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/support.ts",
-    "resolvedImportPath": "src/constants.ts",
-  },
-  Object {
-    "importPath": "",
-    "importer": "tests/esbuild.test.ts",
-    "resolvedImportPath": "src/esbuild/index.ts",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/esbuild/traverseEsbuild.ts",
-    "resolvedImportPath": "src/esbuild/plugins.ts",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/esbuild/index.ts",
-    "resolvedImportPath": "src/esbuild/traverseEsbuild.ts",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/esbuild/traverseEsbuild.ts",
-    "resolvedImportPath": "src/support.ts",
-  },
-  Object {
-    "importPath": "",
-    "importer": "tests/esbuild.test.ts",
-    "resolvedImportPath": "tests/support.ts",
-  },
-]
-`;
-
 exports[`traverseWithEsbuild: traverseWithEsbuild 1`] = `
 Array [
   Object {
@@ -160,7 +80,7 @@ Array [
   Object {
     "importPath": "",
     "importer": "node_modules/cookies/index.js",
-    "resolvedImportPath": "node_modules/cookies/node_modules/depd/lib/browser/index.js",
+    "resolvedImportPath": "node_modules/cookies/node_modules/depd/index.js",
   },
   Object {
     "importPath": "",
@@ -169,13 +89,23 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "src/support.ts",
+    "importer": "node_modules/debug/src/index.js",
     "resolvedImportPath": "node_modules/debug/src/browser.js",
   },
   Object {
     "importPath": "",
     "importer": "node_modules/debug/src/browser.js",
     "resolvedImportPath": "node_modules/debug/src/common.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/support.ts",
+    "resolvedImportPath": "node_modules/debug/src/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/debug/src/index.js",
+    "resolvedImportPath": "node_modules/debug/src/node.js",
   },
   Object {
     "importPath": "",
@@ -205,7 +135,22 @@ Array [
   Object {
     "importPath": "",
     "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/depd/lib/browser/index.js",
+    "resolvedImportPath": "node_modules/depd/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/depd/lib/compat/index.js",
+    "resolvedImportPath": "node_modules/depd/lib/compat/callsite-tostring.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/depd/lib/compat/index.js",
+    "resolvedImportPath": "node_modules/depd/lib/compat/event-listener-count.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/depd/index.js",
+    "resolvedImportPath": "node_modules/depd/lib/compat/index.js",
   },
   Object {
     "importPath": "",
@@ -439,8 +384,13 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/http-errors/index.js",
+    "importer": "node_modules/inherits/inherits.js",
     "resolvedImportPath": "node_modules/inherits/inherits_browser.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/http-errors/index.js",
+    "resolvedImportPath": "node_modules/inherits/inherits.js",
   },
   Object {
     "importPath": "",
@@ -499,13 +449,23 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa-static/index.js",
+    "importer": "node_modules/koa-static/node_modules/debug/src/index.js",
     "resolvedImportPath": "node_modules/koa-static/node_modules/debug/src/browser.js",
   },
   Object {
     "importPath": "",
     "importer": "node_modules/koa-static/node_modules/debug/src/browser.js",
     "resolvedImportPath": "node_modules/koa-static/node_modules/debug/src/common.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/koa-static/index.js",
+    "resolvedImportPath": "node_modules/koa-static/node_modules/debug/src/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/koa-static/node_modules/debug/src/index.js",
+    "resolvedImportPath": "node_modules/koa-static/node_modules/debug/src/node.js",
   },
   Object {
     "importPath": "",
@@ -534,13 +494,23 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
+    "importer": "node_modules/koa/node_modules/debug/src/index.js",
     "resolvedImportPath": "node_modules/koa/node_modules/debug/src/browser.js",
   },
   Object {
     "importPath": "",
     "importer": "node_modules/koa/node_modules/debug/src/browser.js",
     "resolvedImportPath": "node_modules/koa/node_modules/debug/src/debug.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/koa/lib/application.js",
+    "resolvedImportPath": "node_modules/koa/node_modules/debug/src/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/koa/node_modules/debug/src/index.js",
+    "resolvedImportPath": "node_modules/koa/node_modules/debug/src/node.js",
   },
   Object {
     "importPath": "",
@@ -629,8 +599,13 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/resolve-path/node_modules/http-errors/index.js",
+    "importer": "node_modules/resolve-path/node_modules/inherits/inherits.js",
     "resolvedImportPath": "node_modules/resolve-path/node_modules/inherits/inherits_browser.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/resolve-path/node_modules/http-errors/index.js",
+    "resolvedImportPath": "node_modules/resolve-path/node_modules/inherits/inherits.js",
   },
   Object {
     "importPath": "",
@@ -701,6 +676,16 @@ Array [
     "importPath": "",
     "importer": "node_modules/koa/lib/application.js",
     "resolvedImportPath": "node_modules/statuses/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/koa-static/node_modules/debug/src/node.js",
+    "resolvedImportPath": "node_modules/supports-color/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "node_modules/supports-color/index.js",
+    "resolvedImportPath": "node_modules/supports-color/node_modules/has-flag/index.js",
   },
   Object {
     "importPath": "",

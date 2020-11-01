@@ -31,6 +31,7 @@ export const defaultResolver = (root: string, id: string) => {
             resolve.sync(id, {
                 basedir: root,
                 extensions: [...JS_EXTENSIONS],
+
                 // necessary to work with pnpm
                 preserveSymlinks: isRunningWithYarnPnp || false,
             }) || ''

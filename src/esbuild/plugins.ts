@@ -1,5 +1,6 @@
 import { Plugin } from 'esbuild'
 import builtins from 'builtin-modules'
+import path from 'path'
 
 // resolve node builtins
 
@@ -34,12 +35,18 @@ export function CustomResolverPlugin({ resolver }): Plugin {
                         external: true,
                     }
                 }
+                // TODO win paths
+                if (args.path.startsWith('.') || args.path.startsWith('/')) {
+                    return null
+                }
+                // console.log(args.importer, args.path)
                 const resolved = resolver(args.importer, args.path)
 
                 // console.log({ resolved })
                 return {
                     external: !resolved,
                     path: resolved,
+                    namespace: 'file',
                 }
             })
         },

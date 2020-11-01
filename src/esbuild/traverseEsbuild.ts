@@ -67,7 +67,7 @@ export async function traverseWithEsbuild({
                         '.js': 'jsx',
                     },
                     plugins: [
-                        // CustomResolverPlugin({ resolver }),
+                        CustomResolverPlugin({ resolver }),
                         stopTraversing &&
                             StopTraversingPlugin({ stopTraversing }),
                     ].filter(Boolean),
