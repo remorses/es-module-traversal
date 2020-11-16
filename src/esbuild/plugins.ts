@@ -12,6 +12,7 @@ export function StopTraversingPlugin({ stopTraversing }): Plugin {
         setup: function setup({ onLoad, onResolve }) {
             onResolve({ filter: /.*/ }, (args) => {
                 console.log({ args })
+                // args.path
                 const external = stopTraversing(
                     args.resolveDir, // TODO replace resolveDir with the complete path to file
                     args.importer,
@@ -27,7 +28,7 @@ export function StopTraversingPlugin({ stopTraversing }): Plugin {
 export function CustomResolverPlugin({ resolver }): Plugin {
     const builtinsSet = new Set(builtins)
     return {
-        name: 'stop-traversing',
+        name: 'custom-resolver',
         setup: function setup({ onLoad, onResolve }) {
             onResolve({ filter: /.*/ }, (args) => {
                 if (builtinsSet.has(args.path)) {
@@ -43,10 +44,13 @@ export function CustomResolverPlugin({ resolver }): Plugin {
                 const resolved = resolver(args.importer, args.path)
 
                 // console.log({ resolved })
+                if (!resolved) {
+                    return {
+                        external: true,
+                    }
+                }
                 return {
-                    external: !resolved,
                     path: resolved,
-                    namespace: 'file',
                 }
             })
         },

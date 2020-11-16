@@ -53,8 +53,11 @@ it('traverseWithEsbuild stop traversing', async () => {
     const currentFile = path.resolve(__dirname, __filename)
     let res = await traverseWithEsbuild({
         entryPoints: [currentFile],
-        stopTraversing: (file) => {
-            return file.includes('node_modules')
+        stopTraversing: (file, importer) => {
+            return (
+                file.includes('node_modules') ||
+                importer.includes('node_modules')
+            )
         },
         esbuildOptions: {
             platform: 'node',
@@ -65,10 +68,11 @@ it('traverseWithEsbuild stop traversing', async () => {
         .sort((a, b) =>
             a.resolvedImportPath.localeCompare(b.resolvedImportPath),
         )
-    expect(
-        res.map((x) => x.importer).filter((x) => x.includes('node_modules'))
-            .length,
-    ).toBe(0)
+    const deps = res
+        .map((x) => x.importer)
+        .filter((x) => x.includes('node_modules'))
+    console.log({ deps })
+    expect(deps.length).toBe(0)
     console.log(res)
-    expect(res).toMatchSnapshot('traverseWithEsbuild')
+    expect(res).toMatchSnapshot('traverseWithEsbuild stop traversing')
 })
