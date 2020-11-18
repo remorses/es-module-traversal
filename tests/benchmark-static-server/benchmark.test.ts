@@ -1,5 +1,5 @@
 import { URL } from 'url'
-import { readFromUrlOrPath, traverseEsModules, urlResolver } from '../../src'
+import { traverseEsModules, urlResolver } from '../../src'
 import { serve, timedRun } from '../support'
 
 jest.setTimeout(100 * 1000)
@@ -18,7 +18,6 @@ test('benchmark static server', async () => {
             await traverseEsModules({
                 entryPoints: [new URL(ENTRY_NAME, baseUrl).toString()],
                 resolver: urlResolver({ root: __dirname, baseUrl }),
-                readFile: readFromUrlOrPath,
             })
         })
 

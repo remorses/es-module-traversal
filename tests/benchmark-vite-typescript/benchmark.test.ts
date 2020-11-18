@@ -1,7 +1,7 @@
-import { exec, execSync } from 'child_process'
+import { exec } from 'child_process'
 import path from 'path'
 import { URL } from 'url'
-import { traverseEsModules, urlResolver, readFromUrlOrPath } from '../../src'
+import { traverseEsModules, urlResolver } from '../../src'
 import { sleep } from '../../src/support'
 import { timedRun } from '../support'
 
@@ -37,7 +37,6 @@ test('benchmark vite server', async () => {
             await traverseEsModules({
                 entryPoints: [new URL(ENTRY_NAME, baseUrl).toString()],
                 resolver: urlResolver({ root: __dirname, baseUrl }),
-                read: readFromUrlOrPath,
             })
         })
 
