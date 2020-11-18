@@ -4,7 +4,7 @@
 
 Gather all imported files from some ES modules entrypoints,
 
-You can also customize the `resolver` and `readFile` functions to traverse the import graph from a static server
+You can also customize the `resolver` and `read` functions to traverse the import graph from a static server
 
 ```
 npm install es-module-traversal

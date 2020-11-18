@@ -20,8 +20,8 @@ jobs:
                   node-version: 12
                   registry-url: https://registry.npmjs.org/
             - run: yarn
-            - run: yarn test
             - run: tsc
+            - run: yarn test
             - name: Bump version
               if: matrix.os == 'ubuntu-latest'
               uses: remorses/bump-version@js
