@@ -22,9 +22,9 @@ it('metaToTraversalResult', async () => {
         },
     }
     const res = metaToTraversalResult({
-        meta: meta as any,
-        entry: '/usr/someFolder/entry',
-        esbuildCwd: '/usr/someFolder',
+        meta,
+        entry: path.resolve(process.cwd(), '/usr/someFolder/entry'),
+        esbuildCwd: path.resolve(process.cwd(), '/usr/someFolder'),
     })
         .map(osAgnosticResult)
         .sort((a, b) =>
@@ -49,7 +49,8 @@ it('traverseWithEsbuild', async () => {
     // console.log(res)
     expect(res).toMatchSnapshot('traverseWithEsbuild')
 })
-it.skip('traverseWithEsbuild stop traversing', async () => { // TODO esbuild plugins tests
+it.skip('traverseWithEsbuild stop traversing', async () => {
+    // TODO esbuild plugins tests
     const currentFile = path.resolve(__dirname, __filename)
     let res = await traverseWithEsbuild({
         entryPoints: [currentFile],
