@@ -23,8 +23,8 @@ it('metaToTraversalResult', async () => {
     }
     const res = metaToTraversalResult({
         meta,
-        entry: path.resolve(process.cwd(), '/usr/someFolder/entry'),
-        esbuildCwd: path.resolve(process.cwd(), '/usr/someFolder'),
+        entry: path.resolve(process.cwd(), 'someFolder/entry'),
+        esbuildCwd: path.resolve(process.cwd(), 'someFolder'),
     })
         .map(osAgnosticResult)
         .sort((a, b) =>
