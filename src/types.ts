@@ -11,7 +11,9 @@ export type TraverseArgs = {
     resolver?: (cwd: string, id: string) => string
     // | ((cwd: string, id: string) => Promise<string>)
     readFile?:
-        | ((path: string, importer?: string) => string)
-        | ((path: string, context?: string) => Promise<string>)
-    onFile?: ((path: string) => any) | ((path: string) => Promise<any>)
+        | ((path: string, importer: string) => string)
+        | ((path: string, importer: string) => Promise<string>)
+    onFile?:
+        | ((path: string, importer: string) => any)
+        | ((path: string, importer: string) => Promise<any>)
 }

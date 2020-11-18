@@ -46,10 +46,10 @@ it('traverseWithEsbuild', async () => {
         .sort((a, b) =>
             a.resolvedImportPath.localeCompare(b.resolvedImportPath),
         )
-    console.log(res)
+    // console.log(res)
     expect(res).toMatchSnapshot('traverseWithEsbuild')
 })
-it('traverseWithEsbuild stop traversing', async () => {
+it.skip('traverseWithEsbuild stop traversing', async () => { // TODO esbuild plugins tests
     const currentFile = path.resolve(__dirname, __filename)
     let res = await traverseWithEsbuild({
         entryPoints: [currentFile],
@@ -71,8 +71,7 @@ it('traverseWithEsbuild stop traversing', async () => {
     const deps = res
         .map((x) => x.importer)
         .filter((x) => x.includes('node_modules'))
-    console.log({ deps })
     expect(deps.length).toBe(0)
-    console.log(res)
+    // console.log(res)
     expect(res).toMatchSnapshot('traverseWithEsbuild stop traversing')
 })

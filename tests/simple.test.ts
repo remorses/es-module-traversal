@@ -5,6 +5,7 @@ import slash from 'slash'
 import path from 'path'
 import fs from 'fs-extra'
 import {
+    isomorphicDirname,
     readFromUrlOrPath,
     TraversalResultType,
     traverseEsModules,
@@ -28,8 +29,29 @@ it('works', async () => {
         entryPoints: [currentFile],
     })
 })
-it('path.dirname on urls', async () => {
-    expect(path.dirname('http://localhost/x/y')).toEqual('http://localhost/x')
+describe('isomorphicDirname on urls', () => {
+    test('simple urls', () => {
+        expect(isomorphicDirname('http://localhost/x/y')).toEqual(
+            'http://localhost/x',
+        )
+        expect(isomorphicDirname('http://localhost/x/y/z')).toEqual(
+            'http://localhost/x/y',
+        )
+    })
+    test('urls with query', () => {
+        expect(isomorphicDirname('http://localhost/x/y?x=2&y=3')).toEqual(
+            'http://localhost/x?x=2&y=3',
+        )
+        expect(isomorphicDirname('http://localhost/x/y/z?x=2&y=3')).toEqual(
+            'http://localhost/x/y?x=2&y=3',
+        )
+    })
+    test('keeps /', () => {
+        expect(isomorphicDirname('/path/to')).toBe('/path')
+        expect(isomorphicDirname('/@modules/to')).toBe('/@modules')
+        expect(isomorphicDirname('http:x/@modules/to')).toBe('http:x/@modules')
+        expect(isomorphicDirname('/path/to?x')).toBe('/path?x')
+    })
 })
 
 describe('snapshots', () => {
@@ -89,10 +111,10 @@ describe('snapshots', () => {
 })
 
 function makeFilesDownloader({ root, downloadFilesToDir }) {
-    return async (url) => {
+    return async (url, importer) => {
         // console.log('traversed ' + url)
         // recreate server files structure on disk
-        const content = await readFromUrlOrPath(url)
+        const content = await readFromUrlOrPath(url, importer)
         let filePath = url.startsWith('http')
             ? urlToRelativePath(url)
             : path.relative(root, url)
@@ -109,4 +131,3 @@ function urlToRelativePath(ctx) {
     pathname = pathname.startsWith('/') ? pathname.slice(1) : pathname
     return pathname
 }
-

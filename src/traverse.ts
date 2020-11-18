@@ -28,14 +28,14 @@ export async function traverseEsModules({
     const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
     // entryPoint = cleanUrl(entryPoint)
-    let toProcess: [path: string, importer?: string][] = [
-        ...entryPoints.map((x): [string] => [x]),
+    let toProcess: [path: string, importer: string][] = [
+        ...entryPoints.map((x): [string, string] => [x, x]),
     ] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
     // first onFile
     if (onFile) {
-        await Promise.all(entryPoints.map((x) => onFile(x)))
+        await Promise.all(entryPoints.map((x) => onFile(x, x)))
     }
 
     while (toProcess.length) {
@@ -45,7 +45,10 @@ export async function traverseEsModules({
             async ([filePath, importer]) => {
                 alreadyProcessed.add(filePath)
                 return {
-                    importPaths: getImportPaths(await readFile(filePath), filePath), // you can transpile modules from jsx and tsx here
+                    importPaths: getImportPaths(
+                        await readFile(filePath, importer),
+                        filePath,
+                    ), // you can transpile modules from jsx and tsx here
                     filePath,
                 }
             },
@@ -56,30 +59,38 @@ export async function traverseEsModules({
         for (let { filePath, importPaths } of files) {
             debug(`traversing ${filePath}`)
             // const importPaths = getImportPaths(content, filePath)
-            const objects = importPaths.map(
-                (importPath): TraversalResultType => {
-                    // TODO maybe throw when import is not resolved?
-                    // you can resolve to a local running server (vite) here if you want
-                    const resolvedImportPath = resolver(
-                        path.dirname(filePath), // TODO does dirname work on urls?
-                        importPath,
-                    )
+            const objects = importPaths
+                .map(
+                    (importPath): TraversalResultType => {
+                        // TODO maybe throw when import is not resolved?
+                        // you can resolve to a local running server (vite) here if you want
+                        const resolvedImportPath = resolver(
+                            isomorphicDirname(filePath), // TODO does dirname work on urls?
+                            importPath,
+                        )
+                        if (!resolvedImportPath) {
+                            debug(
+                                `WARNING: could not resolve '${importPath}' imported by '${filePath}'`,
+                            )
+                            return
+                        }
 
-                    return {
-                        importPath,
-                        importer: filePath,
-                        resolvedImportPath: resolvedImportPath || undefined,
-                    }
-                },
-            )
+                        return {
+                            importPath,
+                            importer: filePath,
+                            resolvedImportPath: resolvedImportPath || undefined,
+                        }
+                    },
+                )
+                .filter(Boolean)
             newResults.push(...objects)
         }
         // add new found imports to the results
         newResults.forEach((x) => results.add(x))
         if (onFile) {
             await batchedPromiseAll(
-                newResults.map((x) => x.resolvedImportPath).filter(Boolean),
-                onFile,
+                newResults.filter(Boolean),
+                (x) => onFile(x.resolvedImportPath, x.importer),
                 MAX_IO_OPS,
             )
         }
@@ -112,6 +123,13 @@ export async function traverseEsModules({
     return [...results]
 }
 
+// works on file paths and on urls
+export function isomorphicDirname(p: string) {
+    const queryMatch = p.match(/\?.*$/)
+    const query = queryMatch ? queryMatch[0] : ''
+    return path.dirname(p) + query
+}
+
 function getImportPaths(source: string, filePath?: string) {
     // strip UTF-8 BOM
     if (source.charCodeAt(0) === 0xfeff) {
@@ -124,11 +142,9 @@ function getImportPaths(source: string, filePath?: string) {
         let importPath = source.slice(s, e).trim()
         const isDynamicImport = d > -1
         if (isDynamicImport) {
-            try {
-                // dynamic import paths are expressions, if they are dimple strings i can get the importPath
-                importPath = eval(importPath) // TODO replace eval with remove comments regex and remove quotes regex
-            } catch {
-                debug(`could not evaluate dynamic import ${importPath}`)
+            // dynamic import paths are expressions, if they are dimple strings i can get the importPath
+            importPath = getImportPathFromExpression(importPath)
+            if (!importPath) {
                 continue
             }
         }
@@ -146,6 +162,16 @@ function getImportPaths(source: string, filePath?: string) {
     }
     debug(`parsed imports [${result.join(', ')}]`)
     return result
+}
+
+function getImportPathFromExpression(id: string) {
+    // remove comment
+    id = id.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '')
+    const literalIdMatch = id.match(/^\s*(?:'([^']+)'|"([^"]+)")\s*$/)
+    if (literalIdMatch) {
+        id = literalIdMatch[1] || literalIdMatch[2]
+    }
+    return id
 }
 
 function tryParseImports(source, message = '') {
