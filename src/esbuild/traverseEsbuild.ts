@@ -23,10 +23,10 @@ type Args = {
 }
 
 // resolver = defaultResolver,
-// onFile,
+// onEntry,
 // stopTraversing,
 // ignore = [],
-// readFile = defaultReadFile,
+// readFile = defaultRead,
 export async function traverseWithEsbuild({
     entryPoints,
     resolver = defaultResolver,

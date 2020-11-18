@@ -87,8 +87,8 @@ describe('snapshots', () => {
                 const res = await traverseEsModules({
                     entryPoints: [new URL(ENTRY_NAME, baseUrl).toString()],
                     resolver: urlResolver({ root: casePath, baseUrl }),
-                    readFile: readFromUrlOrPath,
-                    onFile: makeFilesDownloader({
+                    read: readFromUrlOrPath,
+                    onEntry: makeFilesDownloader({
                         root: casePath,
                         downloadFilesToDir,
                     }),

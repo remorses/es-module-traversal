@@ -37,7 +37,7 @@ test('benchmark vite server', async () => {
             await traverseEsModules({
                 entryPoints: [new URL(ENTRY_NAME, baseUrl).toString()],
                 resolver: urlResolver({ root: __dirname, baseUrl }),
-                readFile: readFromUrlOrPath,
+                read: readFromUrlOrPath,
             })
         })
 

@@ -20,7 +20,7 @@ try {
 
 export const sleep = (t) => new Promise((res) => setTimeout(res, t))
 
-export async function defaultReadFile(filePath: string): Promise<string> {
+export async function readFromDisk(filePath: string): Promise<string> {
     return await (await fsp.readFile(filePath)).toString()
 }
 

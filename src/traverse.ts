@@ -6,23 +6,26 @@ import { batchedPromiseAll } from 'batched-promise-all'
 import {
     cleanUrl,
     debug,
-    defaultReadFile,
+    readFromDisk,
     defaultResolver,
     isJsModule,
     isRelative,
     isRunningWithYarnPnp,
 } from './support'
 import { TraverseArgs, TraversalResultType } from './types'
+import { readFromUrlOrPath } from './server-functions'
+
+export const defaultRead = readFromUrlOrPath
 
 // TODO use a cache and hash of file paths with contents as key that maps to the imports paths, this way i don't have to run the lexer or run transforms in vite server (does this make sense? serializing result will be slower)
 // TODO add a watcher argument, this mode lets you get the import graph over time, when the watcher emits a change to a file, i try to parse it and add the import to the graph if not already existing
 export async function traverseEsModules({
     entryPoints,
     resolver = defaultResolver,
-    onFile,
+    onEntry,
     stopTraversing,
     ignore = [],
-    readFile = defaultReadFile,
+    read = defaultRead,
 }: TraverseArgs): Promise<TraversalResultType[]> {
     let results: Set<TraversalResultType> = new Set()
     const ignoreFiles = new Set(ignore.map(cleanUrl))
@@ -33,9 +36,9 @@ export async function traverseEsModules({
     ] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
-    // first onFile
-    if (onFile) {
-        await Promise.all(entryPoints.map((x) => onFile(x, x)))
+    // first onEntry
+    if (onEntry) {
+        await Promise.all(entryPoints.map((x) => onEntry(x, x)))
     }
 
     while (toProcess.length) {
@@ -46,7 +49,7 @@ export async function traverseEsModules({
                 alreadyProcessed.add(filePath)
                 return {
                     importPaths: getImportPaths(
-                        await readFile(filePath, importer),
+                        await read(filePath, importer),
                         filePath,
                     ), // you can transpile modules from jsx and tsx here
                     filePath,
@@ -87,10 +90,10 @@ export async function traverseEsModules({
         }
         // add new found imports to the results
         newResults.forEach((x) => results.add(x))
-        if (onFile) {
+        if (onEntry) {
             await batchedPromiseAll(
                 newResults.filter(Boolean),
-                (x) => onFile(x.resolvedImportPath, x.importer),
+                (x) => onEntry(x.resolvedImportPath, x.importer),
                 MAX_IO_OPS,
             )
         }

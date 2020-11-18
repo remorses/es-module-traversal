@@ -10,10 +10,10 @@ export type TraverseArgs = {
     stopTraversing?: (importPath: string, context: string) => boolean
     resolver?: (cwd: string, id: string) => string
     // | ((cwd: string, id: string) => Promise<string>)
-    readFile?:
+    read?:
         | ((path: string, importer: string) => string)
         | ((path: string, importer: string) => Promise<string>)
-    onFile?:
+    onEntry?:
         | ((path: string, importer: string) => any)
         | ((path: string, importer: string) => Promise<any>)
 }

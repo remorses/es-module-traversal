@@ -26,7 +26,7 @@ import { traverseEsModules } from 'es-module-traversal'
 
 const res = await traverseEsModules({
     entryPoints: [path.resolve(__dirname, __filename)],
-    onFile: (path) => {
+    onEntry: (path) => {
         console.log('traversed ' + path)
     },
 })
@@ -59,7 +59,7 @@ const res = await traverseEsModules({
         baseUrl: `http://localhost:${port}/`,
     }),
     readFile: readFromUrlOrPath,
-    onFile: (path) => {
+    onEntry: (path) => {
         console.log('traversed ' + path)
     },
 })

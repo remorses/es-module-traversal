@@ -2,15 +2,14 @@ import fetch from 'node-fetch'
 import path from 'path'
 import slash from 'slash'
 import { URL } from 'url'
-import { defaultReadFile, defaultResolver, isRelative } from '.'
-import { debug } from './support'
+import { defaultRead, defaultResolver, isRelative } from '.'
+import { debug, readFromDisk } from './support'
 
 export async function readFromUrlOrPath(url: string, importer: string) {
     let content = ''
     if (!url.startsWith('http')) {
-        content = await defaultReadFile(url)
+        content = await readFromDisk(url)
     } else {
-        debug({ url, referer: importer })
         const res = await fetch(url, {
             headers: importer ? { Referer: importer } : {},
         })
