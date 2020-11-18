@@ -58,7 +58,6 @@ const res = await traverseEsModules({
         root: __dirname,
         baseUrl: `http://localhost:${port}/`,
     }),
-    readFile: readFromUrlOrPath,
     onEntry: (path) => {
         console.log('traversed ' + path)
     },
