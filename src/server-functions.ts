@@ -16,7 +16,7 @@ export async function readFromUrlOrPath(url: string, importer: string) {
         })
         if (!res.ok) {
             throw new Error(
-                `Cannot fetch '${url}', referer '${importer}': ${
+                `Cannot fetch '${url}', referer is '${importer}': ${
                     res.statusText
                 } ${await res.text().catch(() => '')}`,
             )
@@ -31,6 +31,7 @@ export async function readFromUrlOrPath(url: string, importer: string) {
  * Create a resolver function that support urls and paths
  * It assumes a static server behind `baseUrl` with `root` folder mounted at /
  */
+// TODO rename to browserEmulator
 export const urlResolver = ({
     root,
     baseUrl,
