@@ -3,11 +3,11 @@ import path from 'path'
 import slash from 'slash'
 import { URL } from 'url'
 import { defaultRead, defaultResolver, isRelative } from '.'
-import { debug, readFromDisk } from './support'
+import { debug, isUrl, readFromDisk } from './support'
 
 export async function readFromUrlOrPath(url: string, importer: string) {
     let content = ''
-    if (!url.startsWith('http')) {
+    if (!isUrl(url)) {
         content = await readFromDisk(url)
     } else {
         const res = await fetch(url, {
@@ -41,14 +41,13 @@ export const urlResolver = ({
     // resolves relative paths to absolute paths and adds the root baseUrl
     return function resolveUrlOrPath(ctx: string, importPath: string) {
         debug(`resolveUrlOrPath from '${ctx}' to '${importPath}'`)
-        let importerDirectory = ctx.startsWith('http')
-            ? path.resolve(root, urlToRelativePath(ctx)) // TODO does not work with vite
-            : ctx
+        let importerDirectory = isUrl(ctx)
+            ? urlToRelativePath(ctx)
+            : slash(path.relative(root, ctx)) // TODO assumes importer files paths are always absolute
         if (!isRelative(importPath)) {
             // console.log('defaultResolver from', importerDirectory, importPath)
             return defaultResolver(importerDirectory, importPath)
         }
-        importerDirectory = slash(path.relative(root, importerDirectory))
         // console.log({ importerDirectory, importPath, root })
         if (importPath.startsWith('.')) {
             // resolve relative to the importer file

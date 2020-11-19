@@ -2,6 +2,7 @@ import staticServe from 'koa-static'
 import Koa from 'koa'
 import slash from 'slash'
 import { TraversalResultType } from '../src/types'
+import { isUrl } from '../src/support'
 import path from 'path'
 
 export async function serve({ port, cwd }): Promise<Function> {
@@ -38,10 +39,10 @@ export async function timedRun(func) {
 
 export function osAgnosticResult(x: TraversalResultType): TraversalResultType {
     let { importPath, importer, resolvedImportPath } = x
-    if (!resolvedImportPath.startsWith('http')) {
+    if (!isUrl(resolvedImportPath)) {
         resolvedImportPath = normalizePath(resolvedImportPath)
     }
-    if (!importer.startsWith('http')) {
+    if (!isUrl(importer)) {
         importer = normalizePath(importer)
     }
     return {

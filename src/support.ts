@@ -76,3 +76,7 @@ export function unique<T>(array: T[], key = (x: T): any => x): T[] {
         return false
     }, {})
 }
+
+export function isUrl(str: string) {
+    return str.startsWith('http://') || str.startsWith('https://')
+}
