@@ -739,7 +739,7 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "src/esbuild/traverseEsbuild.ts",
+    "importer": "tests/support.ts",
     "resolvedImportPath": "src/support.ts",
   },
   Object {
