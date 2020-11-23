@@ -44,7 +44,7 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "src/esbuild/plugins.ts",
+    "importer": "node_modules/is-builtin-module/index.js",
     "resolvedImportPath": "node_modules/builtin-modules/index.js",
   },
   Object {
@@ -391,6 +391,11 @@ Array [
     "importPath": "",
     "importer": "node_modules/http-errors/index.js",
     "resolvedImportPath": "node_modules/inherits/inherits.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/esbuild/plugins.ts",
+    "resolvedImportPath": "node_modules/is-builtin-module/index.js",
   },
   Object {
     "importPath": "",
