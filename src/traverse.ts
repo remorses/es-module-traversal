@@ -1,19 +1,17 @@
+import { batchedPromiseAll } from 'batched-promise-all'
 import { init, parse } from 'es-module-lexer'
 import isBuiltin from 'is-builtin-module'
 import path from 'path'
 import { MAX_IO_OPS } from './constants'
-import { batchedPromiseAll } from 'batched-promise-all'
+import { readFromUrlOrPath } from './server-functions'
 import {
     cleanUrl,
     debug,
-    readFromDisk,
     defaultResolver,
     isJsModule,
     isRelative,
-    isRunningWithYarnPnp,
 } from './support'
-import { TraverseArgs, TraversalResultType } from './types'
-import { readFromUrlOrPath } from './server-functions'
+import { TraversalResultType, TraverseArgs } from './types'
 
 export const defaultRead = readFromUrlOrPath
 

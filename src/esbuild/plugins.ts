@@ -1,9 +1,6 @@
 import { Plugin } from 'esbuild'
 import isBuiltin from 'is-builtin-module'
 
-// resolve node builtins
-
-// mark node modules as external
 
 export function StopTraversingPlugin({ stopTraversing }): Plugin {
     return {

@@ -1,7 +1,6 @@
+import { promises as fsp } from 'fs'
 import path from 'path'
 import resolve from 'resolve'
-import { promises as fsp } from 'fs'
-import slash from 'slash'
 import { JS_EXTENSIONS, PACKAGE_NAME } from './constants'
 
 export const queryRE = /\?.*$/
