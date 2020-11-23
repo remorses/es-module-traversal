@@ -1,7 +1,7 @@
 {
     "name": "es-module-traversal",
     "_": "[bump]",
-    "version": "0.0.44",
+    "version": "0.0.45",
     "description": "Traverse the ES module graph",
     "main": "dist/index.js",
     "repository": {
