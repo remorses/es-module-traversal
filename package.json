@@ -53,7 +53,6 @@
         "jest-specific-snapshot": "^4.0.0",
         "koa": "^2.13.0",
         "koa-static": "^5.0.0",
-        "node-fetch": "^2.6.1",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "sucrase": "^3.15.0",
@@ -72,6 +71,7 @@
         "is-builtin-module": "^3.0.0",
         "resolve": "^1.18.1",
         "slash": "^3.0.0",
+        "node-fetch": "^2.6.1",
         "tslib": "^2.0.3"
     }
 }
