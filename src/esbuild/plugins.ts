@@ -1,6 +1,5 @@
 import { Plugin } from 'esbuild'
-import builtins from 'builtin-modules'
-import path from 'path'
+import isBuiltin from 'is-builtin-module'
 
 // resolve node builtins
 
@@ -26,12 +25,11 @@ export function StopTraversingPlugin({ stopTraversing }): Plugin {
 }
 
 export function CustomResolverPlugin({ resolver }): Plugin {
-    const builtinsSet = new Set(builtins)
     return {
         name: 'custom-resolver',
         setup: function setup({ onLoad, onResolve }) {
             onResolve({ filter: /.*/ }, (args) => {
-                if (builtinsSet.has(args.path)) {
+                if (isBuiltin(args.path)) {
                     return {
                         external: true,
                     }
