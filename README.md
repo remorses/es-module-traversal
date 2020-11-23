@@ -1,7 +1,5 @@
 # es-module-traversal
 
-**unstable, under heavy development**
-
 Gather all imported files from some ES modules entrypoints,
 
 You can also customize the `resolver` and `read` functions to traverse the import graph from a static server
@@ -39,7 +37,7 @@ console.log(res)
 // }, ...]
 ```
 
-## Using a static server
+## Fetching from a static server
 
 ```ts
 // customize resolution to use a server instead of disk
