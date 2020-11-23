@@ -24,6 +24,7 @@ export async function traverseEsModules({
     stopTraversing,
     ignore = [],
     read = defaultRead,
+    concurrency = MAX_IO_OPS,
 }: TraverseArgs): Promise<TraversalResultType[]> {
     let results: Set<TraversalResultType> = new Set()
     const ignoreFiles = new Set(ignore.map(cleanUrl))
@@ -53,7 +54,7 @@ export async function traverseEsModules({
                     filePath,
                 }
             },
-            MAX_IO_OPS,
+            concurrency,
         )
         let newResults: TraversalResultType[] = []
         // for every files get its imports and add them to results
