@@ -1949,9 +1949,9 @@ esbuild@^0.6.33:
   integrity sha512-InRdL/Q96pUucPqovJzvuLhquZr6jOn81FDVwFjCKz1rYKIm9OdOC+7Fs4vr6x48vKBl5LzKgtjU39BUpO636A==
 
 esbuild@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.1.tgz#aa9a1fb89532b38fe7ac93f6f87cce94484189f8"
-  integrity sha512-izduJqbu66nHek4Rw+4WyZZoo66LMds9Fx5Z1gZDAY0hEyTpL6fRjN7WrQANLZCXEYObjW36Ra5vLA9Zs9QHvg==
+  version "0.8.12"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.12.tgz#bea417dbb228a971a5df255cb1b8acf5ea96ef52"
+  integrity sha512-SWCUodYFOkKcu2Jbum12NbD98MoQq2EWWvHfQtpR2C9RkPzRr1BE4cavYjQpQV01hBR19UAftXl0TVLjka/i3Q==
 
 escape-html@^1.0.3:
   version "1.0.3"
