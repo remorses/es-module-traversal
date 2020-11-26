@@ -3,6 +3,7 @@ import path from 'path'
 import slash from 'slash'
 import { URL } from 'url'
 import { defaultRead, defaultResolver, isRelative } from '.'
+import { PACKAGE_NAME } from './constants'
 import { debug, isUrl, readFromDisk } from './support'
 
 export async function readFromUrlOrPath(url: string, importer: string) {
@@ -11,7 +12,10 @@ export async function readFromUrlOrPath(url: string, importer: string) {
         content = await readFromDisk(url)
     } else {
         const res = await fetch(url, {
-            headers: importer ? { Referer: importer } : {},
+            headers: {
+                ...(importer ? { Referer: importer } : {}),
+                'User-Agent': PACKAGE_NAME,
+            },
         })
         if (!res.ok) {
             throw new Error(
