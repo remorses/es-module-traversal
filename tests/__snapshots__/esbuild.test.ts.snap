@@ -84,11 +84,6 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/debug/src/common.js",
-    "resolvedImportPath": "node_modules/debug/node_modules/ms/index.js",
-  },
-  Object {
-    "importPath": "",
     "importer": "node_modules/debug/src/index.js",
     "resolvedImportPath": "node_modules/debug/src/browser.js",
   },
