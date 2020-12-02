@@ -7,7 +7,7 @@ import path from 'path'
 import slash from 'slash'
 import { defaultResolver, flatten, unique } from '../support'
 import { TraversalResultType } from '../types'
-import { CustomResolverPlugin, StopTraversingPlugin } from './plugins'
+import { CustomResolverPlugin } from './plugins'
 
 // TODO support tsconfig paths,
 // TODO make any non js module external
@@ -19,7 +19,7 @@ type Args = {
     entryPoints: string[]
     esbuildOptions?: Partial<BuildOptions>
     resolver?: (cwd: string, id: string) => string
-    stopTraversing?: (importPath: string, context: string) => boolean
+    stopTraversing?: (resolvedPath: string) => boolean
 }
 
 // resolver = defaultResolver,
@@ -66,11 +66,9 @@ export async function traverseWithEsbuild({
                     loader: {
                         '.js': 'jsx',
                     },
-                    plugins: [
-                        CustomResolverPlugin({ resolver }),
-                        stopTraversing &&
-                            StopTraversingPlugin({ stopTraversing }),
-                    ].filter(Boolean),
+                    plugins: [CustomResolverPlugin({ resolver })].filter(
+                        Boolean,
+                    ),
                     bundle: true,
                     format: 'esm',
                     write: true,

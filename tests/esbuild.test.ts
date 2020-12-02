@@ -54,11 +54,8 @@ it.skip('traverseWithEsbuild stop traversing', async () => {
     const currentFile = path.resolve(__dirname, __filename)
     let res = await traverseWithEsbuild({
         entryPoints: [currentFile],
-        stopTraversing: (file, importer) => {
-            return (
-                file.includes('node_modules') ||
-                importer.includes('node_modules')
-            )
+        stopTraversing: (file) => {
+            return file.includes('node_modules')
         },
         esbuildOptions: {
             platform: 'node',

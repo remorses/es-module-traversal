@@ -8,7 +8,7 @@ export type TraverseArgs = {
     entryPoints: string[]
     ignore?: string[]
     concurrency?: number
-    stopTraversing?: (importPath: string, context: string) => boolean
+    stopTraversing?: (resolvedPath: string) => boolean
     resolver?: (cwd: string, id: string) => string
     // | ((cwd: string, id: string) => Promise<string>)
     read?:

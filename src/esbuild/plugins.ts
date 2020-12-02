@@ -2,24 +2,7 @@ import { Plugin } from 'esbuild'
 import isBuiltin from 'is-builtin-module'
 
 
-export function StopTraversingPlugin({ stopTraversing }): Plugin {
-    return {
-        name: 'stop-traversing',
-        setup: function setup({ onLoad, onResolve }) {
-            onResolve({ filter: /.*/ }, (args) => {
-                console.log({ args })
-                // args.path
-                const external = stopTraversing(
-                    args.resolveDir, // TODO replace resolveDir with the complete path to file
-                    args.importer,
-                )
-                return {
-                    external,
-                }
-            })
-        },
-    }
-}
+
 
 export function CustomResolverPlugin({ resolver }): Plugin {
     return {
