@@ -3,7 +3,7 @@ import isBuiltin from 'is-builtin-module'
 
 
 
-
+// TODO implement custom node resolver that also adds a stopTraversing callback
 export function CustomResolverPlugin({ resolver }): Plugin {
     return {
         name: 'custom-resolver',
