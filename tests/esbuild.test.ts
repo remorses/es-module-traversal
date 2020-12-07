@@ -72,7 +72,7 @@ it('traverseWithEsbuild', async () => {
     expect(res1).toMatchSnapshot('traverseWithEsbuild')
 })
 
-it.skip('traverseWithEsbuild stop traversing', async () => {
+it('traverseWithEsbuild stop traversing', async () => {
     // TODO esbuild plugins tests
     const currentFile = path.resolve(__dirname, __filename)
     let res = await traverseWithEsbuild({
