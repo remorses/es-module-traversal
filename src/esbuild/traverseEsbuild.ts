@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge'
-import { build, BuildOptions, Metadata } from 'esbuild'
+import { build, BuildOptions, Metadata, Plugin } from 'esbuild'
 import { promises as fsp } from 'fs'
 import fsx from 'fs-extra'
 import os from 'os'
@@ -73,9 +73,15 @@ export async function traverseWithEsbuild({
                         '.js': 'jsx',
                     },
                     plugins: [
+                        ExternalButInMetafile(),
                         // NodeModulesPolyfillPlugin({ fs: true, crypto: true }), // TODO enable if in browser?
                         NodeResolvePlugin({
-                            external: stopTraversing,
+                            external: function external(resolved) {
+                                return {
+                                    namespace: externalNamespace,
+                                    path: resolved,
+                                }
+                            },
                             onUnresolved: () => {
                                 return {
                                     external: true,
@@ -116,6 +122,34 @@ export async function traverseWithEsbuild({
         return res
     } finally {
         await fsx.remove(destLoc)
+    }
+}
+
+const externalNamespace = 'external-but-keep-in-metafile'
+function ExternalButInMetafile(): Plugin {
+    return {
+        name: externalNamespace,
+        setup(build) {
+            const externalModule = 'externalModuleXXX'
+            build.onResolve({ filter: new RegExp(externalModule) }, (args) => {
+                if (args.path !== externalModule) {
+                    return
+                }
+                return {
+                    external: true,
+                }
+            })
+            build.onLoad(
+                {
+                    filter: /.*/,
+                    namespace: 'external-but-keep-in-metafile',
+                },
+                (args) => {
+                    const contents = `export * from '${externalModule}'`
+                    return { contents, loader: 'js' }
+                },
+            )
+        },
     }
 }
 
