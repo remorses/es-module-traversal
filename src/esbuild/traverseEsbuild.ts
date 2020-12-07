@@ -8,6 +8,10 @@ import slash from 'slash'
 import { defaultResolver, flatten, unique } from '../support'
 import { TraversalResultType } from '../types'
 import { CustomResolverPlugin } from './plugins'
+import {
+    NodeModulesPolyfillPlugin,
+    NodeResolvePlugin,
+} from '@esbuild-plugins/all'
 
 // TODO support tsconfig paths,
 // TODO make any non js module external
@@ -57,19 +61,30 @@ export async function traverseWithEsbuild({
                     define: {
                         'process.env.NODE_ENV': JSON.stringify('dev'),
                         global: 'window',
-                        // TODO defined to make any package work
                         // ...generateEnvReplacements(env),
                     },
-                    // TODO allow importing from node builtins when using allowNodeImports
-                    // TODO add plugin for pnp resolution
+                    inject: [
+                        // require.resolve(
+                        //     '@esbuild-plugins/node-globals-polyfill/process.js',
+                        // ),
+                    ],
                     // tsconfig: ,
                     loader: {
                         '.js': 'jsx',
                     },
-                    plugins: [CustomResolverPlugin({ resolver })].filter(
-                        Boolean,
-                    ),
+                    plugins: [
+                        // NodeModulesPolyfillPlugin({ fs: true, crypto: true }), // TODO enable if in browser?
+                        NodeResolvePlugin({
+                            external: stopTraversing,
+                            onUnresolved: () => {
+                                return {
+                                    external: true,
+                                }
+                            },
+                        }),
+                    ].filter(Boolean),
                     bundle: true,
+                    platform: 'node',
                     format: 'esm',
                     write: true,
                     entryPoints,
@@ -85,16 +100,32 @@ export async function traverseWithEsbuild({
         const meta: Metadata = JSON.parse(
             await (await fsp.readFile(metafile)).toString(),
         )
+        // console.log(await (await fsp.readFile(metafile)).toString())
 
         const res = flatten(
             entryPoints.map((entry) => {
                 return metaToTraversalResult({ meta, entry, esbuildCwd })
             }),
-        )
+        ).map((x) => {
+            return {
+                ...x,
+                resolvedImportPath: removeColon(x.resolvedImportPath),
+                importer: removeColon(x.importer),
+            }
+        })
         return res
     } finally {
         await fsx.remove(destLoc)
     }
+}
+
+function removeColon(input: string) {
+    const index = input.indexOf(':')
+    if (index === -1) {
+        return input
+    }
+    const clean = input.slice(index + 1)
+    return clean
 }
 
 // TODO i cannot get the import paths with esbuild, output will only be with resolvedPath and importer
