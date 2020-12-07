@@ -1,6 +1,7 @@
 import { Metadata } from 'esbuild'
 import path from 'path'
 import { metaToTraversalResult, traverseWithEsbuild } from '../src/esbuild'
+import { traverseEsModules } from '../src/traverse'
 import { osAgnosticResult } from './support'
 
 it('metaToTraversalResult', async () => {
@@ -35,23 +36,42 @@ it('metaToTraversalResult', async () => {
 })
 it('traverseWithEsbuild', async () => {
     const currentFile = path.resolve(__dirname, __filename)
-    let res = await traverseWithEsbuild({
-        entryPoints: [currentFile],
-        stopTraversing: (p) => {
-            return p.includes('node_modules')
-        },
+    const entryPoints = [currentFile]
+    const stopTraversing = (p) => {
+        return p.includes('node_modules')
+    }
+    let res1 = await traverseWithEsbuild({
+        entryPoints,
+        stopTraversing,
         esbuildOptions: {
             platform: 'node',
         },
     })
-    res = res
+    let res2 = await traverseEsModules({
+        entryPoints,
+        stopTraversing,
+    })
+
+    const normalize = (x: string[]) => {
+        return [...new Set(x)].sort()
+    }
+
+    const expected = normalize(res2.map((x) => x.resolvedImportPath)) // can be a superset
+    expect(
+        normalize(res1.map((x) => x.resolvedImportPath)).filter((x) =>
+            expected.includes(x),
+        ),
+    ).toEqual(expected)
+
+    res1 = res1
         .map(osAgnosticResult)
         .sort((a, b) =>
             a.resolvedImportPath.localeCompare(b.resolvedImportPath),
         )
     // console.log(res)
-    expect(res).toMatchSnapshot('traverseWithEsbuild')
+    expect(res1).toMatchSnapshot('traverseWithEsbuild')
 })
+
 it.skip('traverseWithEsbuild stop traversing', async () => {
     // TODO esbuild plugins tests
     const currentFile = path.resolve(__dirname, __filename)

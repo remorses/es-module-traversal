@@ -71,7 +71,7 @@ export async function traverseEsModules({
                             importPath,
                         )
                         if (!resolvedImportPath) {
-                            debug(
+                            console.error(
                                 `WARNING: could not resolve '${importPath}' imported by '${filePath}'`,
                             )
                             return
@@ -98,10 +98,14 @@ export async function traverseEsModules({
         }
         // process the relative imports found in current path
         toProcess = newResults
-            .filter((x) => isRelative(x.importPath))
+            .filter((x) => isRelative(x.importPath)) // TODO do not process only relative imports
             .filter((x) => {
                 if (stopTraversing) {
-                    return !stopTraversing(x.resolvedImportPath)
+                    const stop = stopTraversing(x.resolvedImportPath)
+                    if (stop) {
+                        debug(`stop traversing at ${x.resolvedImportPath}`)
+                    }
+                    return !stop
                 }
                 return true
             })

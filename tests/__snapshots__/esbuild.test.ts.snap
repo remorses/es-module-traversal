@@ -20,92 +20,82 @@ Array [
   Object {
     "importPath": "",
     "importer": "src/esbuild/traverseEsbuild.ts",
-    "resolvedImportPath": "../../../.config/yarn/link/@esbuild-plugins/all/esm/index.js",
+    "resolvedImportPath": "../esbuild-plugins/all/dist/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa/lib/request.js",
-    "resolvedImportPath": "node_modules/accepts/index.js",
+    "importer": "../esbuild-plugins/all/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/esm-externals/dist/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa-convert/node_modules/koa-compose/index.js",
-    "resolvedImportPath": "node_modules/any-promise/index.js",
+    "importer": "../esbuild-plugins/esm-externals/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/esm-externals/package.json",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/any-promise/register.js",
-    "resolvedImportPath": "node_modules/any-promise/loader.js",
+    "importer": "../esbuild-plugins/node-resolve/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node_modules/builtin-modules/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/any-promise/index.js",
-    "resolvedImportPath": "node_modules/any-promise/register.js",
+    "importer": "../esbuild-plugins/node-resolve/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node_modules/debug/src/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/fs-extra/lib/mkdirs/make-dir.js",
-    "resolvedImportPath": "node_modules/at-least-node/index.js",
+    "importer": "../esbuild-plugins/esm-externals/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node_modules/escape-string-regexp/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa/lib/response.js",
-    "resolvedImportPath": "node_modules/cache-content-type/index.js",
+    "importer": "../esbuild-plugins/node-resolve/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node_modules/resolve/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa-convert/index.js",
-    "resolvedImportPath": "node_modules/co/index.js",
+    "importer": "../esbuild-plugins/node-modules-polyfill/dist/polyfills.js",
+    "resolvedImportPath": "../esbuild-plugins/node_modules/rollup-plugin-node-polyfills/polyfills/http.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa/lib/response.js",
-    "resolvedImportPath": "node_modules/content-disposition/index.js",
+    "importer": "../esbuild-plugins/all/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node-globals-polyfill/dist/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/content-disposition/index.js",
-    "resolvedImportPath": "node_modules/content-disposition/node_modules/safe-buffer/index.js",
+    "importer": "../esbuild-plugins/all/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node-modules-polyfill/dist/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa/lib/request.js",
-    "resolvedImportPath": "node_modules/content-type/index.js",
+    "importer": "../esbuild-plugins/node-modules-polyfill/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node-modules-polyfill/dist/polyfills.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa/lib/context.js",
-    "resolvedImportPath": "node_modules/cookies/index.js",
+    "importer": "../esbuild-plugins/node-modules-polyfill/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node-modules-polyfill/package.json",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/cookies/index.js",
-    "resolvedImportPath": "node_modules/cookies/node_modules/depd/lib/browser/index.js",
+    "importer": "../esbuild-plugins/all/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node-resolve/dist/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "../esbuild-plugins/node-resolve/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/node-resolve/package.json",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/traverse.ts",
+    "resolvedImportPath": "node_modules/batched-promise-all/dist/index.js",
   },
   Object {
     "importPath": "",
     "importer": "src/support.ts",
-    "resolvedImportPath": "node_modules/debug/src/browser.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/debug/src/browser.js",
-    "resolvedImportPath": "node_modules/debug/src/common.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/http-assert/index.js",
-    "resolvedImportPath": "node_modules/deep-equal/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/deep-equal/index.js",
-    "resolvedImportPath": "node_modules/deep-equal/lib/is_arguments.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/deep-equal/index.js",
-    "resolvedImportPath": "node_modules/deep-equal/lib/keys.js",
+    "resolvedImportPath": "node_modules/debug/src/index.js",
   },
   Object {
     "importPath": "",
@@ -114,28 +104,8 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa/lib/context.js",
-    "resolvedImportPath": "node_modules/delegates/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/depd/lib/browser/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/response.js",
-    "resolvedImportPath": "node_modules/destroy/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/on-finished/index.js",
-    "resolvedImportPath": "node_modules/ee-first/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/response.js",
-    "resolvedImportPath": "node_modules/encodeurl/index.js",
+    "importer": "src/traverse.ts",
+    "resolvedImportPath": "node_modules/es-module-lexer/dist/lexer.cjs",
   },
   Object {
     "importPath": "",
@@ -144,268 +114,13 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa/lib/response.js",
-    "resolvedImportPath": "node_modules/escape-html/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/request.js",
-    "resolvedImportPath": "node_modules/fresh/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/copy-sync/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/copy-sync/copy-sync.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/copy-sync/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/copy/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/copy/copy.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/copy/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/empty/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/ensure/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/ensure/file.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/ensure/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/ensure/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/ensure/link.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/ensure/symlink.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/ensure/symlink-paths.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/ensure/symlink.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/ensure/symlink-type.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/ensure/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/ensure/symlink.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/fs/index.js",
-  },
-  Object {
-    "importPath": "",
     "importer": "src/esbuild/traverseEsbuild.ts",
     "resolvedImportPath": "node_modules/fs-extra/lib/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/json/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/json/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/json/jsonfile.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/json/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/json/output-json-sync.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/json/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/json/output-json.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/mkdirs/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/mkdirs/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/mkdirs/make-dir.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/move-sync/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/move-sync/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/move-sync/move-sync.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/move/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/move/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/move/move.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/output/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/path-exists/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/remove/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/remove/index.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/remove/rimraf.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/copy-sync/copy-sync.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/util/stat.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/copy-sync/copy-sync.js",
-    "resolvedImportPath": "node_modules/fs-extra/lib/util/utimes.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/function-bind/index.js",
-    "resolvedImportPath": "node_modules/function-bind/implementation.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/has/src/index.js",
-    "resolvedImportPath": "node_modules/function-bind/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/graceful-fs/graceful-fs.js",
-    "resolvedImportPath": "node_modules/graceful-fs/clone.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/fs/index.js",
-    "resolvedImportPath": "node_modules/graceful-fs/graceful-fs.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/graceful-fs/graceful-fs.js",
-    "resolvedImportPath": "node_modules/graceful-fs/legacy-streams.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/graceful-fs/graceful-fs.js",
-    "resolvedImportPath": "node_modules/graceful-fs/polyfills.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/is-core-module/index.js",
-    "resolvedImportPath": "node_modules/has/src/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/context.js",
-    "resolvedImportPath": "node_modules/http-assert/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/http-assert/index.js",
-    "resolvedImportPath": "node_modules/http-assert/node_modules/http-errors/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/http-assert/node_modules/http-errors/index.js",
-    "resolvedImportPath": "node_modules/http-assert/node_modules/setprototypeof/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/http-errors/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/http-errors/index.js",
-    "resolvedImportPath": "node_modules/inherits/inherits_browser.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/is-core-module/index.js",
-    "resolvedImportPath": "node_modules/is-core-module/core.json",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve/lib/async.js",
-    "resolvedImportPath": "node_modules/is-core-module/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/is-generator-function/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/json/jsonfile.js",
-    "resolvedImportPath": "node_modules/jsonfile/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/json/output-json.js",
-    "resolvedImportPath": "node_modules/jsonfile/utils.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/cookies/index.js",
-    "resolvedImportPath": "node_modules/keygrip/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/koa-compose/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/koa-convert/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa-convert/index.js",
-    "resolvedImportPath": "node_modules/koa-convert/node_modules/koa-compose/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa-static/index.js",
-    "resolvedImportPath": "node_modules/koa-send/index.js",
+    "importer": "src/traverse.ts",
+    "resolvedImportPath": "node_modules/is-builtin-module/index.js",
   },
   Object {
     "importPath": "",
@@ -414,143 +129,13 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa-static/index.js",
-    "resolvedImportPath": "node_modules/koa-static/node_modules/debug/src/browser.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa-static/node_modules/debug/src/browser.js",
-    "resolvedImportPath": "node_modules/koa-static/node_modules/debug/src/common.js",
-  },
-  Object {
-    "importPath": "",
     "importer": "tests/support.ts",
     "resolvedImportPath": "node_modules/koa/lib/application.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/koa/lib/context.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/koa/lib/request.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/koa/lib/response.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/koa/node_modules/debug/src/browser.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/node_modules/debug/src/browser.js",
-    "resolvedImportPath": "node_modules/koa/node_modules/debug/src/debug.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/node_modules/debug/src/debug.js",
-    "resolvedImportPath": "node_modules/koa/node_modules/ms/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/type-is/index.js",
-    "resolvedImportPath": "node_modules/media-typer/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/mime-db/index.js",
-    "resolvedImportPath": "node_modules/mime-db/db.json",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/mime-types/index.js",
-    "resolvedImportPath": "node_modules/mime-db/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/cache-content-type/index.js",
-    "resolvedImportPath": "node_modules/mime-types/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa-static/node_modules/debug/src/common.js",
-    "resolvedImportPath": "node_modules/ms/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/accepts/index.js",
-    "resolvedImportPath": "node_modules/negotiator/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/negotiator/index.js",
-    "resolvedImportPath": "node_modules/negotiator/lib/charset.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/negotiator/index.js",
-    "resolvedImportPath": "node_modules/negotiator/lib/encoding.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/negotiator/index.js",
-    "resolvedImportPath": "node_modules/negotiator/lib/language.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/negotiator/index.js",
-    "resolvedImportPath": "node_modules/negotiator/lib/mediaType.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/on-finished/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/only/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/request.js",
-    "resolvedImportPath": "node_modules/parseurl/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve-path/index.js",
-    "resolvedImportPath": "node_modules/path-is-absolute/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve/lib/node-modules-paths.js",
-    "resolvedImportPath": "node_modules/path-parse/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa-send/index.js",
-    "resolvedImportPath": "node_modules/resolve-path/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve-path/index.js",
-    "resolvedImportPath": "node_modules/resolve-path/node_modules/http-errors/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve-path/node_modules/http-errors/index.js",
-    "resolvedImportPath": "node_modules/resolve-path/node_modules/inherits/inherits_browser.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve-path/node_modules/http-errors/index.js",
-    "resolvedImportPath": "node_modules/resolve-path/node_modules/setprototypeof/index.js",
+    "importer": "src/server-functions.ts",
+    "resolvedImportPath": "node_modules/node-fetch/lib/index.mjs",
   },
   Object {
     "importPath": "",
@@ -559,97 +144,12 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/resolve/index.js",
-    "resolvedImportPath": "node_modules/resolve/lib/async.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve/lib/async.js",
-    "resolvedImportPath": "node_modules/resolve/lib/caller.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve/index.js",
-    "resolvedImportPath": "node_modules/resolve/lib/core.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve/lib/core.js",
-    "resolvedImportPath": "node_modules/resolve/lib/core.json",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve/index.js",
-    "resolvedImportPath": "node_modules/resolve/lib/is-core.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve/lib/async.js",
-    "resolvedImportPath": "node_modules/resolve/lib/node-modules-paths.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve/lib/async.js",
-    "resolvedImportPath": "node_modules/resolve/lib/normalize-options.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/resolve/index.js",
-    "resolvedImportPath": "node_modules/resolve/lib/sync.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/http-errors/index.js",
-    "resolvedImportPath": "node_modules/setprototypeof/index.js",
-  },
-  Object {
-    "importPath": "",
     "importer": "tests/support.ts",
     "resolvedImportPath": "node_modules/slash/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "node_modules/statuses/index.js",
-    "resolvedImportPath": "node_modules/statuses/codes.json",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/application.js",
-    "resolvedImportPath": "node_modules/statuses/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/http-errors/index.js",
-    "resolvedImportPath": "node_modules/toidentifier/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/keygrip/index.js",
-    "resolvedImportPath": "node_modules/tsscmp/lib/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/response.js",
-    "resolvedImportPath": "node_modules/type-is/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/fs-extra/lib/fs/index.js",
-    "resolvedImportPath": "node_modules/universalify/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/koa/lib/response.js",
-    "resolvedImportPath": "node_modules/vary/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "node_modules/cache-content-type/index.js",
-    "resolvedImportPath": "node_modules/ylru/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "src/support.ts",
+    "importer": "src/traverse.ts",
     "resolvedImportPath": "src/constants.ts",
   },
   Object {
@@ -664,8 +164,28 @@ Array [
   },
   Object {
     "importPath": "",
-    "importer": "tests/support.ts",
+    "importer": "src/server-functions.ts",
+    "resolvedImportPath": "src/index.ts",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/traverse.ts",
+    "resolvedImportPath": "src/server-functions.ts",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/traverse.ts",
     "resolvedImportPath": "src/support.ts",
+  },
+  Object {
+    "importPath": "",
+    "importer": "tests/esbuild.test.ts",
+    "resolvedImportPath": "src/traverse.ts",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/index.ts",
+    "resolvedImportPath": "src/types.ts",
   },
   Object {
     "importPath": "",

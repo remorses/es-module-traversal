@@ -1,3 +1,6 @@
+import {
+    NodeResolvePlugin
+} from '@esbuild-plugins/all'
 import deepmerge from 'deepmerge'
 import { build, BuildOptions, Metadata, Plugin } from 'esbuild'
 import { promises as fsp } from 'fs'
@@ -5,13 +8,14 @@ import fsx from 'fs-extra'
 import os from 'os'
 import path from 'path'
 import slash from 'slash'
-import { defaultResolver, flatten, unique } from '../support'
-import { TraversalResultType } from '../types'
-import { CustomResolverPlugin } from './plugins'
+import { JS_EXTENSIONS } from '../constants'
 import {
-    NodeModulesPolyfillPlugin,
-    NodeResolvePlugin,
-} from '@esbuild-plugins/all'
+    defaultResolver,
+    flatten,
+    isRunningWithYarnPnp,
+    unique
+} from '../support'
+import { TraversalResultType } from '../types'
 
 // TODO support tsconfig paths,
 // TODO make any non js module external
@@ -77,15 +81,25 @@ export async function traverseWithEsbuild({
                         // NodeModulesPolyfillPlugin({ fs: true, crypto: true }), // TODO enable if in browser?
                         NodeResolvePlugin({
                             external: function external(resolved) {
-                                return {
-                                    namespace: externalNamespace,
-                                    path: resolved,
+                                if (
+                                    stopTraversing &&
+                                    stopTraversing(resolved)
+                                ) {
+                                    return {
+                                        namespace: externalNamespace,
+                                        path: resolved,
+                                    }
                                 }
+                                return false
                             },
                             onUnresolved: () => {
                                 return {
                                     external: true,
                                 }
+                            },
+                            resolveOptions: {
+                                preserveSymlinks: isRunningWithYarnPnp || false,
+                                extensions: [...JS_EXTENSIONS],
                             },
                         }),
                     ].filter(Boolean),
