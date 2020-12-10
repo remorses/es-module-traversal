@@ -179,15 +179,15 @@ function getImportPathFromExpression(id: string) {
     return id
 }
 
-function tryParseImports(source, message = '') {
+function tryParseImports(source, filename = '') {
     try {
         const [imports] = parse(source)
         return imports
     } catch (e) {
-        const match = /\@:(\d+)/.exec(String(e))
-        const line = match[1] ? Number(match[1]) : 0
+        // error message is @:line:column
+        const line = source.slice(0, e.idx).split('\n').length
         throw new Error(
-            `cannot parse ES imports in '${message}', code is:\n${source
+            `cannot parse ES imports in '${filename}', code is:\n${source
                 .split('\n')
                 .slice(abs(line - 1), line + 1)
                 .join('  \n')}\n`,
