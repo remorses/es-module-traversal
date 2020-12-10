@@ -183,7 +183,16 @@ function tryParseImports(source, message = '') {
     try {
         const [imports] = parse(source)
         return imports
-    } catch {
-        throw new Error('cannot parse ES modules, ' + message)
+    } catch (e) {
+        const match = /\@:(\d+)/.exec(String(e))
+        const line = match[1] ? Number(match[1]) : 0
+        throw new Error(
+            `cannot parse ES imports in '${message}', code is:\n${source
+                .split('\n')
+                .slice(abs(line - 1), line + 1)
+                .join('  \n')}\n`,
+        )
     }
 }
+
+const abs = (x) => (x < 0 ? 0 : x)
