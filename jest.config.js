@@ -1,7 +1,15 @@
 /** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {
     testEnvironment: 'node',
-    testPathIgnorePatterns: ['/dist/', '/esm/', '/node_modules/', '/mirror/', '/benchmark-'],
+    modulePathIgnorePatterns: ['benchmark-native-esm'],
+    testPathIgnorePatterns: [
+        '/dist/',
+        '/esm/',
+        '/node_modules/',
+        '/mirror/',
+        '/benchmark-',
+        'benchmark-native-esm',
+    ],
     transform: {
         '^.+\\.tsx?$': 'esbuild-jest',
     },
