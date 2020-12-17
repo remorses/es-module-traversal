@@ -47,10 +47,19 @@ export async function traverseEsModules({
                     let entries = await getHtmlScriptsUrls(
                         await readFromUrlOrPath(entry),
                     )
-                    entries = entries.map((p) =>
+                    entries.forEach((x) => {
+                        results.add({
+                            importPath: x,
+                            importer: entry,
+                            resolvedImportPath: new url.URL(
+                                x,
+                                baseUrl,
+                            ).toString(),
+                        })
+                    })
+                    return entries.map((p) =>
                         new url.URL(p, baseUrl).toString(),
                     )
-                    return entries
                 }
                 return [entry]
             }),
