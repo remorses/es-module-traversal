@@ -20,6 +20,9 @@ try {
 export const sleep = (t) => new Promise((res) => setTimeout(res, t))
 
 export async function readFromDisk(filePath: string): Promise<string> {
+    if (!filePath) {
+        return ''
+    }
     return await (await fsp.readFile(filePath)).toString()
 }
 
@@ -77,5 +80,5 @@ export function unique<T>(array: T[], key = (x: T): any => x): T[] {
 }
 
 export function isUrl(str: string) {
-    return str.startsWith('http://') || str.startsWith('https://')
+    return str && (str.startsWith('http://') || str.startsWith('https://'))
 }

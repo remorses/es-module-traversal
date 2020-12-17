@@ -2,14 +2,18 @@ import { batchedPromiseAll } from 'batched-promise-all'
 import { init, parse } from 'es-module-lexer'
 import isBuiltin from 'is-builtin-module'
 import path from 'path'
+import url from 'url'
 import { MAX_IO_OPS } from './constants'
+import { getHtmlScriptsUrls } from './html'
 import { readFromUrlOrPath } from './server-functions'
 import {
     cleanUrl,
     debug,
     defaultResolver,
+    flatten,
     isJsModule,
     isRelative,
+    isUrl,
 } from './support'
 import { TraversalResultType, TraverseArgs } from './types'
 
@@ -29,6 +33,28 @@ export async function traverseEsModules({
     let results: Set<TraversalResultType> = new Set()
     const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
+
+    entryPoints = flatten(
+        await Promise.all(
+            entryPoints.map(async (entry) => {
+                if (
+                    isUrl(entry) &&
+                    ['.html', '.htm'].includes(path.extname(entry))
+                ) {
+                    const baseUrlParsed = url.parse(entry)
+                    const baseUrl = `${baseUrlParsed.protocol}//${baseUrlParsed.host}` // TODO add the starting path
+                    let entries = await getHtmlScriptsUrls(
+                        await readFromUrlOrPath(entry),
+                    )
+                    entries = entries.map((p) =>
+                        new url.URL(p, baseUrl).toString(),
+                    )
+                    return entries
+                }
+            }),
+        ),
+    )
+
     // entryPoint = cleanUrl(entryPoint)
     let toProcess: [path: string, importer: string][] = [
         ...entryPoints.map((x): [string, string] => [x, x]),

@@ -6,7 +6,7 @@ import { defaultRead, defaultResolver, isRelative } from '.'
 import { PACKAGE_NAME } from './constants'
 import { debug, isUrl, readFromDisk } from './support'
 
-export async function readFromUrlOrPath(url: string, importer: string) {
+export async function readFromUrlOrPath(url: string, importer?: string) {
     let content = ''
     if (!isUrl(url)) {
         content = await readFromDisk(url)

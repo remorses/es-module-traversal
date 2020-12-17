@@ -1,6 +1,4 @@
-import {
-    NodeResolvePlugin
-} from '@esbuild-plugins/all'
+import { NodeResolvePlugin } from '@esbuild-plugins/all'
 import deepmerge from 'deepmerge'
 import { build, BuildOptions, Metadata, Plugin } from 'esbuild'
 import { promises as fsp } from 'fs'
@@ -13,7 +11,7 @@ import {
     defaultResolver,
     flatten,
     isRunningWithYarnPnp,
-    unique
+    unique,
 } from '../support'
 import { TraversalResultType } from '../types'
 
@@ -80,7 +78,7 @@ export async function traverseWithEsbuild({
                         ExternalButInMetafile(),
                         // NodeModulesPolyfillPlugin({ fs: true, crypto: true }), // TODO enable if in browser?
                         NodeResolvePlugin({
-                            external: function external(resolved) {
+                            onResolved: function external(resolved) {
                                 if (
                                     stopTraversing &&
                                     stopTraversing(resolved)
@@ -90,7 +88,6 @@ export async function traverseWithEsbuild({
                                         path: resolved,
                                     }
                                 }
-                                return false
                             },
                             onUnresolved: () => {
                                 return {

@@ -19,7 +19,7 @@
         "esm"
     ],
     "scripts": {
-        "test": "jest",
+        "test": "jest -i",
         "watch": "tsc -w",
         "test:debug": "cross-env DEBUG=es-module-traversal jest",
         "test:bench": "cross-env BENCHMARK=1 jest",
@@ -46,10 +46,10 @@
         "cross-env": "^7.0.2",
         "dotenv": "^8.2.0",
         "esbuild": "^0.8.20",
-        "esbuild-jest": "^0.3.0-beta.0",
+        "esbuild-jest": "^0.3.0",
         "fs-extra": "^9.0.1",
         "glob": "^7.1.6",
-        "jest": "^26.5.3",
+        "jest": "^26.6.3",
         "jest-specific-snapshot": "^4.0.0",
         "koa": "^2.13.0",
         "koa-static": "^5.0.0",
@@ -71,6 +71,7 @@
         "es-module-lexer": "^0.3.25",
         "is-builtin-module": "^3.0.0",
         "node-fetch": "^2.6.1",
+        "posthtml": "^0.15.1",
         "resolve": "^1.18.1",
         "slash": "^3.0.0",
         "tslib": "^2.0.3"
