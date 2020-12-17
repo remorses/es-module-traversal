@@ -29,6 +29,7 @@ export async function traverseEsModules({
     ignore = [],
     read = defaultRead,
     concurrency = MAX_IO_OPS,
+    onUnresolved,
 }: TraverseArgs): Promise<TraversalResultType[]> {
     let results: Set<TraversalResultType> = new Set()
     const ignoreFiles = new Set(ignore.map(cleanUrl))
@@ -98,9 +99,13 @@ export async function traverseEsModules({
                             importPath,
                         )
                         if (!resolvedImportPath) {
-                            console.error(
-                                `WARNING: could not resolve '${importPath}' imported by '${filePath}'`,
-                            )
+                            if (onUnresolved) {
+                                onUnresolved(filePath)
+                            } else {
+                                console.error(
+                                    `WARNING: could not resolve '${importPath}' imported by '${filePath}'`,
+                                )
+                            }
                             return
                         }
 

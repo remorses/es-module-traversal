@@ -6,6 +6,7 @@ export type TraversalResultType = {
 
 export type TraverseArgs = {
     entryPoints: string[]
+    onUnresolved?: (path: string) => any
     ignore?: string[]
     concurrency?: number
     stopTraversing?: (resolvedPath: string) => boolean
