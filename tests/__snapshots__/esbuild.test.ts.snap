@@ -35,11 +35,6 @@ Array [
   Object {
     "importPath": "",
     "importer": "../esbuild-plugins/node-resolve/dist/index.js",
-    "resolvedImportPath": "../esbuild-plugins/node_modules/builtin-modules/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "../esbuild-plugins/node-resolve/dist/index.js",
     "resolvedImportPath": "../esbuild-plugins/node_modules/debug/src/index.js",
   },
   Object {
@@ -139,6 +134,11 @@ Array [
   },
   Object {
     "importPath": "",
+    "importer": "src/html.ts",
+    "resolvedImportPath": "node_modules/posthtml/lib/index.js",
+  },
+  Object {
+    "importPath": "",
     "importer": "src/support.ts",
     "resolvedImportPath": "node_modules/resolve/index.js",
   },
@@ -161,6 +161,11 @@ Array [
     "importPath": "",
     "importer": "src/esbuild/index.ts",
     "resolvedImportPath": "src/esbuild/traverseEsbuild.ts",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/traverse.ts",
+    "resolvedImportPath": "src/html.ts",
   },
   Object {
     "importPath": "",
@@ -215,11 +220,6 @@ Array [
   Object {
     "importPath": "",
     "importer": "../esbuild-plugins/node-resolve/dist/index.js",
-    "resolvedImportPath": "../esbuild-plugins/node_modules/builtin-modules/index.js",
-  },
-  Object {
-    "importPath": "",
-    "importer": "../esbuild-plugins/node-resolve/dist/index.js",
     "resolvedImportPath": "../esbuild-plugins/node_modules/debug/src/index.js",
   },
   Object {
@@ -319,6 +319,11 @@ Array [
   },
   Object {
     "importPath": "",
+    "importer": "src/html.ts",
+    "resolvedImportPath": "node_modules/posthtml/lib/index.js",
+  },
+  Object {
+    "importPath": "",
     "importer": "src/support.ts",
     "resolvedImportPath": "node_modules/resolve/index.js",
   },
@@ -341,6 +346,11 @@ Array [
     "importPath": "",
     "importer": "src/esbuild/index.ts",
     "resolvedImportPath": "src/esbuild/traverseEsbuild.ts",
+  },
+  Object {
+    "importPath": "",
+    "importer": "src/traverse.ts",
+    "resolvedImportPath": "src/html.ts",
   },
   Object {
     "importPath": "",
