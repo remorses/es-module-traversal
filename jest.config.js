@@ -13,6 +13,7 @@ module.exports = {
     transform: {
         '^.+\\.tsx?$': 'esbuild-jest',
     },
+    bail: 1,
     // transform: {
     //     '.*\.tsx?': 'esbuild-jest',
     // },

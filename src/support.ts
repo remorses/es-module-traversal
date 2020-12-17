@@ -20,10 +20,14 @@ try {
 export const sleep = (t) => new Promise((res) => setTimeout(res, t))
 
 export async function readFromDisk(filePath: string): Promise<string> {
-    if (!filePath) {
-        return ''
+    try {
+        if (!filePath) {
+            return ''
+        }
+        return await (await fsp.readFile(filePath)).toString()
+    } catch (e) {
+        throw new Error(`Cannot read '${filePath}', ${e}`)
     }
-    return await (await fsp.readFile(filePath)).toString()
 }
 
 // use resolve.sync to resolve paths, returns '' when it cannot resolve
@@ -49,7 +53,7 @@ export const defaultResolver = (root: string, id: string) => {
 //     return x.map(func)
 // }
 
-export function isRelative(x: string) {
+export function isRelative(x: string = '') {
     x = cleanUrl(x)
     return x.startsWith('.') || x.startsWith('/')
 }

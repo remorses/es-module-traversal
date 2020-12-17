@@ -43,7 +43,7 @@ export const urlResolver = ({
     baseUrl: string
 }) => {
     // resolves relative paths to absolute paths and adds the root baseUrl
-    return function resolveUrlOrPath(ctx: string, importPath: string) {
+    return function resolveUrlOrPath(ctx: string, importPath: string = '') {
         debug(`resolveUrlOrPath from '${ctx}' to '${importPath}'`)
         let importerDirectory = isUrl(ctx)
             ? urlToRelativePath(ctx)

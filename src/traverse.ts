@@ -51,6 +51,7 @@ export async function traverseEsModules({
                     )
                     return entries
                 }
+                return [entry]
             }),
         ),
     )

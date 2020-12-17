@@ -111,7 +111,7 @@ describe('snapshots', () => {
 })
 
 function makeFilesDownloader({ root, downloadFilesToDir }) {
-    return async (url, importer) => {
+    return async (url='', importer) => {
         // console.log('traversed ' + url)
         // recreate server files structure on disk
         const content = await readFromUrlOrPath(url, importer)
