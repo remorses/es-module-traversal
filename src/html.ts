@@ -8,8 +8,8 @@ export async function getHtmlScriptsUrls(html: string) {
             tree.walk((node) => {
                 if (
                     node.tag === 'script' &&
-                    node.attrs['type'] === 'module' &&
                     node.attrs &&
+                    node.attrs['type'] === 'module' &&
                     node.attrs['src'] &&
                     isRelative(node.attrs['src'])
                 ) {
