@@ -31,10 +31,13 @@ export async function traverseEsModules({
     concurrency = MAX_IO_OPS,
     onNonResolved,
 }: TraverseArgs): Promise<TraversalResultType[]> {
+
+    // TODO add entrypoints in result? but what do i put in importerPath?
     let results: Set<TraversalResultType> = new Set()
     const ignoreFiles = new Set(ignore.map(cleanUrl))
     const alreadyProcessed = new Set([])
 
+    // add entries found in html
     entryPoints = flatten(
         await Promise.all(
             entryPoints.map(async (entry) => {
