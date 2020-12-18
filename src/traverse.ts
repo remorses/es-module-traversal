@@ -31,7 +31,6 @@ export async function traverseEsModules({
     concurrency = MAX_IO_OPS,
     onNonResolved,
 }: TraverseArgs): Promise<TraversalResultType[]> {
-
     // TODO add entrypoints in result? but what do i put in importerPath?
     let results: Set<TraversalResultType> = new Set()
     const ignoreFiles = new Set(ignore.map(cleanUrl))
@@ -104,10 +103,9 @@ export async function traverseEsModules({
             const objects = importPaths
                 .map(
                     (importPath): TraversalResultType => {
-                        // TODO maybe throw when import is not resolved?
                         // you can resolve to a local running server (vite) here if you want
                         const resolvedImportPath = resolver(
-                            isomorphicDirname(filePath), // TODO does dirname work on urls?
+                            isomorphicDirname(filePath),
                             importPath,
                         )
                         if (!resolvedImportPath) {
@@ -155,7 +153,7 @@ export async function traverseEsModules({
             })
             .filter((x) => {
                 return (
-                    isJsModule(x.resolvedImportPath) &&
+                    // isJsModule(x.resolvedImportPath) &&
                     !ignoreFiles.has(cleanUrl(x.resolvedImportPath)) &&
                     !alreadyProcessed.has(x.resolvedImportPath)
                 )

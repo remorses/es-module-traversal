@@ -78,6 +78,7 @@ export async function traverseWithEsbuild({
                         ExternalButInMetafile(),
                         // NodeModulesPolyfillPlugin({ fs: true, crypto: true }), // TODO enable if in browser?
                         NodeResolvePlugin({
+                            extensions: [...JS_EXTENSIONS],
                             onResolved: function external(resolved) {
                                 if (
                                     stopTraversing &&
