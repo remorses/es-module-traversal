@@ -90,7 +90,7 @@ export async function traverseWithEsbuild({
                                     }
                                 }
                             },
-                            onUnresolved: () => {
+                            onNonResolved: () => {
                                 return {
                                     external: true,
                                 }
