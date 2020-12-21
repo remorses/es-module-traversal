@@ -34,13 +34,33 @@ Array [
   },
   Object {
     "importPath": "",
+    "importer": "../esbuild-plugins/html/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/html/dist/html.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "../esbuild-plugins/all/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/html/dist/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "../esbuild-plugins/html/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/html/package.json",
+  },
+  Object {
+    "importPath": "",
     "importer": "../esbuild-plugins/node-resolve/dist/index.js",
     "resolvedImportPath": "../esbuild-plugins/node_modules/debug/src/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "../esbuild-plugins/esm-externals/dist/index.js",
+    "importer": "../esbuild-plugins/node-resolve/dist/index.js",
     "resolvedImportPath": "../esbuild-plugins/node_modules/escape-string-regexp/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "../esbuild-plugins/html/dist/html.js",
+    "resolvedImportPath": "../esbuild-plugins/node_modules/posthtml/lib/index.js",
   },
   Object {
     "importPath": "",
@@ -219,13 +239,33 @@ Array [
   },
   Object {
     "importPath": "",
+    "importer": "../esbuild-plugins/html/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/html/dist/html.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "../esbuild-plugins/all/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/html/dist/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "../esbuild-plugins/html/dist/index.js",
+    "resolvedImportPath": "../esbuild-plugins/html/package.json",
+  },
+  Object {
+    "importPath": "",
     "importer": "../esbuild-plugins/node-resolve/dist/index.js",
     "resolvedImportPath": "../esbuild-plugins/node_modules/debug/src/index.js",
   },
   Object {
     "importPath": "",
-    "importer": "../esbuild-plugins/esm-externals/dist/index.js",
+    "importer": "../esbuild-plugins/node-resolve/dist/index.js",
     "resolvedImportPath": "../esbuild-plugins/node_modules/escape-string-regexp/index.js",
+  },
+  Object {
+    "importPath": "",
+    "importer": "../esbuild-plugins/html/dist/html.js",
+    "resolvedImportPath": "../esbuild-plugins/node_modules/posthtml/lib/index.js",
   },
   Object {
     "importPath": "",
