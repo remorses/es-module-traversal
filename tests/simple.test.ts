@@ -13,15 +13,7 @@ import {
 } from '../src'
 import { osAgnosticResult, serve } from './support'
 
-require('jest-specific-snapshot')
-
-declare global {
-    namespace jest {
-        interface Matchers<R> {
-            toMatchSpecificSnapshot(path: string, name?: string): R
-        }
-    }
-}
+import 'jest-specific-snapshot'
 
 it('works', async () => {
     const currentFile = path.resolve(__dirname, __filename)
@@ -111,7 +103,7 @@ describe('snapshots', () => {
 })
 
 function makeFilesDownloader({ root, downloadFilesToDir }) {
-    return async (url='', importer) => {
+    return async (url = '', importer) => {
         // console.log('traversed ' + url)
         // recreate server files structure on disk
         const content = await readFromUrlOrPath(url, importer)
