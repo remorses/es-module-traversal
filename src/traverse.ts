@@ -19,8 +19,6 @@ import { TraversalResultType, TraverseArgs } from './types'
 
 export const defaultRead = readFromUrlOrPath
 
-// TODO use a cache and hash of file paths with contents as key that maps to the imports paths, this way i don't have to run the lexer or run transforms in vite server (does this make sense? serializing result will be slower)
-// TODO add a watcher argument, this mode lets you get the import graph over time, when the watcher emits a change to a file, i try to parse it and add the import to the graph if not already existing
 export async function traverseEsModules({
     entryPoints,
     resolver = defaultResolver,
@@ -68,7 +66,6 @@ export async function traverseEsModules({
         ),
     )
 
-    // entryPoint = cleanUrl(entryPoint)
     let toProcess: TraversalResultType[] = [
         ...entryPoints.map((x) => ({
             importPath: '',
@@ -79,10 +76,7 @@ export async function traverseEsModules({
     await init
 
     while (toProcess.length) {
-        // read files to process concurrently
-
         // for every files get its imports and add them to results
-
         const newResults: TraversalResultType[] = flatten(
             await batchedPromiseAll(
                 toProcess,
@@ -132,9 +126,8 @@ export async function traverseEsModules({
             ),
         )
 
-        // add new found imports to the results
         newResults.forEach((x) => results.add(x))
-        // process the relative imports found in current path
+
         toProcess = newResults
             .filter((x) => isRelative(x.importPath)) // TODO do not process only relative imports
             .filter((x) => {
@@ -149,17 +142,11 @@ export async function traverseEsModules({
             })
             .filter((x) => {
                 return (
-                    // isJsModule(x.resolvedImportPath) &&
                     !ignoreFiles.has(cleanUrl(x.resolvedImportPath)) &&
                     !alreadyProcessed.has(x.resolvedImportPath)
                 )
             })
-            // .map((x) => x.resolvedImportPath)
-            // .map(cleanUrl)
             .filter(Boolean)
-        // .map((x) => [x.resolvedImportPath, x.importer])
-
-        // .filter((x) => !stopTraversing(x))
 
         debug(`traversing inside [${toProcess.join(', ')}]`)
     }
@@ -222,7 +209,6 @@ function tryParseImports(source, filename = '') {
         const [imports] = parse(source)
         return imports
     } catch (e) {
-        // error message is @:line:column
         const line = source.slice(0, e.idx).split('\n').length
         throw new Error(
             `cannot parse ES imports in '${filename}', code is:\n${source
