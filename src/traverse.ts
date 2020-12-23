@@ -80,41 +80,26 @@ export async function traverseEsModules({
 
     while (toProcess.length) {
         // read files to process concurrently
-        const files: Array<{
-            importPaths: string[]
-            contents: string
-            importer: string
-            resolvedImportPath: string
-        }> = await batchedPromiseAll(
-            toProcess,
-            async ({ resolvedImportPath, importer }) => {
-                alreadyProcessed.add(resolvedImportPath)
-                const contents = await read(resolvedImportPath, importer)
-                return {
-                    importPaths: getImportPaths(contents, resolvedImportPath), // you can transpile modules from jsx and tsx here
-                    contents,
-                    importer,
-                    resolvedImportPath,
-                }
-            },
-            concurrency,
-        )
-        let newResults: TraversalResultType[] = []
+
         // for every files get its imports and add them to results
-        for (let {
-            contents,
-            resolvedImportPath,
-            importer,
-            importPaths,
-        } of files) {
-            if (onEntry) {
-                await onEntry(resolvedImportPath, importer, contents)
-            }
-            debug(`traversing ${resolvedImportPath}`)
-            // const importPaths = getImportPaths(content, filePath)
-            const objects = importPaths
-                .map(
-                    (importPath): TraversalResultType => {
+
+        const newResults: TraversalResultType[] = flatten(
+            await batchedPromiseAll(
+                toProcess,
+                async ({ resolvedImportPath, importer }) => {
+                    alreadyProcessed.add(resolvedImportPath)
+                    const contents = await read(resolvedImportPath, importer)
+                    const importPaths = getImportPaths(
+                        contents,
+                        resolvedImportPath,
+                    ) // you can transpile modules from jsx and tsx here
+                    if (onEntry) {
+                        await onEntry(resolvedImportPath, importer, contents)
+                    }
+                    debug(`traversing ${resolvedImportPath}`)
+                    function importPathToResult(
+                        importPath,
+                    ): TraversalResultType {
                         // you can resolve to a local running server (vite) here if you want
                         const newResolvedImportPath = resolver(
                             isomorphicDirname(resolvedImportPath),
@@ -137,11 +122,16 @@ export async function traverseEsModules({
                             resolvedImportPath:
                                 newResolvedImportPath || undefined,
                         }
-                    },
-                )
-                .filter(Boolean)
-            newResults.push(...objects)
-        }
+                    }
+                    const newResults = importPaths
+                        .map(importPathToResult)
+                        .filter(Boolean)
+                    return newResults
+                },
+                concurrency,
+            ),
+        )
+
         // add new found imports to the results
         newResults.forEach((x) => results.add(x))
         // process the relative imports found in current path
