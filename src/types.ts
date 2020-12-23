@@ -16,6 +16,6 @@ export type TraverseArgs = {
         | ((path: string, importer: string) => string)
         | ((path: string, importer: string) => Promise<string>)
     onEntry?:
-        | ((path: string, importer: string) => any)
-        | ((path: string, importer: string) => Promise<any>)
+        | ((path: string, importer: string, contents: string) => any)
+        | ((path: string, importer: string, contents: string) => Promise<any>)
 }

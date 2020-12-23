@@ -69,51 +69,63 @@ export async function traverseEsModules({
     )
 
     // entryPoint = cleanUrl(entryPoint)
-    let toProcess: [path: string, importer: string][] = [
-        ...entryPoints.map((x): [string, string] => [x, x]),
+    let toProcess: TraversalResultType[] = [
+        ...entryPoints.map((x) => ({
+            importPath: '',
+            importer: '',
+            resolvedImportPath: x,
+        })),
     ] // TODO if the format here is path and then resolver returns another format (like url) i can have duplicates
     await init
 
-    // first onEntry
-    if (onEntry) {
-        await Promise.all(entryPoints.map((x) => onEntry(x, x)))
-    }
-
     while (toProcess.length) {
         // read files to process concurrently
-        const files = await batchedPromiseAll(
+        const files: Array<{
+            importPaths: string[]
+            contents: string
+            importer: string
+            resolvedImportPath: string
+        }> = await batchedPromiseAll(
             toProcess,
-            async ([filePath, importer]) => {
-                alreadyProcessed.add(filePath)
+            async ({ resolvedImportPath, importer }) => {
+                alreadyProcessed.add(resolvedImportPath)
+                const contents = await read(resolvedImportPath, importer)
                 return {
-                    importPaths: getImportPaths(
-                        await read(filePath, importer),
-                        filePath,
-                    ), // you can transpile modules from jsx and tsx here
-                    filePath,
+                    importPaths: getImportPaths(contents, resolvedImportPath), // you can transpile modules from jsx and tsx here
+                    contents,
+                    importer,
+                    resolvedImportPath,
                 }
             },
             concurrency,
         )
         let newResults: TraversalResultType[] = []
         // for every files get its imports and add them to results
-        for (let { filePath, importPaths } of files) {
-            debug(`traversing ${filePath}`)
+        for (let {
+            contents,
+            resolvedImportPath,
+            importer,
+            importPaths,
+        } of files) {
+            if (onEntry) {
+                await onEntry(resolvedImportPath, importer, contents)
+            }
+            debug(`traversing ${resolvedImportPath}`)
             // const importPaths = getImportPaths(content, filePath)
             const objects = importPaths
                 .map(
                     (importPath): TraversalResultType => {
                         // you can resolve to a local running server (vite) here if you want
-                        const resolvedImportPath = resolver(
-                            isomorphicDirname(filePath),
+                        const newResolvedImportPath = resolver(
+                            isomorphicDirname(resolvedImportPath),
                             importPath,
                         )
-                        if (!resolvedImportPath) {
+                        if (!newResolvedImportPath) {
                             if (onNonResolved) {
-                                onNonResolved(filePath)
+                                onNonResolved(newResolvedImportPath)
                             } else {
                                 console.error(
-                                    `WARNING: could not resolve '${importPath}' imported by '${filePath}'`,
+                                    `WARNING: could not resolve '${importPath}' imported by '${resolvedImportPath}'`,
                                 )
                             }
                             return
@@ -121,8 +133,9 @@ export async function traverseEsModules({
 
                         return {
                             importPath,
-                            importer: filePath,
-                            resolvedImportPath: resolvedImportPath || undefined,
+                            importer: resolvedImportPath,
+                            resolvedImportPath:
+                                newResolvedImportPath || undefined,
                         }
                     },
                 )
@@ -131,13 +144,6 @@ export async function traverseEsModules({
         }
         // add new found imports to the results
         newResults.forEach((x) => results.add(x))
-        if (onEntry) {
-            await batchedPromiseAll(
-                newResults.filter(Boolean),
-                (x) => onEntry(x.resolvedImportPath, x.importer),
-                MAX_IO_OPS,
-            )
-        }
         // process the relative imports found in current path
         toProcess = newResults
             .filter((x) => isRelative(x.importPath)) // TODO do not process only relative imports
@@ -161,7 +167,7 @@ export async function traverseEsModules({
             // .map((x) => x.resolvedImportPath)
             // .map(cleanUrl)
             .filter(Boolean)
-            .map((x) => [x.resolvedImportPath, x.importer])
+        // .map((x) => [x.resolvedImportPath, x.importer])
 
         // .filter((x) => !stopTraversing(x))
 
