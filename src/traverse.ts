@@ -44,9 +44,11 @@ export async function traverseEsModules({
                 ) {
                     const baseUrlParsed = url.parse(entry)
                     const baseUrl = `${baseUrlParsed.protocol}//${baseUrlParsed.host}` // TODO add the starting path
-                    let entries = await getHtmlScriptsUrls(
-                        await readFromUrlOrPath(entry),
-                    )
+                    const contents = await readFromUrlOrPath(entry)
+                    if (onEntry) {
+                        await onEntry(entry, '', contents)
+                    }
+                    let entries = await getHtmlScriptsUrls(contents)
                     entries.forEach((x) => {
                         results.add({
                             importPath: x,

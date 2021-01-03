@@ -5,6 +5,7 @@ import { URL } from 'url'
 import { defaultRead, defaultResolver, isRelative } from '.'
 import { PACKAGE_NAME } from './constants'
 import { debug, isUrl, readFromDisk } from './support'
+import mime from 'mime-types'
 
 export async function readFromUrlOrPath(url: string, importer?: string) {
     let content = ''
@@ -14,6 +15,9 @@ export async function readFromUrlOrPath(url: string, importer?: string) {
         const res = await fetch(url, {
             headers: {
                 ...(importer ? { Referer: importer } : {}),
+                Accept:
+                    mime.lookup(path.extname(url.split('/').reverse()[0])) ||
+                    '*/*',
                 'User-Agent': PACKAGE_NAME,
             },
         })
