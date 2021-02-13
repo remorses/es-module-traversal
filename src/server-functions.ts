@@ -4,26 +4,26 @@ import slash from 'slash'
 import { URL } from 'url'
 import { defaultRead, defaultResolver, isRelative } from '.'
 import { PACKAGE_NAME } from './constants'
-import { debug, isUrl, readFromDisk } from './support'
-import mime from 'mime-types'
+import { cleanUrl, debug, isUrl, readFromDisk } from './support'
 
 export async function readFromUrlOrPath(url: string, importer?: string) {
     let content = ''
     if (!isUrl(url)) {
         content = await readFromDisk(url)
     } else {
+        const isHtml =
+            path.extname(cleanUrl(url).split('/').reverse()[0]) === '.html'
+        const Accept =  isHtml ? 'text/html' : '*/*'
         const res = await fetch(url, {
             headers: {
                 ...(importer ? { Referer: importer } : {}),
-                Accept:
-                    mime.lookup(path.extname(url.split('/').reverse()[0])) ||
-                    '*/*',
+                Accept,
                 'User-Agent': PACKAGE_NAME,
             },
         })
         if (!res.ok) {
             throw new Error(
-                `Cannot fetch '${url}', referer is '${importer}': ${
+                `Cannot fetch '${url}', referer is '${importer}', content type is '${Accept}': ${
                     res.statusText
                 } ${await res.text().catch(() => '')}`,
             )
