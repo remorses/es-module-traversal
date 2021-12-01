@@ -40,7 +40,8 @@ export async function traverseEsModules({
             entryPoints.map(async (entry) => {
                 if (
                     isUrl(entry) &&
-                    ['.html', '.htm'].includes(path.extname(entry))
+                    (['.html', '.htm'].includes(path.extname(entry)) ||
+                        entry.endsWith('/'))
                 ) {
                     const baseUrlParsed = url.parse(entry)
                     const baseUrl = `${baseUrlParsed.protocol}//${baseUrlParsed.host}` // TODO add the starting path
